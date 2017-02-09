@@ -1,0 +1,58 @@
+@docopt_cmd_decorator
+    def do_create_room(self, arg):
+        """Usage: create_room <room_type> <room_name>..."""
+        print (Dojo.create_room(arg['<room_type'], ['<room_name>']))
+
+
+    @docopt_cmd_decorator
+    def do_add_person(self, arg):
+        """Usage: add_person <person_name> <staff/fellow> [<wants_accomodation>] """
+
+        
+    @docopt_cmd_decorator
+    def do_reallocate_person(self, arg):
+        """Usage: reallocate_person <person_name> <room_name>"""
+
+       
+
+    @docopt_cmd_decorator
+    def do_print_room(self, arg):
+        """Usage: print_room <room_name>"""
+
+
+    @docopt_cmd_decorator
+    def do_print_allocations(self, arg):
+        """Usage: print_allocations [<filename>]"""
+
+       
+    @docopt_cmd_decorator
+    def do_print_empty_rooms(self, arg):
+        """Usage: print_empty_rooms [<filename>]"""
+
+        
+
+    @docopt_cmd_decorator
+    def do_print_unallocated(self, arg):
+        """"Usage: print_unallocated [<filename>]"""
+
+        
+    @docopt_cmd_decorator
+    def do_load_people(self, arg):
+        """Usage: load_people"""
+
+       
+    @docopt_cmd_decorator
+    def do_save_state(self, arg):
+        """Usage: save_state """
+       
+    @docopt_cmd_decorator
+    def do_load_state(self, arg):
+        """Usage: load_state """
+
+       
+
+    def do_quit(self, arg):
+        """Quits out of Interactive Mode."""
+
+        print('\t\t\tGood Bye!')
+        exit()
