@@ -12,6 +12,6 @@ class LivingSpace(Room):
 
 
 	def add_to_livingspace_list(livingspace_instance):
-		LivingSpace.livingspace_list[livingspace_instance.name] = livingspace_instance
+		pass
 	
 		

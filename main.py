@@ -48,20 +48,12 @@ class MyInteractive(cmd.Cmd):
 	@docopt_cmd_decorator
 	def do_create_room(self, arg):
 		"""Usage: create_room <room_type> <room_name>..."""
-		Dojo.create_room(arg['<room_type>'], arg['<room_name>'])
+		pass
 
 	@docopt_cmd_decorator
 	def do_add_person(self, arg):
 		"""Usage: add_person <lastname> <firstname> <staff/fellow> [<wants_accomodation>] """
-		type_of_person = arg['<staff/fellow>'].strip().lower()
-		if type_of_person == "staff":
-			Staff(arg['<lastname>'], arg['<firstname>'])
-			Room
-		elif type_of_person == "fellow":
-			Fellow(arg['<lastname>'], arg['<firstname>'])
-		else:
-			print ("Invalid type of person")
-		
+		pass
 		
 
 if __name__ == '__main__':

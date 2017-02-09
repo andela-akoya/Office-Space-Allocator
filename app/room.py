@@ -11,9 +11,8 @@ class Room():
 		Room.total_number_of_rooms += 1
 
 	def get_total_number_of_rooms():
-		return Room.total_number_of_rooms
-
-	def add_person_to_room(type_of_person, wants_accomodation):
+		pass
+	def allocate_room(type_of_person, wants_accomodation):
 		pass
 
 	

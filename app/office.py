@@ -11,8 +11,7 @@ class Office(Room):
 		self.type = "office"
 
 	def add_to_office_list(office_instance):
-		Office.office_list[office_instance.name] = office_instance
-
+		pass
 		
 
 		
