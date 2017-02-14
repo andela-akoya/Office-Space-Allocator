@@ -83,3 +83,15 @@ class Dojo(object):
 			print (Room.print_room_members(room_name))	
 		except Exception as e:
 			print (e)
+
+	def print_allocations(filename):
+		allocations = Room.get_allocations()
+		if filename is None:
+			print(allocations)
+		else:
+			try:
+				file = File.create_file(filename)
+				File.write(file, allocations)
+
+			except Exception as e:
+				print(e)
