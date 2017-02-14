@@ -135,8 +135,20 @@ class Room():
 
 		return False	
 
-	
+
 	def add_room_members(self, person):
 		self.room_members.append(person)
 		if len(self.room_members) == self.maximum_capacity:
 			self.is_full = True
+
+	def get_allocations():
+		output = ""
+		for room in list(Room.room_list.values()):
+			output += "{} Room\n".format(room.name)
+			output += (len(room.name + " Room") * "-") + "\n"
+			for member in room.room_members:
+				output += "{m.surname} {m.firstname}, ".format(m=member)
+			output += "\n\n\n"
+
+		return output
+			
