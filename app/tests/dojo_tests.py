@@ -46,15 +46,16 @@ class TestRoom(unittest.TestCase):
 		self.assertNotEqual(initial_room_count, latter_room_count)
 		self.assertEqual(latter_room_count, 2)
 
-	# def test_create_duplicate_room(self):
-	# 	""" the create_room function shouldn't create an already existing room within the same type category """
-	# 	new_room1 = Dojo.create_room("Office", "Orange")
-	# 	initial_room_count = Dojo.get_total_rooms()
-	# 	self.assertEqual(initial_room_count, 1)
-	# 	new_room2 = Dojo.create_room("Office", "Orange")
-	# 	latter_room_count = Dojo.get_total_rooms()
-	# 	self.assertEqual(new_room2, "An Office called Orange already exist")
-	# 	self.assertEqual(initial_room_count, latter_room_count)
+	def test_create_duplicate_room(self):
+		""" the create_room function shouldn't create an already existing 
+		room within the same type category """
+		new_room1 = Dojo.create_room("Office", "Orange")
+		initial_room_count = Dojo.get_total_rooms()
+		self.assertEqual(initial_room_count, 1)
+		new_room2 = Dojo.create_room("Office", "Orange")
+		latter_room_count = Dojo.get_total_rooms()
+		self.assertEqual(new_room2, "An Office called Orange already exist")
+		self.assertEqual(initial_room_count, latter_room_count)
 
 	# def test_remove_room(self):
 	# 	""" test checks if function successfully removes a specicified room name and room type """
