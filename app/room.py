@@ -18,3 +18,78 @@ class Room():
 
 	def add_room(room):
 		Room.room_list[room.name] = room
+
+	def allocate_room(person, office_list, livingspace_list = None ):
+		output = []
+		random_office = Room.get_random_room(office_list)
+
+		if livingspace_list != None:
+			output.append("Fellow {p.surname} {p.firstname} " \
+							+ "has been successfully added." \
+							.format(p=person))
+
+			random_livingspace = Room.get_random_room(livingspace_list)
+
+			if random_office and random_livingspace:
+				person.set_assigned_office(random_office)
+				person.set_assigned_livingspace(random_livingspace)
+				random_office.add_room_members(person)
+				random_livingspace.add_room_members(person)
+				output.append(("{p.surname} has been allocated "  \
+								+ "the office {o.name}"  \
+								+ "\n{p.surname} has been allocated " \
+								+ "the livingspace {l.name}") \
+								.format(p=person, o=random_office, \
+										l=random_livingspace))
+			elif random_office:
+				person.set_assigned_office(random_office)
+				random_office.add_room_members(person)
+				Fellow.add_unallocated_fellow(person, False, True)
+				output.append(("{p.surname} has been allocated " \
+								+"the office {o.name}" \
+								+ "\nNo available livingspace, " \
+								+"{p.surname} has been placed on the" \
+								+ " livingspace waiting list") \
+								.format(p=person, o=random_office))
+
+			elif random_livingspace:
+				person.set_assigned_livingspace(random_livingspace)
+				random_livingspace.add_room_members(person)
+				Fellow.add_unallocated_fellow(person, True, False)
+				output.append(("{p.surname} has been allocated " \
+								+"the livingspace {l.name}" \
+								+ "\nNo available office, " \
+								+ "{p.surname} has been placed on the" \
+								+ " office waiting list")
+								.format(p=person, l=random_livingspace))
+
+			else:
+				Fellow.add_unallocated_fellow(person, True, True)
+				output.append(("No available room. " \
+								+"All the rooms are occupied " \
+								+ "\n{p.surname} has been placed " \
+								+"on the waiting list") \
+								.format(p=person))
+		else:
+			output.append("{0} {p.surname} {p.firstname} has been " \ 
+							+" successfully added."\
+							.format(person.category.capitalize(), p=person))
+
+			if random_office:
+				person.set_assigned_office(random_office)
+				random_office.add_room_members([person])
+				output.append("{p.surname} has been allocated" \
+								+" the office {o.name}" \
+								.format(p=person, o=random_office) )
+			else:
+				Staff.add_unallocated_staff(person) \
+				if isinstance(person, Staff)  \
+				else Fellow.add_unallocated_fellow(person, True, False)
+
+				output.append(("No available room. " \ 
+								+"All the rooms are occupied " \
+								+ "\n{p.surname} has been placed on " \ 
+								+"the office waiting list") \
+								.format(p=person))
+
+		return("\n".join(output))
