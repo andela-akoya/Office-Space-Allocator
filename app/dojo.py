@@ -95,3 +95,16 @@ class Dojo(object):
 
 			except Exception as e:
 				print(e)
+
+	def print_unallocated(filename):
+		unallocated = Person.get_unallocated(Staff.get_unallocated_staff(), \
+											Fellow.get_unallocated_fellows())
+		if filename is None:
+			print(unallocated)
+		else:
+			try:
+				file = File.create_file(filename)
+				File.write(file, unallocated)
+
+			except Exception as e:
+				print(e)
