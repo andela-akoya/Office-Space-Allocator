@@ -62,7 +62,7 @@ class MyInteractive(cmd.Cmd):
     try:
       if type_of_person == "staff":
         new_staff = Staff(arg['<lastname>'].capitalize(), \
-                  arg['<firstname>'].capitalize())
+                          arg['<firstname>'].capitalize())
 
         Staff.add_to_staff_list(new_staff)
         Person.add_to_map(new_staff)
@@ -70,7 +70,7 @@ class MyInteractive(cmd.Cmd):
 
       elif type_of_person == "fellow":
         new_fellow = Fellow(arg['<lastname>'].capitalize(), \
-                  arg['<firstname>'].capitalize())
+                            arg['<firstname>'].capitalize())
         
         Fellow.add_to_fellow_list(new_fellow)
         Person.add_to_map(new_fellow)
@@ -80,3 +80,39 @@ class MyInteractive(cmd.Cmd):
         print ("Invalid type of person") 
     except Exception as e:
       print ("Firstname or Lastname is not a valid name format")
+
+  @docopt_cmd_decorator
+  def do_print_room(self, arg):
+    """Usage: print_room <room_name> """
+    Dojo.print_room(arg["<room_name>"])
+
+  @docopt_cmd_decorator
+  def do_print_allocations(self, arg):
+    """Usage: print_allocations [--o=<filename>] """
+    try:
+      Dojo.print_allocations(arg['--o'])
+    
+    except Exception as e:
+      print(e)
+
+  @docopt_cmd_decorator
+  def do_print_unallocated(self, arg):
+    """Usage: print_unallocated [--o=<filename>] """
+    try:
+      Dojo.print_unallocated(arg['--o'])
+    
+    except Exception as e:
+      print(e)
+
+  @docopt_cmd_decorator
+  def do_reallocate_person(self, arg):
+    """Usage: reallocate_person <person_identifier> <new_room_name> """
+    try:
+      Dojo.reallocate_person(arg['<person_identifier>'], \
+                             arg['<new_room_name>'])
+    
+    except Exception as e:
+      print(e)
+    
+    
+        

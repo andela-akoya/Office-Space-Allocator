@@ -42,7 +42,7 @@ class Dojo(object):
 			for name in  room_names:
 				try:
 					if (Utilities.check_format_validity([name]) \
-							 and not Room.exists(name.capitalize())):
+							and not Room.exists(name.capitalize())):
 						new_livingspace = LivingSpace(name.capitalize())
 						output.append(new_livingspace)
 						LivingSpace.add_to_livingspace_list(new_livingspace)
@@ -59,3 +59,20 @@ class Dojo(object):
 			print ("Invalid type of room")
 		
 		return output
+
+	def add_person(person_instance, wants_accomodation = None):
+		try:
+			if wants_accomodation == None :
+				print (Room.allocate_room(person_instance, \
+										list(Office.office_list.values())))
+			else:
+				if wants_accomodation.strip().lower() == "y":
+					print (Room.allocate_room(person_instance, \
+												list(Office.office_list.values()), \
+												list(LivingSpace.livingspace_list
+													.values())))
+				else:
+					print (Room.allocate_room(person_instance, \
+												 list(Office.office_list.values())))
+		except Exception as e:
+			print (e)

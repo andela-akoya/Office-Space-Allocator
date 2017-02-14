@@ -39,8 +39,8 @@ class TestRoom(unittest.TestCase):
 		""" test if only rooms with valid names format only are created """
 		TestRoom.reset_total_number_of_rooms()
 		initial_room_count = Room.get_total_number_of_rooms()
-		new_rooms = Dojo.create_room(
-					'LivingSpace', ['Orange', 'Yellow', "\"\""])
+		new_rooms = Dojo.create_room('LivingSpace', ['Orange', \
+										'Yellow', "\"\""])
 		latter_room_count = Room.get_total_number_of_rooms()
 		self.assertTrue(new_rooms)
 		self.assertNotEqual(initial_room_count, latter_room_count)
