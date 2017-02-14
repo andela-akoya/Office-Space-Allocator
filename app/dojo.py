@@ -76,3 +76,10 @@ class Dojo(object):
 												 list(Office.office_list.values())))
 		except Exception as e:
 			print (e)
+
+	def print_room(room_name):
+		try:
+			print()
+			print (Room.print_room_members(room_name))	
+		except Exception as e:
+			print (e)
