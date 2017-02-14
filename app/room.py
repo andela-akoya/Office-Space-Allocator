@@ -93,3 +93,10 @@ class Room():
 								.format(p=person))
 
 		return("\n".join(output))
+
+	def get_random_room(room_list):
+		available_rooms = Room.get_available_rooms(room_list)
+		if available_rooms:
+			return random.choice(available_rooms)
+		
+		return False
