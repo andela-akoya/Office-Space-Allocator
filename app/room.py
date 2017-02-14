@@ -1,18 +1,20 @@
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+import random
+from app.fellow import Fellow
+from app.staff import Staff
+from app.person import Person
 
 class Room():
 	
 	total_number_of_rooms = 0
+	room_list = {}
 
 	def __init__(self, name):
 		self.name = name
-		self.capacity_used = 0
+		self.is_full = False
+		self.room_members = []
 		Room.total_number_of_rooms += 1
 
-	def get_total_number_of_rooms():
-		pass
-	def allocate_room(type_of_person, wants_accomodation):
-		pass
-
-	
+	def add_room(room):
+		Room.room_list[room.name] = room
