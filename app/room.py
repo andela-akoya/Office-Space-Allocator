@@ -108,3 +108,17 @@ class Room():
 				available_rooms.append(room)
 
 		return available_rooms
+
+	def print_room_members(room_name):
+		output = []
+		if room_name in list(Room.room_list.keys()):
+			output.append("{:15} {}".format("Surname", "Firstname"))
+			for member in Room.room_list[room_name].room_members:
+				output.append("{:15} {} " \
+								.format(member.surname, member.firstname))
+
+			return "\n".join(output)
+
+		else:
+			raise Exception("The room with the name {} does not exist" \
+							.format(room_name))
