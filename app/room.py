@@ -100,3 +100,11 @@ class Room():
 			return random.choice(available_rooms)
 		
 		return False
+
+	def get_available_rooms(room_list):
+		available_rooms = []
+		for room in room_list:
+			if not room.is_full:
+				available_rooms.append(room)
+
+		return available_rooms
