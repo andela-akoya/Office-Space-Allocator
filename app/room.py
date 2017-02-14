@@ -122,3 +122,15 @@ class Room():
 		else:
 			raise Exception("The room with the name {} does not exist" \
 							.format(room_name))
+
+	def get_total_number_of_rooms():
+		return Room.total_number_of_rooms
+
+	def get_capacity_used(self):
+		return self.capacity_used
+
+	def exists(room_name):
+		if room_name in list(Room.room_list.keys()):
+			return True
+
+		return False	
