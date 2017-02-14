@@ -134,3 +134,9 @@ class Room():
 			return True
 
 		return False	
+
+	
+	def add_room_members(self, person):
+		self.room_members.append(person)
+		if len(self.room_members) == self.maximum_capacity:
+			self.is_full = True
