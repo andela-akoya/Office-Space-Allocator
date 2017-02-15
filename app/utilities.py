@@ -14,4 +14,4 @@ class Utilities():
 		return True
 
 	def generate_person_id(id_list): 
-		return random.choice(list(set(range(1, 2)).difference(id_list)))
+		return str(random.choice(list(set(range(1, 101)).difference(id_list))))

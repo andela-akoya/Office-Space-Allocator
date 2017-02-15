@@ -73,14 +73,14 @@ class Dojo(object):
 													.values())))
 				else:
 					print (Room.allocate_room(person_instance, \
-												 list(Office.office_list.values())))
+												list(Office.office_list.values())))
 		except Exception as e:
 			print (e)
 
 	def print_room(room_name):
 		try:
 			print()
-			print (Room.print_room_members(room_name))	
+			print (Room.print_room_members(room_name.capitalize()))	
 		except Exception as e:
 			print (e)
 
@@ -108,3 +108,9 @@ class Dojo(object):
 
 			except Exception as e:
 				print(e)
+
+	def reallocate_person(identifier, new_room_name):
+		Room.reallocate_room(identifier, new_room_name)
+
+	def get_total_rooms():
+		return Room.get_total_number_of_rooms()

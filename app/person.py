@@ -10,6 +10,7 @@ class Person():
 	def __init__(self, lname, fname):
 
 		if Utilities.check_format_validity([lname, fname]):
+			self.id = Utilities.generate_person_id(Person.get_id_list())
 			self.surname = lname
 			self.firstname = fname
 			self.office = ""
@@ -26,14 +27,14 @@ class Person():
 		serial_no = 0
 		for staff in unallocated_staff_list:
 			serial_no += 1
-			output.append("{}. Staff {s.surname} {s.firstname}\n" \
+			output.append(("{}. Staff {s.surname} {s.firstname}\n") \
 							.format(serial_no, s=staff))
 
 		for fellow in unallocated_fellow_list["office"]:
 			serial_no += 1
 			if fellow in unallocated_fellow_list["livingspace"]:
-				output.append("{}. Fellow {f.surname} {f.firstname}" \
-								+" (Office $ Livingspace)\n" \
+				output.append(("{}. Fellow {f.surname} {f.firstname}" \
+								+" (Office $ Livingspace)\n") \
 								.format(serial_no, f=fellow))
 			else:
 				output.append("{}. Fellow {f.surname} {f.firstname} " \
@@ -44,14 +45,15 @@ class Person():
 			
 			if not fellow in unallocated_fellow_list["office"]:
 				serial_no += 1
-				output.append("{}. Fellow {f.surname} {f.firstname} " \ 
-								+" (Livingspace)\n" \
+				output.append(("{}. Fellow {f.surname} {f.firstname} " \
+								+" (Livingspace)\n") \
 								.format(serial_no, f=fellow))
 
 		return "\n".join(output)
 
 	def add_to_map(person):
-		Person.id_map[Utilities.generate_person_id(Person.get_id_list())] = person
+		Person.id_map[person.id] = person
+		print(Person.id_map)
 		
 	def get_id_list():
 		return list(Person.id_map.keys())

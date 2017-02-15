@@ -10,8 +10,8 @@ class Room():
 	total_number_of_rooms = 0
 	room_list = {}
 
-	def __init__(self, name):
-		self.name = name
+	def __init__(self, room_name):
+		self.name = room_name
 		self.is_full = False
 		self.room_members = []
 		Room.total_number_of_rooms += 1
@@ -24,8 +24,8 @@ class Room():
 		random_office = Room.get_random_room(office_list)
 
 		if livingspace_list != None:
-			output.append("Fellow {p.surname} {p.firstname} " \
-							+ "has been successfully added." \
+			output.append(("Fellow {p.surname} {p.firstname} " \
+							+ "has been successfully added.") \
 							.format(p=person))
 
 			random_livingspace = Room.get_random_room(livingspace_list)
@@ -71,24 +71,24 @@ class Room():
 								+"on the waiting list") \
 								.format(p=person))
 		else:
-			output.append("{0} {p.surname} {p.firstname} has been " \ 
-							+" successfully added."\
+			output.append(("{0} {p.surname} {p.firstname} has been " \
+							+" successfully added.") \
 							.format(person.category.capitalize(), p=person))
 
 			if random_office:
 				person.set_assigned_office(random_office)
 				random_office.add_room_members([person])
-				output.append("{p.surname} has been allocated" \
-								+" the office {o.name}" \
+				output.append(("{p.surname} has been allocated" \
+								+" the office {o.name}") \
 								.format(p=person, o=random_office) )
 			else:
 				Staff.add_unallocated_staff(person) \
 				if isinstance(person, Staff)  \
 				else Fellow.add_unallocated_fellow(person, True, False)
 
-				output.append(("No available room. " \ 
+				output.append(("No available room. " \
 								+"All the rooms are occupied " \
-								+ "\n{p.surname} has been placed on " \ 
+								+ "\n{p.surname} has been placed on " \
 								+"the office waiting list") \
 								.format(p=person))
 

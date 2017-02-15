@@ -71,7 +71,7 @@ class MyInteractive(cmd.Cmd):
       elif type_of_person == "fellow":
         new_fellow = Fellow(arg['<lastname>'].capitalize(), \
                             arg['<firstname>'].capitalize())
-        
+
         Fellow.add_to_fellow_list(new_fellow)
         Person.add_to_map(new_fellow)
         Dojo.add_person(new_fellow, arg['<wants_accomodation>'])
@@ -115,4 +115,15 @@ class MyInteractive(cmd.Cmd):
       print(e)
     
     
+    
+
+if __name__ == '__main__':
+
+  try:
+    MyInteractive().cmdloop()
+  except SystemExit:
+    pass
+  except KeyboardInterrupt:
+    pass
         
+ 
