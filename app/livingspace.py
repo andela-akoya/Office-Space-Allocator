@@ -40,10 +40,10 @@ class LivingSpace(Room):
 		LivingSpace.livingspace_list[livingspace.name] = livingspace
 
 	def exist(livingspace_name):
-		if livingspace_name.capitalize() in list(LivingSpace.livingspace_list.keys()):
-			raise Exception("A livingspace with the name "
-							+ livingspace_name
-							+ " already exist")
+		if livingspace_name.capitalize() in list(LivingSpace
+												 .livingspace_list.keys()):
+			raise Exception("A livingspace with the name {} already exist"
+							.format(livingspace_name))
 
 		return True
 
@@ -55,8 +55,9 @@ class LivingSpace(Room):
 			person.set_wants_accomodation = True
 			return("{p.surname} has been allocated a livingspace {l.name}\n"
 				   .format(p=person, l=livingspace))
-		return("No available livingspace, {p.surname} has been placed on the"
-			   + " livingspace waiting list\n".format(p=person))
+		Fellow.add_unallocated_fellow(person, False, True)
+		return(("No available livingspace, {p.surname} has been placed on the"
+				+ " livingspace waiting list\n").format(p=person))
 
 	def get_random_livingspace():
 		available_livingspaces = LivingSpace.get_available_livingspaces()

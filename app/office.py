@@ -1,6 +1,8 @@
 import random
 from os import sys, path
 from app.room import Room
+from app.staff import Staff
+from app.fellow import Fellow
 from app.utilities import Utilities
 sys.path.append(path.dirname(path.dirname(
 	path.dirname(path.abspath(__file__)))))
@@ -52,6 +54,8 @@ class Office(Room):
 			office.add_room_members(person)
 			return("{p.surname} has been allocated the office {o.name}\n"
 				   .format(p=person, o=office))
+		Staff.add_unallocated_staff(person) if isinstance(person, Staff) \
+			else Fellow.add_unallocated_fellow(person, True)
 		return(("No available office, {p.surname} has been placed on the"
 				+ " office waiting list").format(p=person))
 

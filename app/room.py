@@ -4,150 +4,151 @@ from app.fellow import Fellow
 from app.staff import Staff
 from app.person import Person
 sys.path.append(path.dirname(path.dirname(
-	path.dirname(path.abspath(__file__)))))
+    path.dirname(path.abspath(__file__)))))
 
 
 class Room():
 
-	total_number_of_rooms = 0
-	room_list = {}
+    total_number_of_rooms = 0
+    room_list = {}
 
-	def __init__(self, room_name):
-		self.name = room_name.capitalize()
-		self.is_full = False
-		self.room_members = []
-		Room.total_number_of_rooms += 1
+    def __init__(self, room_name):
+        self.name = room_name.capitalize()
+        self.is_full = False
+        self.room_members = []
+        Room.total_number_of_rooms += 1
 
-	def add_room(room):
-		Room.room_list[room.name] = room
+    def add_room(room):
+        Room.room_list[room.name] = room
+        print(room.room_list)
 
-	def get_random_room(room_list):
-		available_rooms = Room.get_available_rooms(room_list)
-		if available_rooms:
-			return random.choice(available_rooms)
+    def get_random_room(room_list):
+        available_rooms = Room.get_available_rooms(room_list)
+        if available_rooms:
+            return random.choice(available_rooms)
 
-		return False
+        return False
 
-	def get_available_rooms(room_list):
-		available_rooms = []
-		for room in room_list:
-			if not room.is_full:
-				available_rooms.append(room)
+    def get_available_rooms(room_list):
+        available_rooms = []
+        for room in room_list:
+            if not room.is_full:
+                available_rooms.append(room)
 
-		return available_rooms
+        return available_rooms
 
-	def print_room_members(room_name):
-		output = []
-		if room_name.lower() in list(Room.room_list.keys()):
-			output.append("{:15} {}".format("Surname".capitalize(),
-											"Firstname".capitalize()))
-			for member in Room.room_list[room_name].room_members:
-				output.append("{:15} {} "
-							  .format(member.surname, member.firstname))
+    def print_room_members(room_name):
+        output = []
+        name = room_name.capitalize()
+        if name in list(Room.room_list.keys()):
+            output.append("{:15} {}".format("Surname", "Firstname"))
+            for member in Room.room_list[name].room_members:
+                output.append("{:15} {} "
+                              .format(member.surname, member.firstname))
 
-			return "\n".join(output)
+            return "\n".join(output)
 
-		else:
-			raise Exception("The room with the name {} does not exist"
-							.format(room_name))
+        else:
+            raise Exception("The room with the name {} does not exist"
+                            .format(room_name))
 
-	def get_total_number_of_rooms():
-		return Room.total_number_of_rooms
+    def get_total_number_of_rooms():
+        return Room.total_number_of_rooms
 
-	def get_capacity_used(self):
-		return self.capacity_used
+    def get_capacity_used(self):
+        return self.capacity_used
 
-	def exists(room_name):
-		if room_name.capitalize() in list(Room.room_list.keys()):
-			return True
+    def exists(room_name):
+        if room_name.capitalize() in list(Room.room_list.keys()):
+            return True
 
-		return False
+        return False
 
-	def add_room_members(self, person):
-		self.room_members.append(person)
-		if len(self.room_members) == self.maximum_capacity:
-			self.is_full = True
+    def add_room_members(self, person):
+        self.room_members.append(person)
+        if len(self.room_members) == self.maximum_capacity:
+            self.is_full = True
 
-	def get_room_members(self):
-		return self.room_members
+    def get_room_members(self):
+        return self.room_members
 
-	def get_allocations():
-		output = ""
-		for room in list(Room.room_list.values()):
-			output += "{} Room\n".format(room.name)
-			output += (len(room.name + " Room") * "-") + "\n"
-			for member in room.room_members:
-				output += "{m.surname} {m.firstname}, ".format(m=member)
-			output += "\n\n\n"
+    def get_allocations():
+        output = ""
+        for room in list(Room.room_list.values()):
+            output += "{} Room\n".format(room.name)
+            output += (len(room.name + " Room") * "-") + "\n"
+            for member in room.room_members:
+                output += "{m.surname} {m.firstname}, ".format(m=member)
+            output += "\n\n\n"
 
-		return output
+        return output
 
-	# def reallocate_person(identifier, room_name):
-	# 	if Person.exist(identifier):
-	# 		if Room.exists(room_name):
-	# 			person = Person.id_map[identifier]
-	# 			room = Room.room_list[room_name]
-	# 			if isinstance(person, Staff):
-	# 				if isinstance(room, Office):
-	# 					if not room.is_full:
-	# 						present_office = person.get_assigned_office()
-	# 						if present_office is None:
-	# 							Staff.remove_from_unallocated_staff_list(person)
-	# 						else:
-	# 							present_office.get_room_members() \
-	# 							.remove(person)
-	# 						person.set_assigned_office(room)
-	# 						room.add_room_members(person)
-	# 					else:
-	# 						raise Exception(("{r.name} is filled up and " \
-	# 										+"can't accept any more member ") \
-	# 										.format(r=room))
-	# 				else:
-	# 					raise Exception(("{r.name} is a livingspace and " \
-	# 									+" can't be assigned to a Staff") \
-	# 									.format(r=room))
-	# 			else:
-	# 				if not room.is_full:
-	# 					if isinstance(room, Office):
-	# 						present_office = person.get_assigned_office()
-	# 						if present_office is None:
-	# 							Fellow.remove_from_unallocated_fellow_list( \
-	# 												person, "office" )
-	# 						else:
-	# 							present_office.get_room_members() \
-	# 							.remove(person)
-	#
-	# 						person.set_assigned_office(room)
-	# 						room.add_room_members(person)
-	# 					else:
-	# 						if person.get_wants_accomodation():
-	# 							livingspace = 	person \
-	# 											.get_assigned_livingspace()
-	# 							if Livingspace is None:
-	# 								Fellow.remove_from_unallocated_fellow_list( \
-	# 								person, "livingspace")
-	# 							else:
-	# 								livingspace.get_room_members() \
-	# 								.remove(person)
-	#
-	# 							person.set_assigned_livingspace(room)
-	# 							room.add_room_members(person)
-	#
-	# 						else:
-	# 							raise Exception(("Fellow {p.suraname} " \
-	# 											+"{p.firstname} never " \
-	# 											+"registered for accomodation"\
-	# 											+"so can't be granted a " \
-	# 											+"a livingspace") \
-	# 											.format(p=person))
-	# 				else:
-	# 					raise Exception(("{r.name} is filled up and " \
-	# 									+"can't accept any more member ") \
-	# 									.format(r=room))
-	#
-	#
-	#
-	# 		else:
-	# 			raise Exception("Room doesn't exist")
-	# 	else:
-	# 		raise Exception("Person doesn't exist")
+    # def reallocate_person(identifier, room_name):
+    # 	if Person.exist(identifier):
+    # 		if Room.exists(room_name):
+    # 			person = Person.id_map[identifier]
+    # 			room = Room.room_list[room_name]
+    # 			if isinstance(person, Staff):
+    # 				if isinstance(room, Office):
+    # 					if not room.is_full:
+    # 						present_office = person.get_assigned_office()
+    # 						if present_office is None:
+    # 							Staff.remove_from_unallocated_staff_list(person)
+    # 						else:
+    # 							present_office.get_room_members() \
+    # 							.remove(person)
+    # 						person.set_assigned_office(room)
+    # 						room.add_room_members(person)
+    # 					else:
+    # 						raise Exception(("{r.name} is filled up and " \
+    # 										+"can't accept any more member ") \
+    # 										.format(r=room))
+    # 				else:
+    # 					raise Exception(("{r.name} is a livingspace and " \
+    # 									+" can't be assigned to a Staff") \
+    # 									.format(r=room))
+    # 			else:
+    # 				if not room.is_full:
+    # 					if isinstance(room, Office):
+    # 						present_office = person.get_assigned_office()
+    # 						if present_office is None:
+    # 							Fellow.remove_from_unallocated_fellow_list( \
+    # 												person, "office" )
+    # 						else:
+    # 							present_office.get_room_members() \
+    # 							.remove(person)
+    #
+    # 						person.set_assigned_office(room)
+    # 						room.add_room_members(person)
+    # 					else:
+    # 						if person.get_wants_accomodation():
+    # 							livingspace = 	person \
+    # 											.get_assigned_livingspace()
+    # 							if Livingspace is None:
+    # 								Fellow.remove_from_unallocated_fellow_list( \
+    # 								person, "livingspace")
+    # 							else:
+    # 								livingspace.get_room_members() \
+    # 								.remove(person)
+    #
+    # 							person.set_assigned_livingspace(room)
+    # 							room.add_room_members(person)
+    #
+    # 						else:
+    # 							raise Exception(("Fellow {p.suraname} " \
+    # 											+"{p.firstname} never " \
+    # 											+"registered for accomodation"\
+    # 											+"so can't be granted a " \
+    # 											+"a livingspace") \
+    # 											.format(p=person))
+    # 				else:
+    # 					raise Exception(("{r.name} is filled up and " \
+    # 									+"can't accept any more member ") \
+    # 									.format(r=room))
+    #
+    #
+    #
+    # 		else:
+    # 			raise Exception("Room doesn't exist")
+    # 	else:
+    # 		raise Exception("Person doesn't exist")

@@ -31,14 +31,14 @@ class Dojo(object):
 			if((wants_accomodation is None) or (wants_accomodation.lower() != "y")):
 				print(Office.allocate_office(person))
 			else:
-				print(Office.allocate_office(person),
-					  LivingSpace.allocate_livingspace(person))
+				print("{}\n{}".format(Office.allocate_office(person),
+									  LivingSpace.allocate_livingspace(person)))
 		except Exception as e:
 			pass
 
 	def print_room(room_name):
 		try:
-			print("\n", Room.print_room_members(room_name))
+			print("\n{}".format(Room.print_room_members(room_name)))
 		except Exception as e:
 			print(e)
 
@@ -63,7 +63,6 @@ class Dojo(object):
 			try:
 				file = File.create_file(filename)
 				File.write(file, unallocated)
-
 			except Exception as e:
 				print(e)
 
