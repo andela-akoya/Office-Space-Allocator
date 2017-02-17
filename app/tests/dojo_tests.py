@@ -48,7 +48,7 @@ class TestRoom(unittest.TestCase):
 		self.assertEqual(later_room_count, 2)
 
 	def test_create_duplicate_room(self):
-		""" the create_room function shouldn't create an already existing 
+		""" the create_room function shouldn't create an already existing
 		room within the same type category """
 		TestRoom.reset_total_number_of_rooms()
 		print(Room.total_number_of_rooms)
@@ -81,20 +81,3 @@ class TestRoom(unittest.TestCase):
 		self.assertTrue(new_staff2)
 		Dojo.add_person(new_staff)
 		self.assertEqual(len(new_office[0].room_members), 2)
-
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-	

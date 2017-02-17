@@ -1,6 +1,6 @@
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
-from app.person import Person 
+from app.person import Person
 class Staff(Person):
 	"""docstring for Staff"""
 	staff_list = []
@@ -19,7 +19,5 @@ class Staff(Person):
 	def get_unallocated_staff():
 		return Staff.unallocated_staff
 
-	
-		
-		
-		
+	def remove_from_unallocated_staff_list(staff):
+		Staff.unallocated_staff.remove(staff)

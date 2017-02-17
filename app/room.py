@@ -1,17 +1,19 @@
-from os import sys, path
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
 import random
+from os import sys, path
 from app.fellow import Fellow
 from app.staff import Staff
 from app.person import Person
+sys.path.append(path.dirname(path.dirname(
+	path.dirname(path.abspath(__file__)))))
+
 
 class Room():
-	
+
 	total_number_of_rooms = 0
 	room_list = {}
 
 	def __init__(self, room_name):
-		self.name = room_name
+		self.name = room_name.capitalize()
 		self.is_full = False
 		self.room_members = []
 		Room.total_number_of_rooms += 1
@@ -19,86 +21,11 @@ class Room():
 	def add_room(room):
 		Room.room_list[room.name] = room
 
-	def allocate_room(person, office_list, livingspace_list = None ):
-		output = []
-		random_office = Room.get_random_room(office_list)
-
-		if livingspace_list != None:
-			output.append(("Fellow {p.surname} {p.firstname} " \
-							+ "has been successfully added.") \
-							.format(p=person))
-
-			random_livingspace = Room.get_random_room(livingspace_list)
-
-			if random_office and random_livingspace:
-				person.set_assigned_office(random_office)
-				person.set_assigned_livingspace(random_livingspace)
-				random_office.add_room_members(person)
-				random_livingspace.add_room_members(person)
-				output.append(("{p.surname} has been allocated "  \
-								+ "the office {o.name}"  \
-								+ "\n{p.surname} has been allocated " \
-								+ "the livingspace {l.name}") \
-								.format(p=person, o=random_office, \
-										l=random_livingspace))
-			elif random_office:
-				person.set_assigned_office(random_office)
-				random_office.add_room_members(person)
-				Fellow.add_unallocated_fellow(person, False, True)
-				output.append(("{p.surname} has been allocated " \
-								+"the office {o.name}" \
-								+ "\nNo available livingspace, " \
-								+"{p.surname} has been placed on the" \
-								+ " livingspace waiting list") \
-								.format(p=person, o=random_office))
-
-			elif random_livingspace:
-				person.set_assigned_livingspace(random_livingspace)
-				random_livingspace.add_room_members(person)
-				Fellow.add_unallocated_fellow(person, True, False)
-				output.append(("{p.surname} has been allocated " \
-								+"the livingspace {l.name}" \
-								+ "\nNo available office, " \
-								+ "{p.surname} has been placed on the" \
-								+ " office waiting list")
-								.format(p=person, l=random_livingspace))
-
-			else:
-				Fellow.add_unallocated_fellow(person, True, True)
-				output.append(("No available room. " \
-								+"All the rooms are occupied " \
-								+ "\n{p.surname} has been placed " \
-								+"on the waiting list") \
-								.format(p=person))
-		else:
-			output.append(("{0} {p.surname} {p.firstname} has been " \
-							+" successfully added.") \
-							.format(person.category.capitalize(), p=person))
-
-			if random_office:
-				person.set_assigned_office(random_office)
-				random_office.add_room_members([person])
-				output.append(("{p.surname} has been allocated" \
-								+" the office {o.name}") \
-								.format(p=person, o=random_office) )
-			else:
-				Staff.add_unallocated_staff(person) \
-				if isinstance(person, Staff)  \
-				else Fellow.add_unallocated_fellow(person, True, False)
-
-				output.append(("No available room. " \
-								+"All the rooms are occupied " \
-								+ "\n{p.surname} has been placed on " \
-								+"the office waiting list") \
-								.format(p=person))
-
-		return("\n".join(output))
-
 	def get_random_room(room_list):
 		available_rooms = Room.get_available_rooms(room_list)
 		if available_rooms:
 			return random.choice(available_rooms)
-		
+
 		return False
 
 	def get_available_rooms(room_list):
@@ -111,16 +38,17 @@ class Room():
 
 	def print_room_members(room_name):
 		output = []
-		if room_name in list(Room.room_list.keys()):
-			output.append("{:15} {}".format("Surname", "Firstname"))
+		if room_name.lower() in list(Room.room_list.keys()):
+			output.append("{:15} {}".format("Surname".capitalize(),
+											"Firstname".capitalize()))
 			for member in Room.room_list[room_name].room_members:
-				output.append("{:15} {} " \
-								.format(member.surname, member.firstname))
+				output.append("{:15} {} "
+							  .format(member.surname, member.firstname))
 
 			return "\n".join(output)
 
 		else:
-			raise Exception("The room with the name {} does not exist" \
+			raise Exception("The room with the name {} does not exist"
 							.format(room_name))
 
 	def get_total_number_of_rooms():
@@ -130,16 +58,18 @@ class Room():
 		return self.capacity_used
 
 	def exists(room_name):
-		if room_name in list(Room.room_list.keys()):
+		if room_name.capitalize() in list(Room.room_list.keys()):
 			return True
 
-		return False	
-
+		return False
 
 	def add_room_members(self, person):
 		self.room_members.append(person)
 		if len(self.room_members) == self.maximum_capacity:
 			self.is_full = True
+
+	def get_room_members(self):
+		return self.room_members
 
 	def get_allocations():
 		output = ""
@@ -151,4 +81,73 @@ class Room():
 			output += "\n\n\n"
 
 		return output
-			
+
+	# def reallocate_person(identifier, room_name):
+	# 	if Person.exist(identifier):
+	# 		if Room.exists(room_name):
+	# 			person = Person.id_map[identifier]
+	# 			room = Room.room_list[room_name]
+	# 			if isinstance(person, Staff):
+	# 				if isinstance(room, Office):
+	# 					if not room.is_full:
+	# 						present_office = person.get_assigned_office()
+	# 						if present_office is None:
+	# 							Staff.remove_from_unallocated_staff_list(person)
+	# 						else:
+	# 							present_office.get_room_members() \
+	# 							.remove(person)
+	# 						person.set_assigned_office(room)
+	# 						room.add_room_members(person)
+	# 					else:
+	# 						raise Exception(("{r.name} is filled up and " \
+	# 										+"can't accept any more member ") \
+	# 										.format(r=room))
+	# 				else:
+	# 					raise Exception(("{r.name} is a livingspace and " \
+	# 									+" can't be assigned to a Staff") \
+	# 									.format(r=room))
+	# 			else:
+	# 				if not room.is_full:
+	# 					if isinstance(room, Office):
+	# 						present_office = person.get_assigned_office()
+	# 						if present_office is None:
+	# 							Fellow.remove_from_unallocated_fellow_list( \
+	# 												person, "office" )
+	# 						else:
+	# 							present_office.get_room_members() \
+	# 							.remove(person)
+	#
+	# 						person.set_assigned_office(room)
+	# 						room.add_room_members(person)
+	# 					else:
+	# 						if person.get_wants_accomodation():
+	# 							livingspace = 	person \
+	# 											.get_assigned_livingspace()
+	# 							if Livingspace is None:
+	# 								Fellow.remove_from_unallocated_fellow_list( \
+	# 								person, "livingspace")
+	# 							else:
+	# 								livingspace.get_room_members() \
+	# 								.remove(person)
+	#
+	# 							person.set_assigned_livingspace(room)
+	# 							room.add_room_members(person)
+	#
+	# 						else:
+	# 							raise Exception(("Fellow {p.suraname} " \
+	# 											+"{p.firstname} never " \
+	# 											+"registered for accomodation"\
+	# 											+"so can't be granted a " \
+	# 											+"a livingspace") \
+	# 											.format(p=person))
+	# 				else:
+	# 					raise Exception(("{r.name} is filled up and " \
+	# 									+"can't accept any more member ") \
+	# 									.format(r=room))
+	#
+	#
+	#
+	# 		else:
+	# 			raise Exception("Room doesn't exist")
+	# 	else:
+	# 		raise Exception("Person doesn't exist")
