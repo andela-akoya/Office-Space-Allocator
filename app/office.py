@@ -19,14 +19,15 @@ class Office(Room):
 		self.type = "office"
 		self.maximum_capacity = 4
 
-	def create_office(room_names):
+	@classmethod
+	def create_office(cls, room_names):
 		output = []
 		for name in room_names:
 			try:
 				if (Utilities.check_format_validity([name])
 						and not Room.exists(name)):
 					new_office = Office(name)
-					Office.add_to_office_list(new_office)
+					cls.add_to_office_list(new_office)
 					Room.add_room(new_office)
 					output.append(new_office)
 					print("An Office called {} has been successfully created"
@@ -38,19 +39,22 @@ class Office(Room):
 				print(e)
 		return output
 
-	def add_to_office_list(office_instance):
-		Office.office_list[office_instance.name] = office_instance
+	@classmethod
+	def add_to_office_list(cls, office_instance):
+		cls.office_list[office_instance.name] = office_instance
 
-	def exist(office_name):
-		if office_name.capitalize() in list(Office.office_list.keys()):
+	@classmethod
+	def exist(cls, office_name):
+		if office_name.capitalize() in list(cls.office_list.keys()):
 			raise Exception("An Office with the name "
 							+ office_name
 							+ " already exist")
 
 		return True
 
-	def allocate_office(person):
-		office = Office.get_random_office()
+	@classmethod
+	def allocate_office(cls, person):
+		office = cls.get_random_office()
 		if office:
 			person.set_assigned_office(office)
 			office.add_room_members(person)
@@ -61,17 +65,20 @@ class Office(Room):
 		return(("No available office, {p.surname} has been placed on the"
 				+ " office waiting list").format(p=person))
 
-	def get_random_office():
-		available_offices = Office.get_available_offices()
+	@classmethod
+	def get_random_office(cls):
+		available_offices = cls.get_available_offices()
 		return random.choice(available_offices) \
 			if available_offices else None
 
-	def get_available_offices():
+	@classmethod
+	def get_available_offices(cls):
 		available_offices = []
-		for office in Office.get_office_list():
+		for office in cls.get_office_list():
 			if not office.is_full:
 				available_offices.append(office)
 		return available_offices
 
-	def get_office_list():
-		return list(Office.office_list.values())
+	@classmethod
+	def get_office_list(cls):
+		return list(cls.office_list.values())

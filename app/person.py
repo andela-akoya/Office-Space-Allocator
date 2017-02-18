@@ -59,14 +59,14 @@ class Person():
 
 	@classmethod
 	def add_to_map(cls, person):
-		Person.id_map[person.id] = person
+		cls.id_map[person.id] = person
 
 	@classmethod
 	def get_id_list(cls):
-		return list(Person.id_map.keys())
+		return list(cls.id_map.keys())
 
 	@classmethod
 	def exist(cls, person_identifier):
-		if not person_identifier in Person.get_id_list():
+		if not person_identifier in cls.get_id_list():
 			raise Exception("Person doesn't exist")
 		return True

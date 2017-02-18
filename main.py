@@ -15,7 +15,9 @@ Options:
 """
 import sys
 import cmd
+
 from docopt import docopt, DocoptExit
+
 from app.dojo import Dojo
 from app.staff import Staff
 from app.fellow import Fellow

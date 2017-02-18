@@ -18,6 +18,18 @@ class Fellow(Person):
 		self.livingspace = None
 		self.wants_accomodation = False
 
+	def set_assigned_livingspace(self, livingspace):
+		self.livingspace = livingspace
+
+	def get_assigned_livingspace(self):
+		return self.livingspace
+
+	def set_wants_accomodation(self, param):
+		self.wants_accomodation = param
+
+	def get_wants_accomodation(self):
+		return self.wants_accomodation
+
 	@classmethod
 	def add_to_fellow_list(cls, fellow):
 		cls.fellow_list.append(fellow)
@@ -35,18 +47,6 @@ class Fellow(Person):
 	@classmethod
 	def get_unallocated_fellows(cls):
 		return cls.unallocated_fellows
-
-	def set_assigned_livingspace(self, livingspace):
-		self.livingspace = livingspace
-
-	def get_assigned_livingspace(self):
-		return self.livingspace
-
-	def set_wants_accomodation(self, param):
-		self.wants_accomodation = param
-
-	def get_wants_accomodation(self):
-		return self.wants_accomodation
 
 	@classmethod
 	def remove_from_unallocated_fellow_list(cls, fellow, room_type):

@@ -17,16 +17,16 @@ class Staff(Person):
 
 	@classmethod
 	def add_to_staff_list(cls, staff):
-		Staff.staff_list.append(staff)
+		cls.staff_list.append(staff)
 
 	@classmethod
 	def add_unallocated_staff(cls, staff):
-		Staff.unallocated_staff.append(staff)
+		cls.unallocated_staff.append(staff)
 
 	@classmethod
 	def get_unallocated_staff(cls):
-		return Staff.unallocated_staff
+		return cls.unallocated_staff
 
 	@classmethod
 	def remove_from_unallocated_staff_list(cls, staff):
-		Staff.unallocated_staff.remove(staff)
+		cls.unallocated_staff.remove(staff)
