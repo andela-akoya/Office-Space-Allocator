@@ -1,9 +1,13 @@
-from app.utilities import Utilities
 from os import path
+
+from app.utilities import Utilities
+
 
 class File():
 	"""docstring for File"""
-	def create_file(filename):
+
+	@classmethod
+	def create_file(cls, filename):
 		try:
 			Utilities.check_format_validity(filename)
 		except:
@@ -11,17 +15,18 @@ class File():
 
 		filepath = path.dirname(path.abspath(__file__)) + "\\text documents\\"
 		filename = "{}.txt".format(filename)
-		
+
 		if File.exist(filepath, filename):
 			raise Exception("{} already exist".format(filename))
 		else:
 			return open(filepath + filename, "w")
 
-	def write(file, content):
-		file.write(content)
+	@classmethod
+	def write(cls, new_file, content):
+		new_file.write(content)
 
-
-	def exist(filepath, filename):
+	@classmethod
+	def exist(cls, filepath, filename):
 		if path.isfile(filepath + filename):
 			return True
 

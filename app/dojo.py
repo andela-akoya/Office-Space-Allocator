@@ -1,6 +1,5 @@
 from os import sys, path
-sys.path.append(path.dirname(path.dirname(
-	path.dirname(path.abspath(__file__)))))
+
 from app.office import Office
 from app.livingspace import LivingSpace
 from app.room import Room
@@ -10,14 +9,15 @@ from app.fellow import Fellow
 from app.file import File
 from app.person import Person
 
+sys.path.append(path.dirname(path.dirname(
+	path.dirname(path.abspath(__file__)))))
+
 
 class Dojo(object):
 	"""docstring for Dojo"""
 
-	def __init__(self):
-		pass
-
-	def create_room(room_type, room_names):
+	@classmethod
+	def create_room(cls, room_type, room_names):
 		type_of_room = room_type.strip().lower()
 		if type_of_room == "office":
 			return Office.create_office(room_names)
@@ -26,9 +26,10 @@ class Dojo(object):
 		else:
 			print("Invalid type of room")
 
-	def allocate_room(person, wants_accomodation=None):
+	@classmethod
+	def allocate_room(cls, person, wants_accomodation=None):
 		try:
-			if((wants_accomodation is None) or (wants_accomodation.lower() != "y")):
+			if(not wants_accomodation or wants_accomodation in ['y', 'Y']):
 				print(Office.allocate_office(person))
 			else:
 				print("{}\n{}".format(Office.allocate_office(person),
@@ -36,37 +37,41 @@ class Dojo(object):
 		except Exception as e:
 			pass
 
+	@classmethod
 	def print_room(room_name):
 		try:
 			print("\n{}".format(Room.print_room_members(room_name)))
 		except Exception as e:
 			print(e)
 
-	def print_allocations(filename):
+	@classmethod
+	def print_allocations(cls, filename):
 		allocations = Room.get_allocations()
 		if filename is None:
 			print(allocations)
 		else:
 			try:
-				file = File.create_file(filename)
-				File.write(file, allocations)
+				new_file = File.create_file(filename)
+				File.write(new_file, allocations)
 
 			except Exception as e:
 				print(e)
 
-	def print_unallocated(filename):
+	@classmethod
+	def print_unallocated(cls, filename):
 		unallocated = Person.get_unallocated(Staff.get_unallocated_staff(),
 											 Fellow.get_unallocated_fellows())
 		if filename is None:
 			print(unallocated)
 		else:
 			try:
-				file = File.create_file(filename)
-				File.write(file, unallocated)
+				new_file = File.create_file(filename)
+				File.write(new_file, unallocated)
 			except Exception as e:
 				print(e)
 
-	def reallocate_person(identifier, new_room_name):
+	@classmethod
+	def reallocate_person(cls, identifier, new_room_name):
 		person_id = None
 		try:
 			person_id = int(identifier)
@@ -79,5 +84,6 @@ class Dojo(object):
 		except Exception as e:
 			print(e)
 
-	def get_total_rooms():
+	@classmethod
+	def get_total_rooms(cls):
 		return Room.get_total_number_of_rooms()

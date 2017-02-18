@@ -1,7 +1,9 @@
 from os import sys, path
+
+from app.utilities import Utilities
+
 sys.path.append(path.dirname(path.dirname(
 	path.dirname(path.abspath(__file__)))))
-from app.utilities import Utilities
 
 
 class Person():
@@ -26,7 +28,8 @@ class Person():
 	def get_assigned_office(self):
 		return self.office
 
-	def get_unallocated(unallocated_staff_list, unallocated_fellow_list):
+	@classmethod
+	def get_unallocated(cls, unallocated_staff_list, unallocated_fellow_list):
 		output = []
 		output.append("Unallocated List \n---------------------\n")
 		serial_no = 0
@@ -54,13 +57,16 @@ class Person():
 
 		return "\n".join(output)
 
-	def add_to_map(person):
+	@classmethod
+	def add_to_map(cls, person):
 		Person.id_map[person.id] = person
 
-	def get_id_list():
+	@classmethod
+	def get_id_list(cls):
 		return list(Person.id_map.keys())
 
-	def exist(person_identifier):
+	@classmethod
+	def exist(cls, person_identifier):
 		if not person_identifier in Person.get_id_list():
 			raise Exception("Person doesn't exist")
 		return True

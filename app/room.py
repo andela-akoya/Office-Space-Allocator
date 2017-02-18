@@ -1,8 +1,10 @@
 import random
 from os import sys, path
+
 from app.fellow import Fellow
 from app.staff import Staff
 from app.person import Person
+
 sys.path.append(path.dirname(path.dirname(
     path.dirname(path.abspath(__file__)))))
 
@@ -18,18 +20,21 @@ class Room():
         self.room_members = []
         Room.total_number_of_rooms += 1
 
-    def add_room(room):
-        Room.room_list[room.name] = room
+    @classmethod
+    def add_room(cls, room):
+        cls.room_list[room.name] = room
         print(room.room_list)
 
-    def get_random_room(room_list):
-        available_rooms = Room.get_available_rooms(room_list)
+    @classmethod
+    def get_random_room(cls, room_list):
+        available_rooms = cls.get_available_rooms(room_list)
         if available_rooms:
             return random.choice(available_rooms)
 
         return False
 
-    def get_available_rooms(room_list):
+    @classmethod
+    def get_available_rooms(cls, room_list):
         available_rooms = []
         for room in room_list:
             if not room.is_full:
@@ -37,12 +42,13 @@ class Room():
 
         return available_rooms
 
-    def print_room_members(room_name):
+    @classmethod
+    def print_room_members(cls, room_name):
         output = []
         name = room_name.capitalize()
-        if name in list(Room.room_list.keys()):
+        if name in list(cls.room_list.keys()):
             output.append("{:15} {}".format("Surname", "Firstname"))
-            for member in Room.room_list[name].room_members:
+            for member in cls.room_list[name].room_members:
                 output.append("{:15} {} "
                               .format(member.surname, member.firstname))
 
@@ -52,14 +58,16 @@ class Room():
             raise Exception("The room with the name {} does not exist"
                             .format(room_name))
 
-    def get_total_number_of_rooms():
-        return Room.total_number_of_rooms
+    @classmethod
+    def get_total_number_of_rooms(cls):
+        return cls.total_number_of_rooms
 
     def get_capacity_used(self):
         return self.capacity_used
 
-    def exists(room_name):
-        if room_name.capitalize() in list(Room.room_list.keys()):
+    @classmethod
+    def exists(cls, room_name):
+        if room_name.capitalize() in list(cls.room_list.keys()):
             return True
 
         return False
@@ -72,9 +80,10 @@ class Room():
     def get_room_members(self):
         return self.room_members
 
-    def get_allocations():
+    @classmethod
+    def get_allocations(cls):
         output = ""
-        for room in list(Room.room_list.values()):
+        for room in list(cls.room_list.values()):
             output += "{} Room\n".format(room.name)
             output += (len(room.name + " Room") * "-") + "\n"
             for member in room.room_members:

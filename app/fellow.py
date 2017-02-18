@@ -1,12 +1,16 @@
 from os import sys, path
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+
 from app.person import Person
+
+sys.path.append(path.dirname(path.dirname(
+	path.dirname(path.abspath(__file__)))))
+
 
 class Fellow(Person):
 	"""docstring for Fellow"""
 
 	fellow_list = []
-	unallocated_fellows = {"office" : [], "livingspace" : []}
+	unallocated_fellows = {"office": [], "livingspace": []}
 
 	def __init__(self, lname, fname):
 		super(Fellow, self).__init__(lname, fname)
@@ -14,32 +18,36 @@ class Fellow(Person):
 		self.livingspace = None
 		self.wants_accomodation = False
 
-	def add_to_fellow_list(fellow):
-		Fellow.fellow_list.append(fellow)
+	@classmethod
+	def add_to_fellow_list(cls, fellow):
+		cls.fellow_list.append(fellow)
 
-	def add_unallocated_fellow(fellow, office=False, livingspace = False):
+	@classmethod
+	def add_unallocated_fellow(cls, fellow, office=False, livingspace=False):
 		if office and livingspace:
-			Fellow.unallocated_fellows["office"].append(fellow)
-			Fellow.unallocated_fellows["livingspace"].append(fellow)
+			cls.unallocated_fellows["office"].append(fellow)
+			cls.unallocated_fellows["livingspace"].append(fellow)
 		elif office:
-			Fellow.unallocated_fellows["office"].append(fellow)
+			cls.unallocated_fellows["office"].append(fellow)
 		else:
-			Fellow.unallocated_fellows["livingspace"].append(fellow)
+			cls.unallocated_fellows["livingspace"].append(fellow)
 
-	def get_unallocated_fellows():
-		return Fellow.unallocated_fellows
+	@classmethod
+	def get_unallocated_fellows(cls):
+		return cls.unallocated_fellows
 
 	def set_assigned_livingspace(self, livingspace):
 		self.livingspace = livingspace
 
-	def get_assigned_livingspace():
+	def get_assigned_livingspace(self):
 		return self.livingspace
 
-	def set_wants_accomodation(param):
+	def set_wants_accomodation(self, param):
 		self.wants_accomodation = param
 
-	def get_wants_accomodation():
+	def get_wants_accomodation(self):
 		return self.wants_accomodation
 
-	def remove_from_unallocated_fellow_list(fellow, room_type):
-		Fellow.unallocated_fellows[room_type].remove(fellow)
+	@classmethod
+	def remove_from_unallocated_fellow_list(cls, fellow, room_type):
+		cls.unallocated_fellows[room_type].remove(fellow)

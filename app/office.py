@@ -1,9 +1,11 @@
 import random
 from os import sys, path
+
 from app.room import Room
 from app.staff import Staff
 from app.fellow import Fellow
 from app.utilities import Utilities
+
 sys.path.append(path.dirname(path.dirname(
 	path.dirname(path.abspath(__file__)))))
 
