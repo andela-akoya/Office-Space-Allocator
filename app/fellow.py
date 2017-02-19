@@ -12,11 +12,11 @@ class Fellow(Person):
 	fellow_list = []
 	unallocated_fellows = {"office": [], "livingspace": []}
 
-	def __init__(self, lname, fname):
+	def __init__(self, lname, fname, wants_accomodation=False):
 		super(Fellow, self).__init__(lname, fname)
 		self.category = "fellow"
 		self.livingspace = None
-		self.wants_accomodation = False
+		self.wants_accomodation = wants_accomodation
 
 	def set_assigned_livingspace(self, livingspace):
 		self.livingspace = livingspace

@@ -1,3 +1,4 @@
+import random
 from os import sys, path
 
 from app.room import Room
@@ -55,14 +56,6 @@ class LivingSpace(Room):
 	@classmethod
 	def add_to_livingspace_list(cls, livingspace):
 		cls.livingspace_list[livingspace.name] = livingspace
-
-	@classmethod
-	def exist(cls, livingspace_name):
-		if livingspace_name.capitalize() in list(cls.livingspace_list.keys()):
-			raise Exception("A livingspace with the name {} already exist"
-							.format(livingspace_name))
-
-		return True
 
 	@classmethod
 	def allocate_livingspace(cls, person):

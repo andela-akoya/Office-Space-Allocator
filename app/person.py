@@ -88,5 +88,5 @@ class Person():
 	@classmethod
 	def exist(cls, person_identifier):
 		if not person_identifier in cls.get_id_list():
-			raise Exception("Person doesn't exist")
+			return False
 		return True

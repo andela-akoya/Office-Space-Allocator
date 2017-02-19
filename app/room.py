@@ -34,10 +34,12 @@ class Room():
 	def get_room_members(self):
 		return self.room_members
 
+	def remove_member(self, person):
+		self.room_members.remove(person)
+
 	@classmethod
 	def add_room(cls, room):
 		cls.room_list[room.name] = room
-		print(room.room_list)
 
 	@classmethod
 	def get_random_room(cls, room_list):
@@ -85,6 +87,10 @@ class Room():
 		return False
 
 	@classmethod
+	def get_room_list(cls):
+		return cls.room_list
+
+	@classmethod
 	def get_allocations(cls):
 		output = ""
 		for room in list(cls.room_list.values()):
@@ -96,71 +102,66 @@ class Room():
 
 		return output
 
-	def reallocate_person(identifier, room_name):
-		if Person.exist(identifier):
-			if Room.exists(room_name):
-				person = Person.id_map[identifier]
-				room = Room.room_list[room_name]
-				if isinstance(person, Staff):
-					if isinstance(room, Office):
-						if not room.is_full:
-							present_office = person.get_assigned_office()
-							if present_office is None:
+	@classmethod
+	def reallocate_person(cls, person, room_name):
+		message = "{p.category} {p.surname} {p.firstname} has been " \
+			+ "successfully reallocated to {} {}"
+		if Room.exists(room_name):
+			room = cls.get_room_list()[room_name]
+			if not room.is_full:
+				if not (person in room.get_room_members()):
+					if isinstance(person, Staff):
+						if room.get_type() == "office":
+							if person.get_assigned_office() is None:
 								Staff.remove_from_unallocated_staff_list(
 									person)
 							else:
-								present_office.get_room_members() \
-									.remove(person)
+								person.get_assigned_office() \
+									.remove_member(person)
 							person.set_assigned_office(room)
 							room.add_room_members(person)
+							print(message.format(room_name, "office", p=person))
 						else:
-							raise Exception(("{r.name} is filled up and "
-											 + "can't accept any more member ")
-											.format(r=room))
+							print(("Room {} is a livingspace and can't be "
+								   + "assigned to a staff").format(room_name))
 					else:
-						raise Exception(("{r.name} is a livingspace and "
-										 + " can't be assigned to a Staff")
-										.format(r=room))
-				else:
-					if not room.is_full:
-						if isinstance(room, Office):
-							present_office = person.get_assigned_office()
-							if present_office is None:
+						if room.get_type() == "office":
+							if person.get_assigned_office() is None:
 								Fellow.remove_from_unallocated_fellow_list(
 									person, "office")
 							else:
-								present_office.get_room_members() \
-									.remove(person)
-
+								person.get_assigned_office() \
+									.remove_member(person)
 							person.set_assigned_office(room)
 							room.add_room_members(person)
+							print(message.format(room_name, "office", p=person))
 						else:
 							if person.get_wants_accomodation():
-								livingspace =  person \
-									.get_assigned_livingspace()
-								if Livingspace is None:
+								if person.get_assigned_livingspace() is None:
 									Fellow.remove_from_unallocated_fellow_list(
 										person, "livingspace")
 								else:
-									livingspace.get_room_members() \
-										.remove(person)
-
+									person.get_assigned_livingspace() \
+										.remove_member(person)
 								person.set_assigned_livingspace(room)
 								room.add_room_members(person)
-
+								print(message
+									  .format(room_name, "livingspace", p=person))
 							else:
-								raise Exception(("Fellow {p.suraname} "
-												 + "{p.firstname} never "
-												 + "registered for accomodation"
-												 + "so can't be granted a "
-												 + "a livingspace")
-												.format(p=person))
-					else:
-						raise Exception(("{r.name} is filled up and "
-										 + "can't accept any more member ")
-										.format(r=room))
-
+								cls
+								print(("Fellow {p.surname} "
+									   + "{p.firstname} never "
+									   + "registered for accomodation "
+									   + "so can't be reallocated to a "
+									   + "a livingspace")
+									  .format(p=person))
+				else:
+					print(("{p.surname} {p.firstname} already belongs "
+						   + "to room {}, therefore can't be "
+						   + "reallocated to the same room")
+						  .format(room_name, p=person))
 			else:
-				raise Exception("Room doesn't exist")
+				print("Room {} is filled up, please input another room"
+					  .format(room_name))
 		else:
-			raise Exception("Person doesn't exist")
+			print("Room {} doesn't exist".format(room_name))

@@ -23,7 +23,6 @@ from app.staff import Staff
 from app.fellow import Fellow
 from app.room import Room
 from app.person import Person
-from app.errors import WrongFormatException
 
 
 def docopt_cmd_decorator(callback):
@@ -52,7 +51,7 @@ def docopt_cmd_decorator(callback):
 class MyInteractive(cmd.Cmd):
 	"""docstring for MyInteractive"""
 	intro = 'Welcome to the Dojo Space Allocator Program!' \
-			+ ' (type help for a list of commands.)'
+		+ ' (type help for a list of commands.)'
 	prompt = ">>> "
 
 	@docopt_cmd_decorator
@@ -63,30 +62,8 @@ class MyInteractive(cmd.Cmd):
 	@docopt_cmd_decorator
 	def do_add_person(self, arg):
 		"""Usage: add_person <lastname> <firstname> <staff/fellow> [<wants_accomodation>] """
-		type_of_person = arg['<staff/fellow>'].strip().lower()
-		try:
-			if type_of_person == "staff":
-				new_staff = Staff(arg['<lastname>'], arg['<firstname>'])
-				if new_staff:
-					print(("Staff {ns.surname} {ns.firstname} has been"
-						   + " successfully added").format(ns=new_staff))
-					Staff.add_to_staff_list(new_staff)
-					Person.add_to_map(new_staff)
-					Dojo.allocate_room(new_staff)
-
-			elif type_of_person == "fellow":
-				new_fellow = Fellow(arg['<lastname>'], arg['<firstname>'])
-				if new_fellow:
-					print(("Fellow {nf.surname} {nf.firstname} has been"
-						   + " successfully added").format(nf=new_fellow))
-					Fellow.add_to_fellow_list(new_fellow)
-					Person.add_to_map(new_fellow)
-					Dojo.allocate_room(new_fellow, arg['<wants_accomodation>'])
-			else:
-				print("Invalid type of person")
-
-		except WrongFormatException as e:
-			print(e)
+		Dojo.add_person(arg['<lastname>'], arg['<firstname>'],
+						arg['<staff/fellow>'], arg['<wants_accomodation>'])
 
 	@docopt_cmd_decorator
 	def do_print_room(self, arg):
@@ -96,10 +73,7 @@ class MyInteractive(cmd.Cmd):
 	@docopt_cmd_decorator
 	def do_print_allocations(self, arg):
 		"""Usage: print_allocations [--o=<filename>] """
-		try:
-			Dojo.print_allocations(arg['--o'])
-		except Exception as e:
-			print(e)
+		Dojo.print_allocations(arg['--o'])
 
 	@docopt_cmd_decorator
 	def do_print_unallocated(self, arg):
@@ -109,12 +83,8 @@ class MyInteractive(cmd.Cmd):
 	@docopt_cmd_decorator
 	def do_reallocate_person(self, arg):
 		"""Usage: reallocate_person <person_identifier> <new_room_name> """
-		try:
-			Dojo.reallocate_person(
-				arg['<person_identifier>'], arg['<new_room_name>'])
-		except Exception as e:
-			print(e)
-
+		Dojo.reallocate_person(
+			arg['<person_identifier>'], arg['<new_room_name>'].capitalize())
 
 if __name__ == '__main__':
 

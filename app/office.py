@@ -46,8 +46,8 @@ class Office(Room):
 					print("An Office called {} has been successfully created"
 						  .format(name.capitalize()))
 				else:
-					print("A Room with the name {} already"
-						  " exist".format(name.capitalize()))
+					print("A Room with the name {} already exist"
+						  .format(name.capitalize()))
 			except WrongFormatException as e:
 				print("' is not a valid office name format")
 		return output
@@ -55,15 +55,6 @@ class Office(Room):
 	@classmethod
 	def add_to_office_list(cls, office_instance):
 		cls.office_list[office_instance.name] = office_instance
-
-	@classmethod
-	def exist(cls, office_name):
-		if office_name.capitalize() in list(cls.office_list.keys()):
-			raise Exception("An Office with the name "
-							+ office_name
-							+ " already exist")
-
-		return True
 
 	@classmethod
 	def allocate_office(cls, person):
@@ -76,7 +67,7 @@ class Office(Room):
 		Staff.add_unallocated_staff(person) if isinstance(person, Staff) \
 			else Fellow.add_unallocated_fellow(person, True)
 		return(("No available office, {p.surname} has been placed on the"
-				+ " office waiting list").format(p=person))
+				+ " office waiting list\n").format(p=person))
 
 	@classmethod
 	def get_random_office(cls):
