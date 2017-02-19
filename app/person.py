@@ -1,6 +1,7 @@
 from os import sys, path
 
 from app.utilities import Utilities
+from app.errors import WrongFormatException
 
 sys.path.append(path.dirname(path.dirname(
 	path.dirname(path.abspath(__file__)))))
@@ -12,15 +13,34 @@ class Person():
 	id_map = {}
 
 	def __init__(self, lname, fname):
+		try:
+			Utilities.check_format_validity([lname, fname])
+		except WrongFormatException:
+			raise WrongFormatException(
+				"Firstname or Lastname is not a valid name format")
 
-		if Utilities.check_format_validity([lname, fname]):
-			self.id = Utilities.generate_person_id(Person.get_id_list())
-			self.surname = lname.capitalize()
-			self.firstname = fname.capitalize()
-			self.office = None
+		self.id = Utilities.generate_person_id(Person.get_id_list())
+		self.surname = lname.capitalize()
+		self.firstname = fname.capitalize()
+		self.office = None
 
-		else:
-			raise Exception
+	def get_id(self):
+		return self.id
+
+	def set_id(self, new_id):
+		self.id = new_id
+
+	def get_surname(self):
+		return self.surname
+
+	def set_surname(self, new_surname):
+		self.surname = new_surname.capitalize()
+
+	def get_firstname(self):
+		return self.firstname
+
+	def set_firstname(self, new_firstname):
+		self.firstname = new_firstname.capitalize()
 
 	def set_assigned_office(self, office):
 		self.office = office

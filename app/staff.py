@@ -15,6 +15,12 @@ class Staff(Person):
 		super(Staff, self).__init__(lname, fname)
 		self.category = "staff"
 
+	def get_category(self):
+		return self.category
+
+	def set_category(self, new_category):
+		self.category = new_category.lower()
+
 	@classmethod
 	def add_to_staff_list(cls, staff):
 		cls.staff_list.append(staff)

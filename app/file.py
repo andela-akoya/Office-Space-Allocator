@@ -1,6 +1,7 @@
 from os import path
 
 from app.utilities import Utilities
+from app.errors import WrongFormatException
 
 
 class File():
@@ -11,13 +12,15 @@ class File():
 		try:
 			Utilities.check_format_validity(filename)
 		except:
-			raise Exception("{} is not a valid file name".format(filename))
+			raise WrongFormatException(
+				"{} is not a valid file name".format(filename))
 
-		filepath = path.dirname(path.abspath(__file__)) + "\\text documents\\"
+		filepath = path.dirname(path.abspath(__file__)) \
+			+ "\\text documents\\"
+
 		filename = "{}.txt".format(filename)
-
 		if File.exist(filepath, filename):
-			raise Exception("{} already exist".format(filename))
+			raise FileExistsError("{} already exist".format(filename))
 		else:
 			return open(filepath + filename, "w")
 

@@ -28,21 +28,15 @@ class Dojo(object):
 
 	@classmethod
 	def allocate_room(cls, person, wants_accomodation=None):
-		try:
-			if(not wants_accomodation or wants_accomodation in ['y', 'Y']):
-				print(Office.allocate_office(person))
-			else:
-				print("{}\n{}".format(Office.allocate_office(person),
-									  LivingSpace.allocate_livingspace(person)))
-		except Exception as e:
-			pass
+		if(not(wants_accomodation in ['y', 'Y'])):
+			print(Office.allocate_office(person))
+		else:
+			print("{} {}".format(Office.allocate_office(person),
+								 LivingSpace.allocate_livingspace(person)))
 
 	@classmethod
-	def print_room(room_name):
-		try:
-			print("\n{}".format(Room.print_room_members(room_name)))
-		except Exception as e:
-			print(e)
+	def print_room(cls, room_name):
+		print("\n{}".format(Room.print_room_members(room_name)))
 
 	@classmethod
 	def print_allocations(cls, filename):
@@ -53,21 +47,21 @@ class Dojo(object):
 			try:
 				new_file = File.create_file(filename)
 				File.write(new_file, allocations)
-
-			except Exception as e:
+			except FileExistsError as e:
 				print(e)
 
 	@classmethod
 	def print_unallocated(cls, filename):
-		unallocated = Person.get_unallocated(Staff.get_unallocated_staff(),
-											 Fellow.get_unallocated_fellows())
+		unallocated = Person \
+			.get_unallocated(Staff.get_unallocated_staff(),
+							 Fellow.get_unallocated_fellows())
 		if filename is None:
 			print(unallocated)
 		else:
 			try:
 				new_file = File.create_file(filename)
 				File.write(new_file, unallocated)
-			except Exception as e:
+			except FileExistsError as e:
 				print(e)
 
 	@classmethod
@@ -80,7 +74,7 @@ class Dojo(object):
 			return None
 
 		try:
-			Room.reallocate_room(person_id, new_room_name.capitalize())
+			Room.reallocate_person(person_id, new_room_name.capitalize())
 		except Exception as e:
 			print(e)
 

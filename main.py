@@ -23,6 +23,7 @@ from app.staff import Staff
 from app.fellow import Fellow
 from app.room import Room
 from app.person import Person
+from app.errors import WrongFormatException
 
 
 def docopt_cmd_decorator(callback):
@@ -66,44 +67,44 @@ class MyInteractive(cmd.Cmd):
 		try:
 			if type_of_person == "staff":
 				new_staff = Staff(arg['<lastname>'], arg['<firstname>'])
-				Staff.add_to_staff_list(new_staff)
-				Person.add_to_map(new_staff)
-				Dojo.allocate_room(new_staff)
+				if new_staff:
+					print(("Staff {ns.surname} {ns.firstname} has been"
+						   + " successfully added").format(ns=new_staff))
+					Staff.add_to_staff_list(new_staff)
+					Person.add_to_map(new_staff)
+					Dojo.allocate_room(new_staff)
 
 			elif type_of_person == "fellow":
 				new_fellow = Fellow(arg['<lastname>'], arg['<firstname>'])
-				Fellow.add_to_fellow_list(new_fellow)
-				Person.add_to_map(new_fellow)
-				Dojo.allocate_room(new_fellow, arg['<wants_accomodation>'])
-
+				if new_fellow:
+					print(("Fellow {nf.surname} {nf.firstname} has been"
+						   + " successfully added").format(nf=new_fellow))
+					Fellow.add_to_fellow_list(new_fellow)
+					Person.add_to_map(new_fellow)
+					Dojo.allocate_room(new_fellow, arg['<wants_accomodation>'])
 			else:
 				print("Invalid type of person")
-		except Exception as e:
+
+		except WrongFormatException as e:
 			print(e)
-			#print ("Firstname or Lastname is not a valid name format")
 
 	@docopt_cmd_decorator
 	def do_print_room(self, arg):
 		"""Usage: print_room <room_name> """
-		Dojo.print_room(arg["<room_name>"])
+		Dojo.print_room(arg['<room_name>'])
 
 	@docopt_cmd_decorator
 	def do_print_allocations(self, arg):
 		"""Usage: print_allocations [--o=<filename>] """
 		try:
 			Dojo.print_allocations(arg['--o'])
-
 		except Exception as e:
 			print(e)
 
 	@docopt_cmd_decorator
 	def do_print_unallocated(self, arg):
 		"""Usage: print_unallocated [--o=<filename>] """
-		try:
-			Dojo.print_unallocated(arg['--o'])
-
-		except Exception as e:
-			print(e)
+		Dojo.print_unallocated(arg['--o'])
 
 	@docopt_cmd_decorator
 	def do_reallocate_person(self, arg):

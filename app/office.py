@@ -5,6 +5,7 @@ from app.room import Room
 from app.staff import Staff
 from app.fellow import Fellow
 from app.utilities import Utilities
+from app.errors import WrongFormatException
 
 sys.path.append(path.dirname(path.dirname(
 	path.dirname(path.abspath(__file__)))))
@@ -19,13 +20,25 @@ class Office(Room):
 		self.type = "office"
 		self.maximum_capacity = 4
 
+	def get_type(self):
+		return self.type
+
+	def set_type(self, new_type):
+		self.type = new_type
+
+	def get_maximum_capacity(self):
+		return self.maximum_capacity
+
+	def set_maximum_capacity(self, new_capacity):
+		self.maximum_capacity = new_capacity
+
 	@classmethod
 	def create_office(cls, room_names):
 		output = []
 		for name in room_names:
 			try:
-				if (Utilities.check_format_validity([name])
-						and not Room.exists(name)):
+				Utilities.check_format_validity([name])
+				if not Room.exists(name):
 					new_office = Office(name)
 					cls.add_to_office_list(new_office)
 					Room.add_room(new_office)
@@ -35,8 +48,8 @@ class Office(Room):
 				else:
 					print("A Room with the name {} already"
 						  " exist".format(name.capitalize()))
-			except Exception as e:
-				print(e)
+			except WrongFormatException as e:
+				print("' is not a valid office name format")
 		return output
 
 	@classmethod

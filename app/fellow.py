@@ -30,6 +30,12 @@ class Fellow(Person):
 	def get_wants_accomodation(self):
 		return self.wants_accomodation
 
+	def set_category(self, new_category):
+		self.category = new_category.lower()
+
+	def get_category(self):
+		return self.category
+
 	@classmethod
 	def add_to_fellow_list(cls, fellow):
 		cls.fellow_list.append(fellow)

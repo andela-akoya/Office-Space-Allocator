@@ -1,5 +1,7 @@
 import random
 
+from app.errors import WrongFormatException
+
 
 class Utilities():
 	"""docstring for Utilities"""
@@ -9,10 +11,10 @@ class Utilities():
 		for param in parameters:
 			if (param.strip()
 					in ["\"\"", "\"", "'", "''", ".", "-", "?", "_", ","]):
-				raise ValueError("Invalid name format")
+				raise WrongFormatException("Invalid name format")
 
 		return True
 
 	@classmethod
 	def generate_person_id(cls, id_list):
-		return random.choice(list(set(range(1, 4)).difference(id_list)))
+		return random.choice(list(set(range(1, 2)).difference(id_list)))
