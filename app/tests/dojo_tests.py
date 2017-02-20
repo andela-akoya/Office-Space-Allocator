@@ -1,11 +1,13 @@
 import unittest
 from os import sys, path
-sys.path.append(path.dirname(path.dirname(
-	path.dirname(path.abspath(__file__)))))
+
 from app.dojo import Dojo
 from app.room import Room
 from app.staff import Staff
 from app.fellow import Fellow
+
+sys.path.append(path.dirname(path.dirname(
+	path.dirname(path.abspath(__file__)))))
 
 
 class TestRoom(unittest.TestCase):
