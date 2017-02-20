@@ -25,7 +25,7 @@ from app.room import Room
 from app.person import Person
 
 
-def docopt_cmd_decorator(callback):
+def docopt_cmd(callback):
 
 	def fn(self, arg):
 		try:
@@ -51,40 +51,45 @@ def docopt_cmd_decorator(callback):
 class MyInteractive(cmd.Cmd):
 	"""docstring for MyInteractive"""
 	intro = 'Welcome to the Dojo Space Allocator Program!' \
-		+ ' (type help for a list of commands.)'
+			+ ' (type help for a list of commands.)'
 	prompt = ">>> "
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_create_room(self, arg):
 		"""Usage: create_room <room_type> <room_name>..."""
 		Dojo.create_room(arg['<room_type>'], arg['<room_name>'])
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_add_person(self, arg):
 		"""Usage: add_person <lastname> <firstname> <staff/fellow> [<wants_accomodation>] """
 		Dojo.add_person(arg['<lastname>'], arg['<firstname>'],
 						arg['<staff/fellow>'], arg['<wants_accomodation>'])
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_print_room(self, arg):
 		"""Usage: print_room <room_name> """
 		Dojo.print_room(arg['<room_name>'])
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_print_allocations(self, arg):
 		"""Usage: print_allocations [--o=<filename>] """
 		Dojo.print_allocations(arg['--o'])
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_print_unallocated(self, arg):
 		"""Usage: print_unallocated [--o=<filename>] """
 		Dojo.print_unallocated(arg['--o'])
 
-	@docopt_cmd_decorator
+	@docopt_cmd
 	def do_reallocate_person(self, arg):
 		"""Usage: reallocate_person <person_identifier> <new_room_name> """
 		Dojo.reallocate_person(
 			arg['<person_identifier>'], arg['<new_room_name>'].capitalize())
+
+	@docopt_cmd
+	def do_load_people(self, arg):
+		"""Usage: load_people <filename> """
+		Dojo.load_people(arg['<filename>'])
 
 if __name__ == '__main__':
 

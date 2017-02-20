@@ -99,7 +99,6 @@ class Dojo(object):
 		person_id = None
 		try:
 			person_id = int(identifier)
-			# Room.reallocate_person(person_id, new_room_name.capitalize())
 			if Person.exist(person_id):
 				person = Person.id_map[person_id]
 				Room.reallocate_person(person, new_room_name)
@@ -107,6 +106,28 @@ class Dojo(object):
 				print("Person with the id {} doesn't exist".format(person_id))
 		except ValueError:
 			print("Wrong id format. id must be a number")
+
+	@classmethod
+	def load_people(cls, filename):
+		error_messages = []
+		error_messages.append("Errors\n---------")
+		error_messages.append("The following people couldn't be loaded "
+							  + "because of incomplete information\n")
+		try:
+			data_file = File.open_file(filename)
+			with data_file as f:
+				for line in f:
+					data = line.strip().split(" ")
+					if len(data) > 2:
+						cls.add_person(data[0], data[1], data[2]) \
+							if len(data) == 3  \
+							else cls.add_person(data[0], data[1], data[2], data[3])
+					else:
+						error_messages.append(" ".join(data))
+				f.close()
+				print("\n".join(error_messages))
+		except FileNotFoundError as e:
+			print(e)
 
 	@classmethod
 	def get_total_rooms(cls):

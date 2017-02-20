@@ -1,6 +1,7 @@
 import unittest
 from os import sys, path
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+sys.path.append(path.dirname(path.dirname(
+	path.dirname(path.abspath(__file__)))))
 from app.dojo import Dojo
 from app.room import Room
 from app.staff import Staff
@@ -8,9 +9,6 @@ from app.fellow import Fellow
 
 
 class TestRoom(unittest.TestCase):
-
-	def setUp(self):
-		self.dojo_instance = Dojo()
 
 	def reset_total_number_of_rooms():
 		Room.total_number_of_rooms = 0
@@ -37,11 +35,11 @@ class TestRoom(unittest.TestCase):
 		self.assertNotEqual(initial_room_count, latter_room_count)
 
 	def test_create_rooms_with_valid_name_format(self):
-		""" test if only rooms with valid names format only are created """
+		""" test if only rooms with valid name format only are created """
 		TestRoom.reset_total_number_of_rooms()
 		initial_room_count = Room.get_total_number_of_rooms()
-		new_rooms = Dojo.create_room('LivingSpace', ['Python', \
-										'Yellow', "\"\""])
+		new_rooms = Dojo.create_room('LivingSpace', ['Python',
+													 'Yellow', "\"\""])
 		later_room_count = Room.get_total_number_of_rooms()
 		self.assertTrue(new_rooms)
 		self.assertNotEqual(initial_room_count, later_room_count)
@@ -49,9 +47,8 @@ class TestRoom(unittest.TestCase):
 
 	def test_create_duplicate_room(self):
 		""" the create_room function shouldn't create an already existing
-		room within the same type category """
+		room """
 		TestRoom.reset_total_number_of_rooms()
-		print(Room.total_number_of_rooms)
 		new_room1 = Dojo.create_room("Office", ["Orange"])
 		initial_room_count = Dojo.get_total_rooms()
 		self.assertEqual(initial_room_count, 1)
@@ -59,25 +56,66 @@ class TestRoom(unittest.TestCase):
 		later_room_count = Dojo.get_total_rooms()
 		self.assertEqual(initial_room_count, later_room_count)
 
-	# def test_remove_room(self):
-	# 	""" test checks if function successfully removes a specicified room name and room type """
-	# 	new_room1 = self.dojo_instance.create_room("Office", ["Orange"])
-	# 	initial_room_count = Dojo.get_total_rooms()
-	# 	self.assertEqual(initial_room_count, 1)
-	# 	Dojo.remove_room(new_room1)
-	# 	latter_room_count = Dojo.get_total_rooms()
-	# 	self.assertEqual(latter_room_count, 0)
+	def test_create_room_with_valid_type_alone(self):
+		""" the create_room function shouldn't create a room without a valid
+		type like office or livingspace """
+		TestRoom.reset_total_number_of_rooms()
+		initial_room_count = Dojo.get_total_rooms()
+		self.assertEqual(initial_room_count, 0)
+		new_room1 = Dojo.create_room("", ["Orange"])
+		new_room2 = Dojo.create_room("", ["Red"])
+		later_room_count = Dojo.get_total_rooms()
+		self.assertFalse(new_room1)
+		self.assertFalse(new_room2)
+		self.assertEqual(initial_room_count, later_room_count)
 
-	def test_add_person(self):
-		""" test  if a person is successfully added to an office """
+	def test_add_staff(self):
+		""" test  if a staff is successfully added and allocated an office """
 		TestRoom.reset_total_number_of_rooms()
 		new_office = Dojo.create_room('Office', ['Orange'])
 		self.assertTrue(new_office)
-		new_staff = Staff("Koya", "Gabriel")
-		self.assertTrue(new_staff)
-		Dojo.add_person(new_staff)
+		Dojo.add_person("koya", "gabriel", "staff")
 		self.assertEqual(len(new_office[0].room_members), 1)
-		new_staff2 = Staff("John", "Doe")
-		self.assertTrue(new_staff2)
-		Dojo.add_person(new_staff)
+		Dojo.add_person("John", "Doe", "staff")
 		self.assertEqual(len(new_office[0].room_members), 2)
+
+	def test_add_fellow_no_accomodation(self):
+		""" test  if a fellow that doesn't want accomodation is successfully
+		added and allocated an office only  """
+		TestRoom.reset_total_number_of_rooms()
+		new_office = Dojo.create_room('Office', ['Orange'])
+		new_livingspace = Dojo.create_room('livingspace', ['kfc'])
+		self.assertTrue(new_office)
+		self.assertTrue(new_livingspace)
+		Dojo.add_person("koya", "gabriel", "fellow")
+		self.assertEqual(len(new_office[0].room_members), 1)
+		self.assertEqual(len(new_livingspace[0].room_members), 0)
+		Dojo.add_person("John", "Doe", "fellow")
+		self.assertEqual(len(new_office[0].room_members), 2)
+		self.assertEqual(len(new_livingspace[0].room_members), 0)
+
+	def test_add_fellow_with_accomodation(self):
+		""" test if a fellow that wants accomodation is successfully
+		added and allocated an office and a livingspace  """
+		TestRoom.reset_total_number_of_rooms()
+		new_office = Dojo.create_room('Office', ['Orange'])
+		new_livingspace = Dojo.create_room('livingspace', ['kfc'])
+		self.assertTrue(new_office)
+		self.assertTrue(new_livingspace)
+		Dojo.add_person("koya", "gabriel", "fellow", 'y')
+		self.assertEqual(len(new_office[0].room_members), 1)
+		self.assertEqual(len(new_livingspace[0].room_members), 1)
+		Dojo.add_person("John", "Doe", "fellow", 'y')
+		self.assertEqual(len(new_office[0].room_members), 2)
+		self.assertEqual(len(new_livingspace[0].room_members), 2)
+
+	def test_add_person_with_valid_category(self):
+		""" test if only people with valid categorys are successfully
+		added and allocated a space  """
+		TestRoom.reset_total_number_of_rooms()
+		new_office = Dojo.create_room('Office', ['Orange'])
+		self.assertTrue(new_office)
+		Dojo.add_person("koya", "gabriel", "staff")
+		self.assertEqual(len(new_office[0].room_members), 1)
+		Dojo.add_person("John", "Doe", "")
+		self.assertEqual(len(new_office[0].room_members), 1)
