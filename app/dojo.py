@@ -149,7 +149,8 @@ class Dojo(object):
                         surname = data[0]
                         firstname = data[1]
                         category = data[2]
-                        wants_accomodation = data[4] or None
+                        wants_accomodation = data[4] \
+                            if len(data) > 3 else None
                         cls.add_person(surname, firstname,
                                        staff, wants_accomodation)
                     else:
