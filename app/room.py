@@ -24,22 +24,35 @@ class Room():
         return self.name
 
     def set_room_name(self, new_room_name):
+        if not new_room_name:
+            return "Room name can't be empty"
         self.name = new_room_name.capitalize()
 
     def add_room_members(self, person):
+        if not isinstance(person, Person):
+            print("Only a person, staff, or fellow instance can be added")
+            return False
         self.room_members.append(person)
         if len(self.room_members) == self.maximum_capacity:
             self.is_full = True
+        return True
 
     def get_room_members(self):
         return self.room_members
 
     def remove_member(self, person):
+        if not isinstance(person, Person):
+            print("Only a person, staff, or fellow instance can be removed")
+            return False
         self.room_members.remove(person)
 
     @classmethod
     def add_room(cls, room):
+        if not isinstance(room, Room):
+            print("Only a room, office, or livingspace instance can be added")
+            return False
         cls.room_list[room.name] = room
+        return True
 
     @classmethod
     def get_random_room(cls, room_list):

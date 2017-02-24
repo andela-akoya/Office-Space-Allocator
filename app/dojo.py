@@ -141,17 +141,20 @@ class Dojo(object):
         error_messages.append("The following people couldn't be loaded "
                               + "because of incomplete information\n")
         try:
-            data_file = File.open_file(filename)
-            with data_file as f:
-                for line in f:
+            file_to_be_loaded = File.open_file(filename)
+            with file_to_be_loaded as data_file:
+                for line in data_file:
                     data = line.strip().split(" ")
                     if len(data) > 2:
-                        cls.add_person(data[0], data[1], data[2]) \
-                            if len(data) == 3  \
-                            else cls.add_person(data[0], data[1], data[2], data[3])
+                        surname = data[0]
+                        firstname = data[1]
+                        category = data[2]
+                        wants_accomodation = data[4] or None
+                        cls.add_person(surname, firstname,
+                                       staff, wants_accomodation)
                     else:
                         error_messages.append(" ".join(data))
-                f.close()
+                data_file.close()
                 print("\n".join(error_messages))
         except FileNotFoundError as e:
             print(e)
