@@ -2,9 +2,6 @@ from os import sys, path
 
 from app.person import Person
 
-sys.path.append(path.dirname(path.dirname(
-    path.dirname(path.abspath(__file__)))))
-
 
 class Fellow(Person):
     """docstring for Fellow"""
@@ -12,8 +9,8 @@ class Fellow(Person):
     fellow_list = []
     unallocated_fellows = {"office": [], "livingspace": []}
 
-    def __init__(self, lname, fname, wants_accomodation=False):
-        super(Fellow, self).__init__(lname, fname)
+    def __init__(self, fellow_id, lname, fname, wants_accomodation=False):
+        super(Fellow, self).__init__(fellow_id, lname, fname)
         self.category = "fellow"
         self.livingspace = None
         self.wants_accomodation = wants_accomodation

@@ -4,7 +4,7 @@ from app.utilities import Utilities
 from app.errors import WrongFormatException
 
 
-class File():
+class Customfile():
     """docstring for File"""
 
     @classmethod
@@ -18,7 +18,7 @@ class File():
         filepath = path.dirname(path.abspath(__file__)) + "\\data\\documents\\"
 
         filename = "{}.txt".format(filename)
-        if File.exist(filepath, filename):
+        if cls.exist(filepath, filename):
             raise FileExistsError("{} already exist".format(filename))
         else:
             return open(filepath + filename, "w")

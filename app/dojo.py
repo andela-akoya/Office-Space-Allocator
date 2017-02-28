@@ -6,12 +6,10 @@ from app.room import Room
 from app.utilities import Utilities
 from app.staff import Staff
 from app.fellow import Fellow
-from app.file import File
+from app.customfile import Customfile
 from app.person import Person
 from app.errors import WrongFormatException
-
-sys.path.append(path.dirname(path.dirname(
-    path.dirname(path.abspath(__file__)))))
+from app.database import Database
 
 
 class Dojo(object):
@@ -28,11 +26,15 @@ class Dojo(object):
             print("Invalid type of room")
 
     @classmethod
-    def add_person(cls, surname, firstname, category, wants_accomodation=None):
+    def get_total_rooms(cls):
+        return Room.get_total_number_of_rooms()
+
+    @classmethod
+    def add_person(cls, surname, firstname, category, wants_accomodation=None, person_id=None):
         type_of_person = category.strip().lower()
         try:
             if type_of_person == "staff":
-                new_staff = Staff(surname, firstname)
+                new_staff = Staff(person_id, surname, firstname)
                 if new_staff:
                     print(("Staff {ns.surname} {ns.firstname} has been"
                            + " successfully added").format(ns=new_staff))
@@ -41,9 +43,9 @@ class Dojo(object):
                     cls.allocate_room(new_staff)
 
             elif type_of_person == "fellow":
-                new_fellow = Fellow(surname, firstname, True) \
+                new_fellow = Fellow(person_id, surname, firstname, True) \
                     if wants_accomodation in ['y', 'Y'] \
-                    else Fellow(surname, firstname)
+                    else Fellow(person_id, surname, firstname)
                 if new_fellow:
                     print(("Fellow {nf.surname} {nf.firstname} has been"
                            + " successfully added").format(nf=new_fellow))
@@ -75,9 +77,11 @@ class Dojo(object):
             print(allocations)
         else:
             try:
-                new_file = File.create_file(filename)
-                File.write(new_file, allocations)
+                new_file = Customfile.create_file(filename)
+                Customfile.write(new_file, allocations)
             except FileExistsError as e:
+                print(e)
+            except WrongFormatException as e:
                 print(e)
 
     @classmethod
@@ -89,14 +93,13 @@ class Dojo(object):
             print(unallocated)
         else:
             try:
-                new_file = File.create_file(filename)
-                File.write(new_file, unallocated)
+                new_file = Customfile.create_file(filename)
+                Customfile.write(new_file, unallocated)
             except FileExistsError as e:
                 print(e)
 
     @classmethod
     def reallocate_person(cls, identifier, room_name):
-        person_id = None
         try:
             person_id = int(identifier)
             if Person.exist(person_id):
@@ -136,30 +139,86 @@ class Dojo(object):
 
     @classmethod
     def load_people(cls, filename):
-        error_messages = []
-        error_messages.append("Errors\n---------")
-        error_messages.append("The following people couldn't be loaded "
-                              + "because of incomplete information\n")
+        error_messages = \
+            [
+                "Errors\n---------",
+                "The following people couldn't be loaded"
+                + " because of incomplete information\n"
+            ]
         try:
-            file_to_be_loaded = File.open_file(filename)
+            file_to_be_loaded = Customfile.open_file(filename)
             with file_to_be_loaded as data_file:
-                for line in data_file:
-                    data = line.strip().split(" ")
+                for entry in data_file:
+                    data = entry.strip().split(" ")
                     if len(data) > 2:
-                        surname = data[0]
-                        firstname = data[1]
-                        category = data[2]
-                        wants_accomodation = data[4] \
+                        surname, firstname, category = data[0:3]
+                        wants_accomodation = data[3] \
                             if len(data) > 3 else None
                         cls.add_person(surname, firstname,
-                                       staff, wants_accomodation)
+                                       category, wants_accomodation)
                     else:
                         error_messages.append(" ".join(data))
+                        print("\n".join(error_messages))
                 data_file.close()
-                print("\n".join(error_messages))
+
         except FileNotFoundError as e:
             print(e)
 
     @classmethod
-    def get_total_rooms(cls):
-        return Room.get_total_number_of_rooms()
+    def load_rooms(cls, filename):
+        error_messages = \
+            [
+                "Errors\n---------",
+                "The following rooms couldn't be loaded"
+                + " because of incomplete information\n"
+            ]
+        try:
+            file_to_be_loaded = Customfile.open_file(filename)
+            with file_to_be_loaded as data_file:
+                for entry in data_file:
+                    data = entry.strip().split(" ")
+                    if len(data) > 1:
+                        room_type = data[0]
+                        room_names = data[1:]
+                        cls.create_room(room_type, room_names)
+                    else:
+                        error_messages.append(" ".join(data))
+                        print("\n".join(error_messages))
+                data_file.close()
+
+        except FileNotFoundError as e:
+            print(e)
+
+    @classmethod
+    def save_state(cls, database_name):
+        database_path = path.dirname(path.abspath(__file__)) \
+            + "\\data\\database\\"
+        if database_name:
+            if not Customfile.exist(database_path, database_name + ".db"):
+                new_database = Database(database_path + database_name + ".db")
+                new_database.save(
+                    Room.export_in_database_format(),
+                    Person.export_in_database_format()
+                )
+            else:
+                error = "Database with the name {} already exist. "\
+                    + "You can either specify another name or override the " \
+                    + "existing database.\n"\
+                    + "To override specify the [override] command "
+                print(error.format(database_name + ".db"))
+        else:
+            pass
+
+    @classmethod
+    def load_state(cls, database_name):
+        database_path = path.dirname(path.abspath(__file__)) \
+            + "\\data\\database\\"
+        if database_name:
+            if Customfile.exist(database_path, database_name + ".db"):
+                new_database = Database(database_path + database_name + ".db")
+                new_database.load()
+                print()
+            else:
+                error = "Database with the name {} does not exist."\
+                    .format(database_name + ".db")
+                print(error)
