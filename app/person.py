@@ -101,9 +101,7 @@ class Person():
 
     @classmethod
     def exist(cls, person_identifier):
-        if not person_identifier in cls.get_id_list():
-            return False
-        return True
+        return person_identifier in cls.get_id_list()
 
     @classmethod
     def export_in_database_format(cls):
