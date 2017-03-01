@@ -60,7 +60,7 @@ class Dojo(object):
 
     @classmethod
     def allocate_room(cls, person, wants_accomodation=None):
-        if(not(wants_accomodation in ['y', 'Y'])):
+        if not wants_accomodation.lower() == "y":
             print(Office.allocate_office(person))
         else:
             print("{}{}".format(Office.allocate_office(person),
