@@ -202,6 +202,7 @@ class TestDojo(unittest.TestCase):
         reallocates a person to a specified room
         """
         new_office = Dojo.create_room("office", ["red"])[0]
+        self.assertEqual(len(new_office.room_members), 0)
         Dojo.add_person("koya", "gabriel", "staff")
         person = Staff.get_staff_list()[0]
         self.assertEqual(len(new_office.room_members), 1)
