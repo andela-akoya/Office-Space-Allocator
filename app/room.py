@@ -21,7 +21,7 @@ class Room():
 	def name(self):
 		return self.__name
 
-	# @set_room_name.setter
+
 	@name.setter
 	def name(self, new_room_name):
 		if not new_room_name:
@@ -32,7 +32,7 @@ class Room():
 	def room_members(self):
 		return self.__room_members
 
-	# @add_room_members.setter
+	
 	@room_members.setter
 	def room_members(self, person):
 		if not isinstance(person, Person):
@@ -103,10 +103,7 @@ class Room():
 
 	@classmethod
 	def exists(cls, room_name):
-		if room_name.capitalize() in list(cls.room_list.keys()):
-			return True
-
-		return False
+		return room_name.capitalize() in list(cls.room_list.keys())
 
 	@classmethod
 	def get_room_list(cls):
