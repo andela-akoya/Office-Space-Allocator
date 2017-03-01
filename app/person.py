@@ -16,40 +16,50 @@ class Person():
             raise WrongFormatException(
                 "Firstname or Lastname is not a valid name format")
 
-        self.id = person_id or Utilities.generate_person_id(
+        self.__id = person_id or Utilities.generate_person_id(
             Person.get_id_list())
-        self.surname = lname.capitalize()
-        self.firstname = fname.capitalize()
-        self.office = None
+        self.__surname = lname.capitalize()
+        self.__firstname = fname.capitalize()
+        self.__office = None
 
-    def get_id(self):
-        return self.id
+    @property
+    def id(self):
+        return self.__id
 
-    def set_id(self, new_id):
-        self.id = new_id
+    @id.setter
+    def id(self, new_id):
+        self.__id = new_id
 
-    def get_surname(self):
-        return self.surname
+    @property
+    def surname(self):
+        return self.__surname
 
-    def set_surname(self, new_surname):
-        self.surname = new_surname.capitalize()
+    @surname.setter
+    def surname(self, new_surname):
+        self.__surname = new_surname.capitalize()
 
-    def get_firstname(self):
-        return self.firstname
+    @property
+    def firstname(self):
+        return self.__firstname
 
-    def set_firstname(self, new_firstname):
-        self.firstname = new_firstname.capitalize()
+    @firstname.setter
+    def firstname(self, new_firstname):
+        self.__firstname = new_firstname.capitalize()
 
-    def set_assigned_office(self, office):
-        self.office = office
+    @property
+    def office(self):
+        return self.__office
 
-    def get_assigned_office(self):
-        return self.office
+    @office.setter
+    def office(self, office):
+        self.__office = office
 
-    def get_assigned_livingspace(self):
+    @property
+    def livingspace(self):
         return None
 
-    def get_wants_accomodation(self):
+    @property
+    def wants_accomodation(self):
         return False
 
     @classmethod
@@ -100,15 +110,15 @@ class Person():
         output = []
         for person in cls.id_map.values():
             office = "None" \
-                if not person.get_assigned_office() \
-                else person.get_assigned_office().get_room_name()
+                if not person.office \
+                else person.office.name
             livingspace = "None" \
-                if not person.get_assigned_livingspace() \
-                else person.get_assigned_livingspace().get_room_name()
+                if not person.livingspace \
+                else person.livingspace.name
             output.append(
-                (person.get_id(), person.get_surname(), person.get_firstname(),
-                 person.get_category(), office, livingspace,
-                 person.get_wants_accomodation())
+                (person.id, person.surname, person.firstname,
+                 person.category, office, livingspace,
+                 person.wants_accomodation)
             )
 
         return output

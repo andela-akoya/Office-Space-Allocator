@@ -14,16 +14,16 @@ class Office(Room):
 
 	def __init__(self, name):
 		super(Office, self).__init__(name)
-		self.__category = "office"
+		self.__room_type = "office"
 		self.__maximum_capacity = 6
 
 	@property
-	def category(self):
-		return self.__category
+	def room_type(self):
+		return self.__room_type
 
-	@category.setter
-	def category(self, new_type):
-		self.__category = new_type
+	@room_type.setter
+	def room_type(self, new_type):
+		self.__room_type = new_type
 
 	@property
 	def maximum_capacity(self):
@@ -62,8 +62,8 @@ class Office(Room):
 		office = Room.get_a_particular_room(office_name) \
 			if office_name else cls.get_random_office()
 		if office:
-			person.set_assigned_office(office)
-			office.add_room_members(person)
+			person.office=office
+			office.room_members=person
 			return("{p.surname} has been allocated the office {o.name}\n"
 				   .format(p=person, o=office))
 		Staff.add_unallocated_staff(person) if isinstance(person, Staff) \
@@ -99,12 +99,12 @@ class Office(Room):
 		message = "{p.category} {p.surname} {p.firstname} has been " \
 			+ "successfully reallocated to {} {}"
 
-		if person.get_assigned_office() is None:
+		if person.office is None:
 			Staff.remove_from_unallocated_staff_list(
 				person)
 		else:
-			person.get_assigned_office() \
+			person.office \
 				.remove_member(person)
-		person.set_assigned_office(office)
-		office.add_room_members(person)
+		person.office=office
+		office.room_members=person
 		print(message.format(office_name, "office", p=person))

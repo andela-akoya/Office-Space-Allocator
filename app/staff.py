@@ -10,13 +10,15 @@ class Staff(Person):
 
     def __init__(self, staff_id,  lname, fname):
         super(Staff, self).__init__(staff_id, lname, fname)
-        self.category = "staff"
+        self.__category = "staff"
 
-    def get_category(self):
-        return self.category
+    @property
+    def category(self):
+        return self.__category
 
-    def set_category(self, new_category):
-        self.category = new_category.lower()
+    @category.setter
+    def category(self, new_category):
+        self.__category = new_category.lower()
 
     @classmethod
     def add_to_staff_list(cls, staff):

@@ -39,7 +39,7 @@ class Room():
 			print("Only a person, staff, or fellow instance can be added")
 			return False
 		self.__room_members.append(person)
-		if len(self.__room_members) == self.__maximum_capacity:
+		if len(self.__room_members) == self.maximum_capacity:
 			self.__is_full = True
 		return True
 

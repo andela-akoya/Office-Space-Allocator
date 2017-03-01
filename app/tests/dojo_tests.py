@@ -108,7 +108,7 @@ class TestDojo(unittest.TestCase):
         added and allocated a space  """
         new_office = Dojo.create_room('Office', ['Orange'])[0]
         Dojo.add_person("koya", "gabriel", "staff")
-        self.assertEqual(len(new_office.get_room_members()), 1)
+        self.assertEqual(len(new_office.room_members), 1)
         Dojo.add_person("John", "Doe", "")
         self.assertEqual(len(new_office.room_members), 1)
 
@@ -116,7 +116,7 @@ class TestDojo(unittest.TestCase):
         """ test if a person instance was created"""
         new_office = Dojo.create_room('Office', ['Orange'])[0]
         Dojo.add_person("koya", "gabriel", "staff")
-        person = new_office.get_room_members()[0]
+        person = new_office.room_members[0]
         self.assertIsInstance(person, Person)
 
     def test_add_person_to_unallocated_list(self):
@@ -204,12 +204,12 @@ class TestDojo(unittest.TestCase):
         new_office = Dojo.create_room("office", ["red"])[0]
         Dojo.add_person("koya", "gabriel", "staff")
         person = Staff.get_staff_list()[0]
-        self.assertEqual(len(new_office.get_room_members()), 1)
-        self.assertEqual(person.get_assigned_office().get_room_name().lower(),
+        self.assertEqual(len(new_office.room_members), 1)
+        self.assertEqual(person.office.name.lower(),
                          "red")
         new_office2 = Dojo.create_room("office", ["orange"])[0]
-        Dojo.reallocate_person(person.get_id(), "Orange")
-        self.assertEqual(len(new_office.get_room_members()), 0)
-        self.assertEqual(len(new_office2.get_room_members()), 1)
-        self.assertEqual(person.get_assigned_office().get_room_name().lower(),
+        Dojo.reallocate_person(person.id, "Orange")
+        self.assertEqual(len(new_office.room_members), 0)
+        self.assertEqual(len(new_office2.room_members), 1)
+        self.assertEqual(person.office.name.lower(),
                          "orange")

@@ -107,9 +107,9 @@ class Dojo(object):
                 if Room.exists(room_name):
                     room = Room.get_room_list()[room_name]
                     if not room.is_full:
-                        if not (person in room.get_room_members()):
+                        if not (person in room.room_members):
                             if isinstance(person, Staff):
-                                if room.get_type() == "office":
+                                if room.room_type == "office":
                                     Office.reallocate_person(person, room_name)
                                 else:
                                     print(("Room {} is a livingspace and  "

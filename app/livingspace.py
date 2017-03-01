@@ -14,16 +14,16 @@ class LivingSpace(Room):
 
 	def __init__(self, name):
 		super(LivingSpace, self).__init__(name)
-		self.__category = "livingspace"
+		self.__room_type = "livingspace"
 		self.__maximum_capacity = 4
 
 	@property
-	def category(self):
-		return self.__category
+	def room_type(self):
+		return self.__room_type
 
-	@category.setter
-	def category(self, new_type):
-		self.__category = new_type
+	@room_type.setter
+	def room_type(self, new_type):
+		self.__room_type = new_type
 
 	@property
 	def maximum_capacity(self):
@@ -63,9 +63,9 @@ class LivingSpace(Room):
 		livingspace = Room.get_a_particular_room(livingspace_name) \
 			if livingspace_name else cls.get_random_livingspace()
 		if livingspace:
-			person.set_assigned_livingspace(livingspace)
-			livingspace.add_room_members(person)
-			person.set_wants_accomodation = True
+			person.livingspace=livingspace
+			livingspace.room_members=person
+			person.wants_accomodation = True
 			return("{p.surname} has been allocated a livingspace {l.name}\n"
 				   .format(p=person, l=livingspace))
 		Fellow.add_unallocated_fellow(person, False, True)
@@ -100,15 +100,15 @@ class LivingSpace(Room):
 		livingspace = cls.get_livingspace(livingspace_name)
 		message = "{p.category} {p.surname} {p.firstname} has been " \
 			+ "successfully reallocated to {} {}"
-		if person.get_wants_accomodation():
-			if person.get_assigned_livingspace() is None:
+		if person.wants_accomodation:
+			if person.livingspace is None:
 				Fellow.remove_from_unallocated_fellow_list(
 					person, "livingspace")
 			else:
-				person.get_assigned_livingspace() \
+				person.livingspace \
 					.remove_member(person)
-			person.set_assigned_livingspace(livingspace)
-			livingspace.add_room_members(person)
+			person.livingspace=livingspace
+			livingspace.room_members=person
 			print(message
 				  .format(livingspace_name, "livingspace", p=person))
 		else:

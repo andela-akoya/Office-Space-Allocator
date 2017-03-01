@@ -11,27 +11,35 @@ class Fellow(Person):
 
     def __init__(self, fellow_id, lname, fname, wants_accomodation=False):
         super(Fellow, self).__init__(fellow_id, lname, fname)
-        self.category = "fellow"
-        self.livingspace = None
-        self.wants_accomodation = wants_accomodation
+        self.__category = "fellow"
+        self.__livingspace = None
+        self.__wants_accomodation = wants_accomodation
 
-    def set_assigned_livingspace(self, livingspace):
-        self.livingspace = livingspace
+    @property
+    def livingspace(self):
+        return self.__livingspace
 
-    def get_assigned_livingspace(self):
-        return self.livingspace
+    @livingspace.setter
+    def livingspace(self, livingspace):
+        self.__livingspace = livingspace
 
-    def set_wants_accomodation(self, param):
-        self.wants_accomodation = param
+    @property
+    def wants_accomodation(self):
+        return self.__wants_accomodation
 
-    def get_wants_accomodation(self):
-        return self.wants_accomodation
+    @wants_accomodation.setter
+    def wants_accomodation(self, param):
+        self.__wants_accomodation = param
 
-    def set_category(self, new_category):
-        self.category = new_category.lower()
+    @property
+    def category(self):
+        return self.__category
 
-    def get_category(self):
-        return self.category
+    @category.setter
+    def category(self, new_category):
+        self.__category = new_category.lower()
+
+
 
     @classmethod
     def add_to_fellow_list(cls, fellow):
