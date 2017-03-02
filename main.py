@@ -13,16 +13,15 @@ Options:
   -h, --help     Show this screen.
   --version      Show version.
 """
-import sys
 import cmd
-
-from docopt import docopt, DocoptExit
+import sys
 
 from app.dojo import Dojo
-from app.staff import Staff
 from app.fellow import Fellow
-from app.room import Room
 from app.person import Person
+from app.room import Room
+from app.staff import Staff
+from docopt import DocoptExit, docopt
 
 
 def docopt_cmd(callback):

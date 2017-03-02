@@ -74,14 +74,14 @@ class Database():
             if category.lower() == "staff":
                 new_staff = Staff(person_id, surname, firstname)
                 Staff.add_to_staff_list(new_staff)
-                Person.add_to_map(new_staff)
+                Person.add_to_person_list(new_staff)
                 Office.allocate_office(new_staff, office) \
                     if not office == "None" \
                     else Staff.add_unallocated_staff(new_staff)
             else:
                 new_fellow = Fellow(person_id, surname, firstname)
                 Fellow.add_to_fellow_list(new_fellow)
-                Person.add_to_map(new_fellow)
+                Person.add_to_person_list(new_fellow)
                 Office.allocate_office(new_fellow, office) \
                     if not office == "None" \
                     else Fellow.add_unallocated_fellow(new_fellow, True)

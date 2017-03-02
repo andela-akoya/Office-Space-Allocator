@@ -10,28 +10,25 @@ from app.person import Person
 from app.room import Room
 from app.staff import Staff
 
-sys.path.append(path.dirname(path.dirname(
-    path.dirname(path.abspath(__file__)))))
-
 
 class TestDojo(unittest.TestCase):
 
     def setUp(self):
         self.filepath = path.dirname(path.dirname(path.abspath(__file__))) \
-            + "\\data\\documents\\"
+            + "/data/documents/"
 
     def tearDown(self):
         Room.total_number_of_rooms = 0
         Room.list_of_rooms = []
-        Office.office_list = {}
-        LivingSpace.livingspace_list = {}
+        Office.list_of_offices = []
+        LivingSpace.list_of_livingspace = []
         Staff.staff_list = []
         Fellow.fellow_list = []
 
     def test_create_room(self):
         """ tests whether a room was created """
         initial_room_count = Room.get_total_number_of_rooms()
-        new_room = Dojo.create_room('Office', ['purple'])[0]
+        new_room, = Dojo.create_room('Office', ['purple'])
         latter_room_count = Room.get_total_number_of_rooms()
         self.assertTrue(new_room)
         self.assertEqual(latter_room_count - initial_room_count, 1)
@@ -58,7 +55,7 @@ class TestDojo(unittest.TestCase):
     def test_create_duplicate_room(self):
         """ the create_room function shouldn't create an already existing
         room """
-        new_room1 = Dojo.create_room("Office", ["Orange"])[0]
+        new_room1, = Dojo.create_room("Office", ["Orange"])
         initial_room_count = Dojo.get_total_rooms()
         self.assertEqual(initial_room_count, 1)
         new_room2 = Dojo.create_room("Office", ["Orange"])
@@ -80,7 +77,7 @@ class TestDojo(unittest.TestCase):
 
     def test_add_staff(self):
         """ test  if a staff is successfully added and allocated an office """
-        new_office = Dojo.create_room('Office', ['Orange'])[0]
+        new_office, = Dojo.create_room('Office', ['Orange'])
         self.assertTrue(new_office)
         Dojo.add_person("koya", "gabriel", "staff")
         self.assertEqual(len(new_office.room_members), 1)
@@ -88,8 +85,8 @@ class TestDojo(unittest.TestCase):
     def test_add_fellow_no_accomodation(self):
         """ test  if a fellow that doesn't want accomodation is successfully
         added and allocated an office only  """
-        new_office = Dojo.create_room('Office', ['Orange'])[0]
-        new_livingspace = Dojo.create_room('livingspace', ['kfc'])[0]
+        new_office, = Dojo.create_room('Office', ['Orange'])
+        new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
         Dojo.add_person("koya", "gabriel", "fellow")
         self.assertEqual(len(new_office.room_members), 1)
         self.assertEqual(len(new_livingspace.room_members), 0)
@@ -97,8 +94,8 @@ class TestDojo(unittest.TestCase):
     def test_add_fellow_with_accomodation(self):
         """ test if a fellow that wants accomodation is successfully
         added and allocated an office and a livingspace  """
-        new_office = Dojo.create_room('Office', ['Orange'])[0]
-        new_livingspace = Dojo.create_room('livingspace', ['kfc'])[0]
+        new_office, = Dojo.create_room('Office', ['Orange'])
+        new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
         Dojo.add_person("koya", "gabriel", "fellow", 'y')
         self.assertEqual(len(new_office.room_members), 1)
         self.assertEqual(len(new_livingspace.room_members), 1)
@@ -106,7 +103,7 @@ class TestDojo(unittest.TestCase):
     def test_add_person_with_valid_category(self):
         """ test if only people with valid categorys are successfully
         added and allocated a space  """
-        new_office = Dojo.create_room('Office', ['Orange'])[0]
+        new_office, = Dojo.create_room('Office', ['Orange'])
         Dojo.add_person("koya", "gabriel", "staff")
         self.assertEqual(len(new_office.room_members), 1)
         Dojo.add_person("John", "Doe", "")
@@ -114,9 +111,9 @@ class TestDojo(unittest.TestCase):
 
     def test_add_person(self):
         """ test if a person instance was created"""
-        new_office = Dojo.create_room('Office', ['Orange'])[0]
+        new_office, = Dojo.create_room('Office', ['Orange'])
         Dojo.add_person("koya", "gabriel", "staff")
-        person = new_office.room_members[0]
+        person, = new_office.room_members
         self.assertIsInstance(person, Person)
 
     def test_add_person_to_unallocated_list(self):
@@ -148,7 +145,7 @@ class TestDojo(unittest.TestCase):
         will be returned if an existing room name is passed in as
         value
         """
-        new_office = Dojo.create_room("office", ["orange"])[0]
+        new_office, = Dojo.create_room("office", ["orange"])
         Dojo.print_room("orange")
         output = sys.stdout.getvalue().strip()
         self.assertNotEqual(output, "The room with the name {} does not exist"
@@ -189,11 +186,12 @@ class TestDojo(unittest.TestCase):
 
     def test_print_unallocated_with_new_filename(self):
         """
-        test the print_unallocated whether it successfully create
+        test the print_unallocated whether it successfully creates
         a new file if a non-existing filename is passed as value.
         """
         filename = "file4.txt"
         Dojo.print_allocations("file4")
+        print(self.filepath + filename)
         self.assertTrue(path.isfile(self.filepath + filename))
 
     def test_reallocate_person(self):
@@ -201,14 +199,14 @@ class TestDojo(unittest.TestCase):
         tests the reallocate_person function if it successfully
         reallocates a person to a specified room
         """
-        new_office = Dojo.create_room("office", ["red"])[0]
+        new_office, = Dojo.create_room("office", ["red"])
         self.assertEqual(len(new_office.room_members), 0)
         Dojo.add_person("koya", "gabriel", "staff")
         person = Staff.get_staff_list()[0]
         self.assertEqual(len(new_office.room_members), 1)
         self.assertEqual(person.office.name.lower(),
                          "red")
-        new_office2 = Dojo.create_room("office", ["orange"])[0]
+        new_office2, = Dojo.create_room("office", ["orange"])
         Dojo.reallocate_person(person.id, "Orange")
         self.assertEqual(len(new_office.room_members), 0)
         self.assertEqual(len(new_office2.room_members), 1)

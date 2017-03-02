@@ -40,7 +40,7 @@ class Dojo(object):
                     print(("Staff {ns.surname} {ns.firstname} has been"
                            + " successfully added").format(ns=new_staff))
                     Staff.add_to_staff_list(new_staff)
-                    Person.add_to_map(new_staff)
+                    Person.add_to_person_list(new_staff)
                     cls.allocate_room(new_staff)
 
             elif type_of_person == "fellow":
@@ -51,7 +51,7 @@ class Dojo(object):
                     print(("Fellow {nf.surname} {nf.firstname} has been"
                            + " successfully added").format(nf=new_fellow))
                     Fellow.add_to_fellow_list(new_fellow)
-                    Person.add_to_map(new_fellow)
+                    Person.add_to_person_list(new_fellow)
                     cls.allocate_room(new_fellow, wants_accomodation)
             else:
                 print("Invalid type of person")
@@ -104,11 +104,12 @@ class Dojo(object):
         try:
             person_id = int(identifier)
             if Person.exist(person_id):
-                person = Person.id_map[person_id]
+                person, = [person for person in Person.get_list_of_persons()
+                           if person.id == person_id]
                 if Room.exists(room_name):
-                    room = [room for room in Room.get_room_list()
-                            if room.name == room_name][0]
-                    if not room.is_full:
+                    room, = [room for room in Room.get_room_list()
+                             if room.name == room_name]
+                    if len(room.room_members) != room.maximum_capacity:
                         if not (person in room.room_members):
                             if isinstance(person, Staff):
                                 if room.room_type == "office":
@@ -118,7 +119,7 @@ class Dojo(object):
                                            + "can't be assigned to a staff")
                                           .format(room_name))
                             else:
-                                if room.get_type() == "office":
+                                if room.room_type == "office":
                                     Office.reallocate_person(person, room_name)
                                 else:
                                     LivingSpace.reallocate_person(person,

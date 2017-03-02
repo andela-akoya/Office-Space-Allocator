@@ -8,14 +8,11 @@ from app.staff import Staff
 
 class Room():
 
-    total_number_of_rooms = 0
     list_of_rooms = []
 
     def __init__(self, room_name):
         self.__name = room_name.capitalize()
-        self.__is_full = False
         self.__room_members = []
-        Room.total_number_of_rooms += 1
 
     @property
     def name(self):
@@ -23,9 +20,10 @@ class Room():
 
     @name.setter
     def name(self, new_room_name):
-        if not new_room_name:
-            return "Room name can't be empty"
-        self.__name = new_room_name.capitalize()
+        if new_room_name and isinstance(new_room_name, str):
+            self.__name = new_room_name.capitalize()
+        else:
+            raise ValueError("Room name must be a string and can't be empty")
 
     @property
     def room_members(self):
@@ -34,21 +32,10 @@ class Room():
     @room_members.setter
     def room_members(self, person):
         if not isinstance(person, Person):
-            print("Only a person, staff, or fellow instance can be added")
+            raise ValueError(
+                "Only a person, staff, or fellow instance can be added")
             return False
         self.__room_members.append(person)
-        if len(self.__room_members) == self.maximum_capacity:
-            self.__is_full = True
-        return True
-
-    @property
-    def is_full(self):
-        return self.__is_full
-
-    @is_full.setter
-    def is_full(self, value):
-        if value:
-            self.__isfull = value
 
     def remove_member(self, person):
         if not isinstance(person, Person):
@@ -76,7 +63,7 @@ class Room():
     def get_available_rooms(cls, room_list):
         available_rooms = []
         for room in cls.list_of_rooms:
-            if not room.is_full:
+            if len(room.room_members) != room.maximum_capacity:
                 available_rooms.append(room)
 
         return available_rooms
@@ -98,7 +85,7 @@ class Room():
 
     @classmethod
     def get_total_number_of_rooms(cls):
-        return cls.total_number_of_rooms
+        return len(cls.list_of_rooms)
 
     @classmethod
     def exists(cls, room_name):

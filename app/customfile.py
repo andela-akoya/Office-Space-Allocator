@@ -1,7 +1,7 @@
 from os import path
 
-from app.utilities import Utilities
 from app.errors import WrongFormatException
+from app.utilities import Utilities
 
 
 class Customfile():
@@ -15,7 +15,7 @@ class Customfile():
             raise WrongFormatException(
                 "{} is not a valid file name".format(filename))
 
-        filepath = path.dirname(path.abspath(__file__)) + "\\data\\documents\\"
+        filepath = path.dirname(path.abspath(__file__)) + "/data/documents/"
 
         filename = "{}.txt".format(filename)
         if cls.exist(filepath, filename):
@@ -25,9 +25,10 @@ class Customfile():
 
     @classmethod
     def open_file(cls, filename):
-        filepath = path.dirname(path.abspath(__file__)) + "\\data\\documents\\"
+        filepath = path.dirname(path.abspath(__file__)) + "/data/documents/"
         filename = "{}.txt".format(filename)
-        if not File.exist(filepath, filename):
+        print(filepath, filename)
+        if not cls.exist(filepath, filename):
             raise FileNotFoundError(
                 "No such file: {} can't be found".format(filename))
         else:

@@ -1,13 +1,13 @@
-from os import sys, path
+from os import path, sys
 
-from app.utilities import Utilities
 from app.errors import WrongFormatException
+from app.utilities import Utilities
 
 
 class Person():
     """docstring for Person"""
 
-    id_map = {}
+    list_of_persons = []
 
     def __init__(self, person_id, lname, fname):
         try:
@@ -92,21 +92,25 @@ class Person():
         return "\n".join(output)
 
     @classmethod
-    def add_to_map(cls, person):
-        cls.id_map[person.id] = person
+    def add_to_person_list(cls, person):
+        cls.list_of_persons.append(person)
 
     @classmethod
     def get_id_list(cls):
-        return list(cls.id_map.keys())
+        return [person.id for person in cls.list_of_persons]
+
+    @classmethod
+    def get_list_of_persons(cls):
+        return cls.list_of_persons
 
     @classmethod
     def exist(cls, person_identifier):
-        return person_identifier in cls.get_id_list()
+        return person_identifier in [person.id for person in cls.list_of_persons]
 
     @classmethod
     def export_in_database_format(cls):
         output = []
-        for person in cls.id_map.values():
+        for person in cls.list_of_persons:
             office = "None" \
                 if not person.office \
                 else person.office.name
