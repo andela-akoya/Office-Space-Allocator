@@ -1,14 +1,14 @@
 import unittest
-from os import sys, path
+from os import path, sys
 
 from app.dojo import Dojo
+from app.errors import WrongFormatException
+from app.fellow import Fellow
+from app.livingspace import LivingSpace
+from app.office import Office
+from app.person import Person
 from app.room import Room
 from app.staff import Staff
-from app.fellow import Fellow
-from app.person import Person
-from app.office import Office
-from app.livingspace import LivingSpace
-from app.errors import WrongFormatException
 
 sys.path.append(path.dirname(path.dirname(
     path.dirname(path.abspath(__file__)))))
@@ -22,7 +22,7 @@ class TestDojo(unittest.TestCase):
 
     def tearDown(self):
         Room.total_number_of_rooms = 0
-        Room.room_list = {}
+        Room.list_of_rooms = []
         Office.office_list = {}
         LivingSpace.livingspace_list = {}
         Staff.staff_list = []

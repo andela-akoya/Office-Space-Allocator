@@ -1,15 +1,15 @@
-from os import sys, path
+from os import path, sys
 
-from app.office import Office
-from app.livingspace import LivingSpace
-from app.room import Room
-from app.utilities import Utilities
-from app.staff import Staff
-from app.fellow import Fellow
 from app.customfile import Customfile
-from app.person import Person
-from app.errors import WrongFormatException
 from app.database import Database
+from app.errors import WrongFormatException
+from app.fellow import Fellow
+from app.livingspace import LivingSpace
+from app.office import Office
+from app.person import Person
+from app.room import Room
+from app.staff import Staff
+from app.utilities import Utilities
 
 
 class Dojo(object):
@@ -30,7 +30,8 @@ class Dojo(object):
         return Room.get_total_number_of_rooms()
 
     @classmethod
-    def add_person(cls, surname, firstname, category, wants_accomodation=None, person_id=None):
+    def add_person(cls, surname, firstname, category, wants_accomodation=None,
+                   person_id=None):
         type_of_person = category.strip().lower()
         try:
             if type_of_person == "staff":
@@ -105,7 +106,8 @@ class Dojo(object):
             if Person.exist(person_id):
                 person = Person.id_map[person_id]
                 if Room.exists(room_name):
-                    room = Room.get_room_list()[room_name]
+                    room = [room for room in Room.get_room_list()
+                            if room.name == room_name][0]
                     if not room.is_full:
                         if not (person in room.room_members):
                             if isinstance(person, Staff):

@@ -1,4 +1,4 @@
-from os import sys, path
+from os import path, sys
 
 from app.person import Person
 
@@ -38,8 +38,6 @@ class Fellow(Person):
     @category.setter
     def category(self, new_category):
         self.__category = new_category.lower()
-
-
 
     @classmethod
     def add_to_fellow_list(cls, fellow):
