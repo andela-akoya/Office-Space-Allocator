@@ -9,7 +9,6 @@ from app.staff import Staff
 class Room():
 
     total_number_of_rooms = 0
-    # room_list = {}
     list_of_rooms = []
 
     def __init__(self, room_name):
