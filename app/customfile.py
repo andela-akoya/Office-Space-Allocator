@@ -27,7 +27,6 @@ class Customfile():
     def open_file(cls, filename):
         filepath = path.dirname(path.abspath(__file__)) + "/data/documents/"
         filename = "{}.txt".format(filename)
-        print(filepath, filename)
         if not cls.exist(filepath, filename):
             raise FileNotFoundError(
                 "No such file: {} can't be found".format(filename))

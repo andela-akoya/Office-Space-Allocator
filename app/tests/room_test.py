@@ -77,3 +77,13 @@ class TestRoom(unittest.TestCase):
             self.room_instance.remove_member("")
             self.assertEqual("Only a person, staff, or fellow instance can be removed",
                              context.exception.message)
+
+    def test_remove_member_with_a_person_instance(self):
+        """ tests the remove_member method for approprite error
+        messages if a non person instance is passed in as value"""
+        self.assertEqual(len(self.room_instance.room_members), 0)
+        new_person = Person(1, "Koya", "Gabriel")
+        self.room_instance.room_members = new_person
+        self.assertEqual(len(self.room_instance.room_members), 1)
+        self.room_instance.remove_member(new_person)
+        self.assertEqual(len(self.room_instance.room_members), 0)

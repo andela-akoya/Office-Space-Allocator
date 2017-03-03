@@ -105,8 +105,8 @@ class Room():
     @classmethod
     def export_in_database_format(cls):
         output = []
-        for room in cls.list_of_room:
-            output.append((room.name, room.category))
+        for room in cls.list_of_rooms:
+            output.append((room.name, room.room_type))
 
         return output
 

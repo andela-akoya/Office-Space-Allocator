@@ -1,3 +1,5 @@
+import re
+from datetime import datetime
 from os import path, sys
 
 from app.customfile import Customfile
@@ -193,29 +195,31 @@ class Dojo(object):
             print(e)
 
     @classmethod
-    def save_state(cls, database_name):
+    def save_state(cls, db_name):
         database_path = path.dirname(path.abspath(__file__)) \
-            + "\\data\\database\\"
-        if database_name:
-            if not Customfile.exist(database_path, database_name + ".db"):
-                new_database = Database(database_path + database_name + ".db")
-                new_database.save(
-                    Room.export_in_database_format(),
-                    Person.export_in_database_format()
-                )
-            else:
-                error = "Database with the name {} already exist. "\
-                    + "You can either specify another name or override the " \
-                    + "existing database.\n"\
-                    + "To override specify the [override] command "
-                print(error.format(database_name + ".db"))
+            + "/data/database/"
+        database_name = db_name or \
+            ("-").join(re.findall(r"[\w']+",
+                                  str(datetime.now()).split(".")[0]))
+        print(database_name)
+
+        if not Customfile.exist(database_path, database_name + ".db"):
+            new_database = Database(database_path + database_name + ".db")
+            new_database.save(
+                Room.export_in_database_format(),
+                Person.export_in_database_format()
+            )
         else:
-            pass
+            error = "Database with the name {} already exist. "\
+                + "You can either specify another name or override the " \
+                + "existing database.\n"\
+                + "To override specify the [override] command "
+            print(error.format(database_name + ".db"))
 
     @classmethod
     def load_state(cls, database_name):
         database_path = path.dirname(path.abspath(__file__)) \
-            + "\\data\\database\\"
+            + "/data/database/"
         if database_name:
             if Customfile.exist(database_path, database_name + ".db"):
                 new_database = Database(database_path + database_name + ".db")

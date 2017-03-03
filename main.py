@@ -106,10 +106,4 @@ class MyInteractive(cmd.Cmd):
         Dojo.load_state(arg['<sqlite_database>'])
 
 if __name__ == '__main__':
-
-    try:
-        MyInteractive().cmdloop()
-    except SystemExit:
-        pass
-    except KeyboardInterrupt:
-        pass
+    MyInteractive().cmdloop()
