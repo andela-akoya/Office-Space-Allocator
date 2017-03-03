@@ -61,12 +61,7 @@ class Room():
 
     @classmethod
     def get_available_rooms(cls, room_list):
-        available_rooms = []
-        for room in cls.list_of_rooms:
-            if len(room.room_members) != room.maximum_capacity:
-                available_rooms.append(room)
-
-        return available_rooms
+        return [room for room in room_list if len(room.room_members) != room.maximum_capacity]
 
     @classmethod
     def print_room_members(cls, room_name):
