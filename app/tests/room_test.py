@@ -58,3 +58,22 @@ class TestRoom(unittest.TestCase):
         new_person = Person(1, "koya", "gabriel")
         self.room_instance.room_members = new_person
         self.assertEqual(len(self.room_instance.room_members), 1)
+
+    def test_room_members_property_setter_with_non_person_instance(self):
+        """ test the setter method for the room members property if it
+        returns the proper error message if non person instance is passed
+        as value"""
+        self.assertEqual(len(self.room_instance.room_members), 0)
+        with self.assertRaises(ValueError) as context:
+            self.room_instance.room_members = ""
+            self.assertEqual("Only a person, staff, or fellow instance can be removed",
+                             context.exception.message)
+
+    def test_remove_member_with_a_non_person_instance(self):
+        """ tests the remove_member method for approprite error
+        messages if a non person instance is passed in as value"""
+        self.assertEqual(len(self.room_instance.room_members), 0)
+        with self.assertRaises(ValueError) as context:
+            self.room_instance.remove_member("")
+            self.assertEqual("Only a person, staff, or fellow instance can be removed",
+                             context.exception.message)

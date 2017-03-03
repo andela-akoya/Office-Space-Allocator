@@ -39,8 +39,8 @@ class Room():
 
     def remove_member(self, person):
         if not isinstance(person, Person):
-            print("Only a person, staff, or fellow instance can be removed")
-            return False
+            raise ValueError(
+                "Only a person, staff, or fellow instance can be removed")
         self.__room_members.remove(person)
 
     @classmethod
