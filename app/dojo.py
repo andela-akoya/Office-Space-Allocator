@@ -39,8 +39,9 @@ class Dojo(object):
             if type_of_person == "staff":
                 new_staff = Staff(person_id, surname, firstname)
                 if new_staff:
-                    print(("Staff {ns.surname} {ns.firstname} has been"
-                           + " successfully added").format(ns=new_staff))
+                    print(("Staff {ns.surname} {ns.firstname} with id {ns.id} "
+                           + "has been successfully added")
+                          .format(ns=new_staff))
                     Staff.add_to_staff_list(new_staff)
                     Person.add_to_person_list(new_staff)
                     cls.allocate_room(new_staff)
@@ -50,8 +51,9 @@ class Dojo(object):
                     if wants_accomodation in ['y', 'Y'] \
                     else Fellow(person_id, surname, firstname)
                 if new_fellow:
-                    print(("Fellow {nf.surname} {nf.firstname} has been"
-                           + " successfully added").format(nf=new_fellow))
+                    print(("Fellow {nf.surname} {nf.firstname} with id {nf.id} "
+                           + "has been successfully added")
+                          .format(nf=new_fellow))
                     Fellow.add_to_fellow_list(new_fellow)
                     Person.add_to_person_list(new_fellow)
                     cls.allocate_room(new_fellow, wants_accomodation)
@@ -110,7 +112,7 @@ class Dojo(object):
                            if person.id == person_id]
                 if Room.exists(room_name):
                     room, = [room for room in Room.get_room_list()
-                             if room.name == room_name]
+                             if room.name == room_name.capitalize()]
                     if len(room.room_members) != room.maximum_capacity:
                         if not (person in room.room_members):
                             if isinstance(person, Staff):
@@ -144,12 +146,11 @@ class Dojo(object):
 
     @classmethod
     def load_people(cls, filename):
-        error_messages = \
-            [
-                "Errors\n---------",
-                "The following people couldn't be loaded"
-                + " because of incomplete information\n"
-            ]
+        error_messages = [
+            "Errors\n---------",
+            "The following people couldn't be loaded"
+            + " because of incomplete information\n"
+        ]
         try:
             file_to_be_loaded = Customfile.open_file(filename)
             with file_to_be_loaded as data_file:
@@ -171,12 +172,11 @@ class Dojo(object):
 
     @classmethod
     def load_rooms(cls, filename):
-        error_messages = \
-            [
-                "Errors\n---------",
-                "The following rooms couldn't be loaded"
-                + " because of incomplete information\n"
-            ]
+        error_messages = [
+            "Errors\n---------",
+            "The following rooms couldn't be loaded"
+            + " because of incomplete information\n"
+        ]
         try:
             file_to_be_loaded = Customfile.open_file(filename)
             with file_to_be_loaded as data_file:

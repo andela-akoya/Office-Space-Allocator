@@ -103,8 +103,7 @@ class Office(Room):
             Staff.remove_from_unallocated_staff_list(
                 person)
         else:
-            person.office \
-                .remove_member(person)
+            person.office.remove_member(person)
         person.office = office
         office.room_members = person
         print(message.format(office_name, "office", p=person))

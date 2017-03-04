@@ -194,15 +194,15 @@ class TestDojo(unittest.TestCase):
         print(self.filepath + filename)
         self.assertTrue(path.isfile(self.filepath + filename))
 
-    def test_reallocate_person(self):
+    def test_reallocate_person_with_office_instance(self):
         """
         tests the reallocate_person function if it successfully
-        reallocates a person to a specified room
+        reallocates a person to a specified office
         """
         new_office, = Dojo.create_room("office", ["red"])
         self.assertEqual(len(new_office.room_members), 0)
         Dojo.add_person("koya", "gabriel", "staff")
-        person = Staff.get_staff_list()[0]
+        person, = Staff.get_staff_list()
         self.assertEqual(len(new_office.room_members), 1)
         self.assertEqual(person.office.name.lower(),
                          "red")
@@ -212,3 +212,39 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_office2.room_members), 1)
         self.assertEqual(person.office.name.lower(),
                          "orange")
+
+    def test_reallocate_person_with_livingspace_instance(self):
+        """
+        tests the reallocate_person function if it successfully
+        reallocates a person to a specified livingspace
+        """
+        new_livingspace, = Dojo.create_room("livingspace", ["kfc"])
+        self.assertEqual(len(new_livingspace.room_members), 0)
+        Dojo.add_person("koya", "gabriel", "fellow", "y")
+        person, = Fellow.get_fellow_list()
+        self.assertEqual(len(new_livingspace.room_members), 1)
+        self.assertEqual(person.livingspace.name.lower(), "kfc")
+        new_livingspace2, = Dojo.create_room("livingspace", ["biggs"])
+        Dojo.reallocate_person(person.id, "Biggs")
+        self.assertEqual(len(new_livingspace.room_members), 0)
+        self.assertEqual(len(new_livingspace2.room_members), 1)
+        self.assertEqual(person.livingspace.name.lower(), "biggs")
+
+    def test_reallocate_person_with_invalid_id_format(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if an id with invalid format is passed as argument
+        """
+        Dojo.reallocate_person("'", "Biggs")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "Wrong id format. id must be a number")
+
+    def test_reallocate_person_with_non_existing_person_id(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if a non existing person id is passed as argument
+        """
+        Dojo.reallocate_person(10, "Biggs")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "Person with the id {} doesn't exist"
+                         .format(10))

@@ -93,7 +93,8 @@ class LivingSpace(Room):
 
     @classmethod
     def get_livingspace(cls, livingspace_name):
-        return [livingspace for livingspace in cls.list_of_livingspace if livingspace.name == livingspace_name][0]
+        return [livingspace for livingspace in cls.list_of_livingspace
+                if livingspace.name == livingspace_name][0]
 
     @classmethod
     def reallocate_person(cls, person, livingspace_name):
@@ -105,8 +106,7 @@ class LivingSpace(Room):
                 Fellow.remove_from_unallocated_fellow_list(
                     person, "livingspace")
             else:
-                person.livingspace \
-                    .remove_member(person)
+                person.livingspace.remove_member(person)
             person.livingspace = livingspace
             livingspace.room_members = person
             print(message
