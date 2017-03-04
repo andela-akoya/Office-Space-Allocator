@@ -248,3 +248,13 @@ class TestDojo(unittest.TestCase):
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "Person with the id {} doesn't exist"
                          .format(10))
+
+    def test_reallocate_person_with_non_existing_room_name(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if a non existing room name is passed as argument
+        """
+        Dojo.reallocate_person(10, "Biggs")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "Person with the id {} doesn't exist"
+                         .format(10))
