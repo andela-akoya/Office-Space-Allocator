@@ -92,7 +92,7 @@ class Room():
             output += (len(room.name + " Room") * "-") + "\n"
             for member in room.room_members:
                 output += "{m.surname} {m.firstname}, ".format(m=member)
-            output += "\n\n\n"
+            output += "\n"
 
         return output
 

@@ -24,6 +24,8 @@ class TestDojo(unittest.TestCase):
         LivingSpace.list_of_livingspace = []
         Staff.staff_list = []
         Fellow.fellow_list = []
+        Fellow.unallocated_fellows = {"office": [], "livingspace": []}
+        Staff.unallocated_staff = []
 
     def test_create_room(self):
         """ tests whether a room was created """
@@ -75,15 +77,17 @@ class TestDojo(unittest.TestCase):
         self.assertFalse(new_room2)
         self.assertEqual(initial_room_count, later_room_count)
 
-    def test_add_staff(self):
-        """ test  if a staff is successfully added and allocated an office """
+    def test_add_person_staff(self):
+        """ test add_person_method if a staff is successfully
+        added and allocated an office """
         new_office, = Dojo.create_room('Office', ['Orange'])
         self.assertTrue(new_office)
         Dojo.add_person("koya", "gabriel", "staff")
         self.assertEqual(len(new_office.room_members), 1)
 
-    def test_add_fellow_no_accomodation(self):
-        """ test  if a fellow that doesn't want accomodation is successfully
+    def test_add_person_fellow_no_accomodation(self):
+        """ test  add_person method if a fellow
+        that doesn't want accomodation is successfully
         added and allocated an office only  """
         new_office, = Dojo.create_room('Office', ['Orange'])
         new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
@@ -91,8 +95,9 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_office.room_members), 1)
         self.assertEqual(len(new_livingspace.room_members), 0)
 
-    def test_add_fellow_with_accomodation(self):
-        """ test if a fellow that wants accomodation is successfully
+    def test_add_person_fellow_with_accomodation(self):
+        """ test add_person method if a fellow
+        that wants accomodation is successfully
         added and allocated an office and a livingspace  """
         new_office, = Dojo.create_room('Office', ['Orange'])
         new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
@@ -127,6 +132,14 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(Fellow.get_unallocated_fellows()['office']), 1)
         self.assertEqual(
             len(Fellow.get_unallocated_fellows()['livingspace']), 1)
+
+    def test_add_person_with_invalid_name_format(self):
+        """ test if the add_person method returns appropriate
+        error if an invalid name format is passed as argument """
+        Dojo.add_person("'", "gabriel", "staff")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(
+            output, "Firstname or Lastname is not a valid name format")
 
     def test_print_room_with_wrong_room_name(self):
         """
@@ -172,6 +185,29 @@ class TestDojo(unittest.TestCase):
         Dojo.print_allocations("file2")
         self.assertTrue(path.isfile(self.filepath + filename))
 
+    def test_print_allocations_with_invalid_filename_format(self):
+        """
+        test the print_allocations whether it returns appropriate
+        error message if an invalid filename format is passed as value
+        """
+        filename = "'"
+        Dojo.print_allocations(filename)
+        output = sys.stdout.getvalue().strip("\n")
+        self.assertEqual(
+            output, "{} is not a valid file name".format(filename))
+
+    def test_print_allocations_without_filename(self):
+        """ test the print_allocations method if it prints
+        the appropriate message if no filename is passed
+        as argument """
+        office, = Dojo.create_room("office", ["Orange"])
+        Dojo.add_person("Koya", "gabriel", "staff")
+        expected_output = "Orange Room{}Koya Gabriel, "\
+            .format(len(office.name + " Room") * "-")
+        Dojo.print_allocations(None)
+        output = "".join(sys.stdout.getvalue().split("\n")[4:7])
+        self.assertEqual(output, expected_output)
+
     def test_print_unallocated_with_existing_filename(self):
         """
         test the print_unallocated for a warning
@@ -193,6 +229,17 @@ class TestDojo(unittest.TestCase):
         Dojo.print_allocations("file4")
         print(self.filepath + filename)
         self.assertTrue(path.isfile(self.filepath + filename))
+
+    def test_print_unallocated_without_filename(self):
+        """ test the print_unallocated method if it prints
+        the appropriate message if no filename is passed
+        as argument """
+        Dojo.add_person("Koya", "gabriel", "staff")
+        expected_output = "Unallocated List {}1. Staff Koya Gabriel"\
+            .format(21 * "-")
+        Dojo.print_unallocated(None)
+        output = "".join(sys.stdout.getvalue().split("\n")[3:7])
+        self.assertEqual(output, expected_output)
 
     def test_reallocate_person_with_office_instance(self):
         """
@@ -258,3 +305,21 @@ class TestDojo(unittest.TestCase):
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "Person with the id {} doesn't exist"
                          .format(10))
+
+    def test_reallocate_person_with_a_full_room(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if the name of a filled up room is passed as argument
+        """
+        new_livingspace, = Dojo.create_room("livingspace", ["kfc"])
+        new_livingspace.room_members = Fellow(1, "koya", "gabriel")
+        new_livingspace.room_members = Fellow(2, "Samuel", "ajayi")
+        new_livingspace.room_members = Fellow(3, "Delores", "dei")
+        new_livingspace.room_members = Fellow(4, "Alamu", "Yusuf")
+        Dojo.add_person("orolu", "wumi", "fellow", "y")
+        fellow, = Fellow.get_fellow_list()
+        Dojo.reallocate_person(fellow.id, new_livingspace.name)
+        output = sys.stdout.getvalue().strip().split("\n")[-1]
+        self.assertEqual(output,
+                         "Room {} is filled up, please input another room"
+                         .format(new_livingspace.name))
