@@ -201,7 +201,6 @@ class Dojo(object):
         database_name = db_name or \
             ("-").join(re.findall(r"[\w']+",
                                   str(datetime.now()).split(".")[0]))
-        print(database_name)
 
         if not Customfile.exist(database_path, database_name + ".db"):
             new_database = Database(database_path + database_name + ".db")
