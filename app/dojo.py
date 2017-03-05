@@ -119,7 +119,7 @@ class Dojo(object):
                                 if room.room_type == "office":
                                     Office.reallocate_person(person, room_name)
                                 else:
-                                    print(("Room {} is a livingspace and  "
+                                    print(("Room {} is a livingspace and "
                                            + "can't be assigned to a staff")
                                           .format(room_name))
                             else:

@@ -241,7 +241,7 @@ class TestDojo(unittest.TestCase):
         output = "".join(sys.stdout.getvalue().split("\n")[3:7])
         self.assertEqual(output, expected_output)
 
-    def test_reallocate_person_with_office_instance(self):
+    def test_reallocate_person_to_office_instance(self):
         """
         tests the reallocate_person function if it successfully
         reallocates a person to a specified office
@@ -260,7 +260,7 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(person.office.name.lower(),
                          "orange")
 
-    def test_reallocate_person_with_livingspace_instance(self):
+    def test_reallocate_person_to_livingspace_instance(self):
         """
         tests the reallocate_person function if it successfully
         reallocates a person to a specified livingspace
@@ -301,12 +301,13 @@ class TestDojo(unittest.TestCase):
         tests the reallocate_person function if it returns appropriate error
         message if a non existing room name is passed as argument
         """
-        Dojo.reallocate_person(10, "Biggs")
-        output = sys.stdout.getvalue().strip()
-        self.assertEqual(output, "Person with the id {} doesn't exist"
-                         .format(10))
+        Dojo.add_person("koya", "gabriel", "fellow", "y")
+        person, = Fellow.get_fellow_list()
+        Dojo.reallocate_person(person.id, "Biggs")
+        output = sys.stdout.getvalue().split("\n")[-2]
+        self.assertEqual(output, "Room Biggs doesn't exist")
 
-    def test_reallocate_person_with_a_full_room(self):
+    def test_reallocate_person_to_a_full_room(self):
         """
         tests the reallocate_person function if it returns appropriate error
         message if the name of a filled up room is passed as argument
@@ -323,3 +324,42 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(output,
                          "Room {} is filled up, please input another room"
                          .format(new_livingspace.name))
+
+    def test_reallocate_person_staff_to_livingspace(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if a staff is to be reallocated to a livingspace
+        """
+        new_livingspace, = Dojo.create_room("livingspace", ["kfc"])
+        Dojo.add_person("orolu", "wumi", "staff")
+        staff, = Staff.get_staff_list()
+        Dojo.reallocate_person(staff.id, new_livingspace.name)
+        output = sys.stdout.getvalue().split("\n")[-2]
+        self.assertEqual(output,
+                         ("Room {} is a livingspace and can't be assigned to "
+                          + "a staff").format(new_livingspace.name))
+
+    def test_reallocate_person_to_already_assigned_room(self):
+        """
+        tests the reallocate_person function if it returns appropriate error
+        message if a staff is to be reallocated to a livingspace
+        """
+        new_office, = Dojo.create_room("office", ["orange"])
+        Dojo.add_person("orolu", "wumi", "staff")
+        staff, = Staff.get_staff_list()
+        Dojo.reallocate_person(staff.id, new_office.name)
+        output = sys.stdout.getvalue().split("\n")[-2]
+        self.assertEqual(output,
+                         ("{s.surname} {s.firstname} already belongs "
+                          + "to room {}, therefore can't be "
+                          + "reallocated to the same room")
+                         .format(new_office.name, s=staff))
+
+    def test_load_people_with_non_existing_filename(self):
+        """
+        test the load_people if it returns the appropriate error message
+        when a non existing filename is passed as argument
+        """
+        Dojo.load_people("people")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "No such file: people.txt can't be found")
