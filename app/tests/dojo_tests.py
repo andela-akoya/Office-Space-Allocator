@@ -363,3 +363,24 @@ class TestDojo(unittest.TestCase):
         Dojo.load_people("people")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "No such file: people.txt can't be found")
+
+    def test_load_people_with_incomplete_file_content(self):
+        """
+        test the load_people method if it returns appropriate
+        error message if the file being loaded contains lines with
+        incomplete arguments
+        """
+        new_file = open(self.filepath + "test.txt", "w")
+        new_file.write("koya gabriel\n")
+        new_file.write("orolu wumi\n")
+        new_file.close()
+        expected_output = [
+            "Errors\n---------",
+            "The following people couldn't be loaded"
+            + " because of incomplete information\n",
+            "koya gabriel",
+            "orolu wumi"
+        ]
+        Dojo.load_people("test")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "\n".join(expected_output))
