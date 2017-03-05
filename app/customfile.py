@@ -1,4 +1,4 @@
-from os import path
+from os import path, stat
 
 from app.errors import WrongFormatException
 from app.utilities import Utilities
@@ -43,3 +43,7 @@ class Customfile():
             return True
 
         return False
+
+    @classmethod
+    def get_status_info(cls, filepath, filename):
+        return stat(filepath + filename)

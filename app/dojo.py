@@ -188,7 +188,7 @@ class Dojo(object):
                         cls.create_room(room_type, room_names)
                     else:
                         error_messages.append(" ".join(data))
-                        print("\n".join(error_messages))
+                print("\n".join(error_messages))
                 data_file.close()
 
         except FileNotFoundError as e:

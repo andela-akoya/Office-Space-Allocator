@@ -1,7 +1,8 @@
 import unittest
-from os import path, sys
+from os import path, remove, sys
 
 from app.customfile import Customfile
+from app.database import Database
 from app.dojo import Dojo
 from app.errors import WrongFormatException
 from app.fellow import Fellow
@@ -17,6 +18,8 @@ class TestDojo(unittest.TestCase):
     def setUp(self):
         self.filepath = path.dirname(path.dirname(path.abspath(__file__))) \
             + "/data/documents/"
+        self.database_path = path.dirname(path.dirname(path.abspath(__file__))) \
+            + "/data/database/"
 
     def tearDown(self):
         Room.total_number_of_rooms = 0
@@ -177,6 +180,7 @@ class TestDojo(unittest.TestCase):
         Dojo.print_allocations("file1")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "file1.txt already exist")
+        remove(self.filepath + "file1.txt")
 
     def test_print_allocations_with_new_filename(self):
         """
@@ -186,6 +190,7 @@ class TestDojo(unittest.TestCase):
         filename = "file2.txt"
         Dojo.print_allocations("file2")
         self.assertTrue(path.isfile(self.filepath + filename))
+        remove(self.filepath + "file2.txt")
 
     def test_print_allocations_with_invalid_filename_format(self):
         """
@@ -221,6 +226,7 @@ class TestDojo(unittest.TestCase):
         Dojo.print_unallocated("file3")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "file3.txt already exist")
+        remove(self.filepath + "file3.txt")
 
     def test_print_unallocated_with_new_filename(self):
         """
@@ -231,6 +237,7 @@ class TestDojo(unittest.TestCase):
         Dojo.print_allocations("file4")
         print(self.filepath + filename)
         self.assertTrue(path.isfile(self.filepath + filename))
+        remove(self.filepath + "file4.txt")
 
     def test_print_unallocated_without_filename(self):
         """ test the print_unallocated method if it prints
@@ -386,6 +393,7 @@ class TestDojo(unittest.TestCase):
         Dojo.load_people("test")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "\n".join(expected_output))
+        remove(self.filepath + "test.txt")
 
     def test_load_people_with_complete_file_content(self):
         """
@@ -400,3 +408,83 @@ class TestDojo(unittest.TestCase):
         self.assertFalse(Person.get_list_of_persons())
         Dojo.load_people("test")
         self.assertEqual(len(Person.get_list_of_persons()), 3)
+        remove(self.filepath + "test.txt")
+
+    def test_load_rooms_with_non_existing_filename(self):
+        """
+        test the load_rooms if it returns the appropriate error message
+        when a non existing filename is passed as argument
+        """
+        Dojo.load_rooms("roomfile")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "No such file: roomfile.txt can't be found")
+
+    def test_load_rooms_with_incomplete_file_content(self):
+        """
+        test the load_rooms method if it returns appropriate
+        error message if the file being loaded contains lines with
+        incomplete arguments
+        """
+        new_file = open(self.filepath + "test.txt", "w")
+        content = "red\nlivingspace \n"
+        Customfile.write(new_file, content)
+        new_file.close()
+        expected_output = [
+            "Errors\n---------",
+            "The following rooms couldn't be loaded"
+            + " because of incomplete information\n",
+            "red",
+            "livingspace"
+        ]
+        Dojo.load_rooms("test")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "\n".join(expected_output))
+        remove(self.filepath + "test.txt")
+
+    def test_load_rooms_with_complete_file_content(self):
+        """
+        tests the load_rooms method if it suceessfully load_rooms
+        data if a file with complete file content is passed as
+        argument
+        """
+        new_file = open(self.filepath + "test.txt", "w")
+        content = "office red green\nlivingspace kfc biggs\n"
+        Customfile.write(new_file, content)
+        new_file.close()
+        self.assertFalse(Room.get_room_list())
+        Dojo.load_rooms("test")
+        self.assertEqual(len(Room.get_room_list()), 4)
+        remove(self.filepath + "test.txt")
+
+    def test_save_state_with_existing_database_name(self):
+        """
+        test the save_state method for a warning
+        message if an already existing database name is
+        inputed as value.
+        """
+        test_database = Database(self.database_path + "file.db")
+        expected_output = "Database with the name {} already exist. "\
+            + "You can either specify another name or override the " \
+            + "existing database.\n"\
+            + "To override specify the [override] command"
+        new_database = Dojo.save_state("file")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, expected_output.format("file.db"))
+        remove(self.database_path + "file.db")
+
+    def test_save_state_with_new_database_name(self):
+        """
+        test the save_state method whether it successfully create
+        a new database if a non-existing database name is
+        passed as value.
+        """
+        Dojo.create_room("office", ["orange", "red"])
+        Dojo.add_person("koya", "gabriel", "staff")
+        initial_database = Database(self.database_path + "file.db")
+        initial_size = Customfile.get_status_info(
+            self.database_path, "file.db").st_size
+        remove(self.database_path + "file.db")
+        new_database = Dojo.save_state("file")
+        final_size = Customfile.get_status_info(
+            self.database_path, "file.db").st_size
+        self.assertNotEqual(initial_size, final_size)
