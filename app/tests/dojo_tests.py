@@ -1,6 +1,7 @@
 import unittest
 from os import path, sys
 
+from app.customfile import Customfile
 from app.dojo import Dojo
 from app.errors import WrongFormatException
 from app.fellow import Fellow
@@ -22,6 +23,7 @@ class TestDojo(unittest.TestCase):
         Room.list_of_rooms = []
         Office.list_of_offices = []
         LivingSpace.list_of_livingspace = []
+        Person.list_of_persons = []
         Staff.staff_list = []
         Fellow.fellow_list = []
         Fellow.unallocated_fellows = {"office": [], "livingspace": []}
@@ -371,8 +373,8 @@ class TestDojo(unittest.TestCase):
         incomplete arguments
         """
         new_file = open(self.filepath + "test.txt", "w")
-        new_file.write("koya gabriel\n")
-        new_file.write("orolu wumi\n")
+        content = "koya gabriel\norolu wumi\n"
+        Customfile.write(new_file, content)
         new_file.close()
         expected_output = [
             "Errors\n---------",
@@ -384,3 +386,17 @@ class TestDojo(unittest.TestCase):
         Dojo.load_people("test")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "\n".join(expected_output))
+
+    def test_load_people_with_complete_file_content(self):
+        """
+        tests the load_people method if it suceessfully load_rooms
+        data if a file with complete file content is passed as
+        argument
+        """
+        new_file = open(self.filepath + "test.txt", "w")
+        content = "koya gabriel staff\norolu wumi fellow\najayi tope fellow y\n"
+        Customfile.write(new_file, content)
+        new_file.close()
+        self.assertFalse(Person.get_list_of_persons())
+        Dojo.load_people("test")
+        self.assertEqual(len(Person.get_list_of_persons()), 3)
