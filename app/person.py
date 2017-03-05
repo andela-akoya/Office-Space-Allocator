@@ -16,19 +16,22 @@ class Person():
             raise WrongFormatException(
                 "Firstname or Lastname is not a valid name format")
 
-        self.__id = person_id or Utilities.generate_person_id(
+        self.__uniqueId = person_id or Utilities.generate_person_id(
             Person.get_id_list())
         self.__surname = lname.capitalize()
         self.__firstname = fname.capitalize()
         self.__office = None
 
     @property
-    def id(self):
-        return self.__id
+    def uniqueId(self):
+        return self.__uniqueId
 
-    @id.setter
-    def id(self, new_id):
-        self.__id = new_id
+    @uniqueId.setter
+    def uniqueId(self, new_id):
+        if isinstance(new_id, int):
+            self.__uniqueId = new_id
+        else:
+            raise ValueError("Only integers are acceptable format")
 
     @property
     def surname(self):
@@ -97,7 +100,7 @@ class Person():
 
     @classmethod
     def get_id_list(cls):
-        return [person.id for person in cls.list_of_persons]
+        return [person.uniqueId for person in cls.list_of_persons]
 
     @classmethod
     def get_list_of_persons(cls):
@@ -105,7 +108,7 @@ class Person():
 
     @classmethod
     def exist(cls, person_identifier):
-        return person_identifier in [person.id for person in cls.list_of_persons]
+        return person_identifier in [person.uniqueId for person in cls.list_of_persons]
 
     @classmethod
     def export_in_database_format(cls):
@@ -118,7 +121,7 @@ class Person():
                 if not person.livingspace \
                 else person.livingspace.name
             output.append(
-                (person.id, person.surname, person.firstname,
+                (person.uniqueId, person.surname, person.firstname,
                  person.category, office, livingspace,
                  person.wants_accomodation)
             )

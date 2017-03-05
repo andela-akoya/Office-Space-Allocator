@@ -50,7 +50,7 @@ class LivingSpace(Room):
                     print("A Room with the name {} already exist"
                           .format(name.capitalize()))
             except WrongFormatException as e:
-                print("{} is not a valid office name format".format(name))
+                print("{} is not a valid livingspace name format".format(name))
 
         return output
 

@@ -39,7 +39,7 @@ class Dojo(object):
             if type_of_person == "staff":
                 new_staff = Staff(person_id, surname, firstname)
                 if new_staff:
-                    print(("Staff {ns.surname} {ns.firstname} with id {ns.id} "
+                    print(("Staff {ns.surname} {ns.firstname} with id {ns.uniqueId} "
                            + "has been successfully added")
                           .format(ns=new_staff))
                     Staff.add_to_staff_list(new_staff)
@@ -51,7 +51,7 @@ class Dojo(object):
                     if wants_accomodation in ['y', 'Y'] \
                     else Fellow(person_id, surname, firstname)
                 if new_fellow:
-                    print(("Fellow {nf.surname} {nf.firstname} with id {nf.id} "
+                    print(("Fellow {nf.surname} {nf.firstname} with id {nf.uniqueId} "
                            + "has been successfully added")
                           .format(nf=new_fellow))
                     Fellow.add_to_fellow_list(new_fellow)
@@ -109,7 +109,7 @@ class Dojo(object):
             person_id = int(identifier)
             if Person.exist(person_id):
                 person, = [person for person in Person.get_list_of_persons()
-                           if person.id == person_id]
+                           if person.uniqueId == person_id]
                 if Room.exists(room_name):
                     room, = [room for room in Room.get_room_list()
                              if room.name == room_name.capitalize()]

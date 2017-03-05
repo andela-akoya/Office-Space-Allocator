@@ -22,7 +22,6 @@ class TestDojo(unittest.TestCase):
             + "/data/database/"
 
     def tearDown(self):
-        Room.total_number_of_rooms = 0
         Room.list_of_rooms = []
         Office.list_of_offices = []
         LivingSpace.list_of_livingspace = []
@@ -81,6 +80,22 @@ class TestDojo(unittest.TestCase):
         self.assertFalse(new_room1)
         self.assertFalse(new_room2)
         self.assertEqual(initial_room_count, later_room_count)
+
+    def test_create_room_with_invalid_office_name_format(self):
+        """ tests the create_room method if it returns appropriate
+        error message if an invalid office name format is passed in as
+        argument """
+        Dojo.create_room("office", ["'"])
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "' is not a valid office name format")
+
+    def test_create_room_with_invalid_livingspace_name_format(self):
+        """ tests the create_room method if it returns appropriate
+        error message if an invalid livingspace name format is passed in as
+        argument """
+        Dojo.create_room("livingspace", ["'"])
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output, "' is not a valid livingspace name format")
 
     def test_add_person_staff(self):
         """ test add_person_method if a staff is successfully
@@ -244,11 +259,14 @@ class TestDojo(unittest.TestCase):
         the appropriate message if no filename is passed
         as argument """
         Dojo.add_person("Koya", "gabriel", "staff")
+        Dojo.add_person("Orolu", "wumi", "fellow")
+        Dojo.add_person("Alamu", "Yusuf", "fellow", "y")
         expected_output = "Unallocated List {}1. Staff Koya Gabriel"\
-            .format(21 * "-")
+            + "2. Fellow Orolu Wumi (Office)"\
+            + "3. Fellow Alamu Yusuf (Office $ Livingspace)"
         Dojo.print_unallocated(None)
-        output = "".join(sys.stdout.getvalue().split("\n")[3:7])
-        self.assertEqual(output, expected_output)
+        output = "".join(sys.stdout.getvalue().split("\n")[9:])
+        self.assertEqual(output, expected_output.format(21 * "-"))
 
     def test_reallocate_person_to_office_instance(self):
         """
@@ -263,7 +281,7 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(person.office.name.lower(),
                          "red")
         new_office2, = Dojo.create_room("office", ["orange"])
-        Dojo.reallocate_person(person.id, "Orange")
+        Dojo.reallocate_person(person.uniqueId, "Orange")
         self.assertEqual(len(new_office.room_members), 0)
         self.assertEqual(len(new_office2.room_members), 1)
         self.assertEqual(person.office.name.lower(),
@@ -281,7 +299,7 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_livingspace.room_members), 1)
         self.assertEqual(person.livingspace.name.lower(), "kfc")
         new_livingspace2, = Dojo.create_room("livingspace", ["biggs"])
-        Dojo.reallocate_person(person.id, "Biggs")
+        Dojo.reallocate_person(person.uniqueId, "Biggs")
         self.assertEqual(len(new_livingspace.room_members), 0)
         self.assertEqual(len(new_livingspace2.room_members), 1)
         self.assertEqual(person.livingspace.name.lower(), "biggs")
@@ -312,7 +330,7 @@ class TestDojo(unittest.TestCase):
         """
         Dojo.add_person("koya", "gabriel", "fellow", "y")
         person, = Fellow.get_fellow_list()
-        Dojo.reallocate_person(person.id, "Biggs")
+        Dojo.reallocate_person(person.uniqueId, "Biggs")
         output = sys.stdout.getvalue().split("\n")[-2]
         self.assertEqual(output, "Room Biggs doesn't exist")
 
@@ -328,7 +346,7 @@ class TestDojo(unittest.TestCase):
         new_livingspace.room_members = Fellow(4, "Alamu", "Yusuf")
         Dojo.add_person("orolu", "wumi", "fellow", "y")
         fellow, = Fellow.get_fellow_list()
-        Dojo.reallocate_person(fellow.id, new_livingspace.name)
+        Dojo.reallocate_person(fellow.uniqueId, new_livingspace.name)
         output = sys.stdout.getvalue().strip().split("\n")[-1]
         self.assertEqual(output,
                          "Room {} is filled up, please input another room"
@@ -342,7 +360,7 @@ class TestDojo(unittest.TestCase):
         new_livingspace, = Dojo.create_room("livingspace", ["kfc"])
         Dojo.add_person("orolu", "wumi", "staff")
         staff, = Staff.get_staff_list()
-        Dojo.reallocate_person(staff.id, new_livingspace.name)
+        Dojo.reallocate_person(staff.uniqueId, new_livingspace.name)
         output = sys.stdout.getvalue().split("\n")[-2]
         self.assertEqual(output,
                          ("Room {} is a livingspace and can't be assigned to "
@@ -356,7 +374,7 @@ class TestDojo(unittest.TestCase):
         new_office, = Dojo.create_room("office", ["orange"])
         Dojo.add_person("orolu", "wumi", "staff")
         staff, = Staff.get_staff_list()
-        Dojo.reallocate_person(staff.id, new_office.name)
+        Dojo.reallocate_person(staff.uniqueId, new_office.name)
         output = sys.stdout.getvalue().split("\n")[-2]
         self.assertEqual(output,
                          ("{s.surname} {s.firstname} already belongs "
