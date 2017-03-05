@@ -102,5 +102,7 @@ class Room():
 
     @classmethod
     def get_a_particular_room(cls, room_name):
-        output = [room for room in cls.list_of_rooms if room.name == room_name]
-        return output[0] if output else "{} doesn't exist".format(room_name)
+        output = [room for room in cls.list_of_rooms if room.name ==
+                  room_name.capitalize()]
+        return output[0] if output \
+            else "Room {} doesn't exist".format(room_name)

@@ -532,3 +532,36 @@ class TestDojo(unittest.TestCase):
         Dojo.load_state("file")
         self.assertEqual(len(Room.get_room_list()), 4)
         self.assertEqual(len(Person.get_list_of_persons()), 2)
+
+    def test_rename_room_with_non_existing_room(self):
+        """ test the rename_room method if it returns
+        appropriate error message if a non existing room
+        is tried to rename """
+        Dojo.rename_room("blue", "red")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output,
+                         ("Room {} doesn't exist, therefore changes couldn't "
+                          + "be made.").format("blue"))
+
+    def test_rename_room_with_existing_room_name(self):
+        """ test rename_room method if it returns appropriate
+        error message when trying to use a name that already
+        exist """
+        Dojo.create_room("office", ["red"])
+        Dojo.create_room("office", ["blue"])
+        Dojo.rename_room("red", "blue")
+        output = sys.stdout.getvalue().split("\n")[-2]
+        self.assertEqual(output,
+                         "Room {} already exist. Please choose another name"
+                         .format("blue"))
+
+    def test_rename_room(self):
+        """ test rename_room method if it properly renames
+        an existing room to a new name passed as arguments """
+        Dojo.create_room("office", ["red"])
+        self.assertTrue(Room.exists("red"))
+        self.assertEqual(Room.get_room_list()[0].name, "Red")
+        Dojo.rename_room("red", "blue")
+        self.assertFalse(Room.exists("red"))
+        self.assertTrue(Room.exists("blue"))
+        self.assertEqual(Room.get_room_list()[0].name, "Blue")

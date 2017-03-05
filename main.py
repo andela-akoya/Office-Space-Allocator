@@ -105,5 +105,10 @@ class MyInteractive(cmd.Cmd):
         """Usage: save_state <sqlite_database> """
         Dojo.load_state(arg['<sqlite_database>'])
 
+    @docopt_cmd
+    def do_rename_room(self, arg):
+        """Usage: rename_room <old_room_name> <new_room_name>"""
+        Dojo.rename_room(arg['<old_room_name>'], arg['<new_room_name>'])
+
 if __name__ == '__main__':
     MyInteractive().cmdloop()

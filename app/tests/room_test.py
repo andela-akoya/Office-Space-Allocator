@@ -168,7 +168,7 @@ class TestRoom(unittest.TestCase):
         argument """
         Room.get_room_list().append(Office("red"))
         self.assertEqual(Room.get_a_particular_room(
-            "blue"), "blue doesn't exist")
+            "blue"), "Room blue doesn't exist")
 
     def test_get_a_particular_room_with_a_valid_room_name(self):
         """ test the get_a_particular_room method if it returns the

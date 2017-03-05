@@ -164,7 +164,8 @@ class Dojo(object):
                                        category, wants_accomodation)
                     else:
                         error_messages.append(" ".join(data))
-                print("\n".join(error_messages))
+                if len(error_messages) > 2:
+                    print("\n".join(error_messages))
                 data_file.close()
 
         except FileNotFoundError as e:
@@ -188,7 +189,8 @@ class Dojo(object):
                         cls.create_room(room_type, room_names)
                     else:
                         error_messages.append(" ".join(data))
-                print("\n".join(error_messages))
+                if len(error_messages) > 2:
+                    print("\n".join(error_messages))
                 data_file.close()
 
         except FileNotFoundError as e:
@@ -228,3 +230,17 @@ class Dojo(object):
                 error = "Database with the name {} does not exist."\
                     .format(database_name + ".db")
                 print(error)
+
+    @classmethod
+    def rename_room(cls, old_room_name, new_room_name):
+        if Room.exists(old_room_name):
+            if not Room.exists(new_room_name):
+                Room.get_a_particular_room(old_room_name).name = new_room_name
+                print("Room {} has been suceessfully renamed to {}"
+                      .format(old_room_name, new_room_name))
+            else:
+                print("Room {} already exist. Please choose another name"
+                      .format(new_room_name))
+        else:
+            print(("Room {} doesn't exist, therefore changes couldn't be "
+                   + "made.").format(old_room_name))
