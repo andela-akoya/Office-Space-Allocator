@@ -484,7 +484,33 @@ class TestDojo(unittest.TestCase):
         remove(self.database_path + "file.db")
         Dojo.create_room("office", ["orange", "red"])
         Dojo.add_person("koya", "gabriel", "staff")
-        new_database = Dojo.save_state("file")
+        Dojo.save_state("file")
         final_size = Customfile.get_status_info(
             self.database_path, "file.db").st_size
         self.assertNotEqual(initial_size, final_size)
+        remove(self.database_path + "file.db")
+
+    def test_load_state_with_non_existing_database_name(self):
+        """ tests load_state method if it returns appropriate
+        error message if a non existing filename is passed as
+        argument """
+        Dojo.load_state("test")
+        output = sys.stdout.getvalue().strip()
+        self.assertEqual(output,
+                         "Database with the name test.db does not exist.")
+
+    def test_load_state_with_existing_database_name(self):
+        """ tests load_state method if it properly loads data
+        if an existing filename is passed as argument """
+        Dojo.create_room("office", ["orange", "red"])
+        Dojo.add_person("koya", "gabriel", "staff")
+        Dojo.create_room("livingspace", ["kfc", "biggs"])
+        Dojo.add_person("Njirap", "Perci", "fellow")
+        Dojo.save_state("file")
+        Room.list_of_rooms = []
+        Person.list_of_persons = []
+        self.assertFalse(Room.get_room_list())
+        self.assertFalse(Person.get_list_of_persons())
+        Dojo.load_state("file")
+        self.assertEqual(len(Room.get_room_list()), 4)
+        self.assertEqual(len(Person.get_list_of_persons()), 2)
