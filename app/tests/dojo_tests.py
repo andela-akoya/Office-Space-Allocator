@@ -478,12 +478,12 @@ class TestDojo(unittest.TestCase):
         a new database if a non-existing database name is
         passed as value.
         """
-        Dojo.create_room("office", ["orange", "red"])
-        Dojo.add_person("koya", "gabriel", "staff")
         initial_database = Database(self.database_path + "file.db")
         initial_size = Customfile.get_status_info(
             self.database_path, "file.db").st_size
         remove(self.database_path + "file.db")
+        Dojo.create_room("office", ["orange", "red"])
+        Dojo.add_person("koya", "gabriel", "staff")
         new_database = Dojo.save_state("file")
         final_size = Customfile.get_status_info(
             self.database_path, "file.db").st_size
