@@ -4,7 +4,7 @@ from os import path, sys
 
 from app.customfile import Customfile
 from app.database import Database
-from app.errors import WrongFormatException
+from app.errors import *
 from app.fellow import Fellow
 from app.livingspace import LivingSpace
 from app.office import Office
@@ -39,8 +39,8 @@ class Dojo(object):
             if type_of_person == "staff":
                 new_staff = Staff(person_id, surname, firstname)
                 if new_staff:
-                    print(("Staff {ns.surname} {ns.firstname} with id {ns.uniqueId} "
-                           + "has been successfully added")
+                    print(("Staff {ns.surname} {ns.firstname} with id "
+                           + "{ns.uniqueId} has been successfully added")
                           .format(ns=new_staff))
                     Staff.add_to_staff_list(new_staff)
                     Person.add_to_person_list(new_staff)
@@ -51,8 +51,8 @@ class Dojo(object):
                     if wants_accomodation in ['y', 'Y'] \
                     else Fellow(person_id, surname, firstname)
                 if new_fellow:
-                    print(("Fellow {nf.surname} {nf.firstname} with id {nf.uniqueId} "
-                           + "has been successfully added")
+                    print(("Fellow {nf.surname} {nf.firstname} with id "
+                           + "{nf.uniqueId} has been successfully added")
                           .format(nf=new_fellow))
                     Fellow.add_to_fellow_list(new_fellow)
                     Person.add_to_person_list(new_fellow)
