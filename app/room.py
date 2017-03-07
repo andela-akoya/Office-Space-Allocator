@@ -76,14 +76,18 @@ class Room():
 	def print_room_members(cls, room_name):
 		""" this method returns a well formattted data of all the
 		members of a particular room """
+		output = []
 		name = room_name.capitalize()
-		output = (["{:15} {}".format("Surname", "Firstname")] +
-				  [("{:15} {} ".format(member.surname, member.firstname))
-				   for member in [room.room_members for room in cls.list_of_rooms
-								  if room.name == name][0]]) \
-			if name in [room.name for room in cls.list_of_rooms] \
-			else "The room with the name {} does not exist".format(room_name)
-		return "\n".join(output) if isinstance(output, list) else output
+		if name in [room.name for room in cls.list_of_rooms]:
+			output.append("{:15} {}".format("Surname", "Firstname"))
+			for member in [room.room_members for room in cls.list_of_rooms
+						   if room.name == name][0]:
+				output.append("{:15} {} "
+							  .format(member.surname, member.firstname))
+
+			return "\n".join(output)
+
+		return("The room with the name {} does not exist".format(room_name))
 
 	@classmethod
 	def get_total_number_of_rooms(cls):
