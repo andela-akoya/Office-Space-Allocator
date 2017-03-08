@@ -54,8 +54,8 @@ class LivingSpace(Room):
 					cls.add_to_livingspace_list(new_livingspace)
 					Room.add_room(new_livingspace)
 					output.append(new_livingspace)
-					print("A LivingSpace called {} has been successfully created"
-						  .format(name.capitalize()))
+					print(("A LivingSpace called {} has been "
+						   + "successfully created.").format(name.capitalize()))
 				else:
 					print("A Room with the name {} already exist"
 						  .format(name.capitalize()))
@@ -73,20 +73,20 @@ class LivingSpace(Room):
 	@classmethod
 	def allocate_livingspace(cls, person, livingspace_name=None):
 		""" This method allocates an available livingspace to a person """
-		livingspace = cls.get_livingspace(livingspace_name) \
+		livingspace = cls.get_livingspace(livingspace_name)\
 			if livingspace_name else cls.get_random_livingspace()
 		if livingspace:
 			person.livingspace = livingspace
 			livingspace.room_members = person
 			person.wants_accomodation = True
-			return("{p.surname} has been allocated a livingspace {l.name}\n"
-				   .format(p=person, l=livingspace))
+			return("{p.surname} {p.firstname}has been allocated a "
+				   + "livingspace {l.name}\n").format(p=person, l=livingspace)
 		Fellow.add_unallocated_fellow(person, False, True)
-		return(("No available livingspace, {p.surname} has been placed on the"
-				+ " livingspace waiting list\n").format(p=person))
+		return("No available livingspace, {p.surname} {p.firstname} has been "
+			   + "placed on the livingspace waiting list\n").format(p=person)
 
 	@classmethod
-	def get_random_livingspace(cls, exempt_livingspace=None):
+	def get_random_livingspace(cls):
 		""" this method returns a random livingspace from a list of
 		available livingspace """
 		available_livingspaces = cls.get_available_livingspaces()
@@ -113,8 +113,9 @@ class LivingSpace(Room):
 	def get_livingspace(cls, livingspace_name):
 		""" This method returns a particular livingspace based on the name
 		passed in as argument """
-		return [livingspace for livingspace in cls.list_of_livingspace
-				if livingspace.name == livingspace_name][0]
+		for livingspace in cls.list_of_livingspace:
+			if livingspace.name == livingspace_name.capitalize():
+				return livingspace
 
 	@classmethod
 	def reallocate_person(cls, person, livingspace_name):
@@ -140,3 +141,8 @@ class LivingSpace(Room):
 				   + "so can't be reallocated to a "
 				   + "a livingspace")
 				  .format(p=person))
+
+	@classmethod
+	def reset(cls):
+		""" Erases all the data in the office list """
+		cls.list_of_livingspace = []

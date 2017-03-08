@@ -32,7 +32,7 @@ class Database():
 
 		# creates the room table
 		create_room_table_query = \
-			"""
+				"""
 		CREATE TABLE IF NOT EXISTS rooms
 		(id INTEGER PRIMARY KEY AUTOINCREMENT,
 		 name VARCHAR(30),
@@ -41,7 +41,7 @@ class Database():
 		"""
 		# creates the person table
 		create_person_table_query = \
-			"""
+				"""
 		CREATE TABLE IF NOT EXISTS person
 		(id INTEGER PRIMARY KEY,
 		 surname VARCHAR(30),
@@ -78,6 +78,7 @@ class Database():
 
 	def load_people(self):
 		""" this method fetches the people data from the database """
+		output = ""
 		for row in self.db_cursor.execute("SELECT * FROM person"):
 			person_id, surname, firstname, category, office, livingspace, \
 				accomodation = row
@@ -85,18 +86,27 @@ class Database():
 				new_staff = Staff(person_id, surname, firstname)
 				Staff.add_to_staff_list(new_staff)
 				Person.add_to_person_list(new_staff)
-				Office.allocate_office(new_staff, office) \
-					if not office == "None" \
-					else Staff.add_unallocated_staff(new_staff)
+				if not office == "None":
+					print(Office.allocate_office(new_staff, office))
+				else:
+					Staff.add_unallocated_staff(new_staff)
+					print(("No available office, {n.surname} {n.lastname} has "
+						   + "been placed on the office waiting list.\n")
+						  .format(n=new_staff))
 			else:
 				new_fellow = Fellow(person_id, surname, firstname)
 				Fellow.add_to_fellow_list(new_fellow)
 				Person.add_to_person_list(new_fellow)
-				Office.allocate_office(new_fellow, office) \
-					if not office == "None" \
-					else Fellow.add_unallocated_fellow(new_fellow, True)
+				if not office == "None":
+					print(Office.allocate_office(new_fellow, office))
+				else:
+					Fellow.add_unallocated_fellow(new_fellow, True)
+					print(("No available office, {n.surname} {n.firstname} has "
+						   + "been placed on the office waiting list.\n")
+						  .format(n=new_fellow))
 				if accomodation == 1:
-					LivingSpace.allocate_livingspace(new_fellow, livingspace)\
-						if livingspace \
-						else Fellow.add_unallocated_fellow(new_fellow, False,
-														   True)
+					if livingspace:
+						print(LivingSpace.allocate_livingspace(new_fellow,
+															   livingspace))
+					else:
+						Fellow.add_unallocated_fellow(new_fellow, False, True)

@@ -49,7 +49,7 @@ class Office(Room):
 					cls.add_to_office_list(new_office)
 					Room.add_room(new_office)
 					output.append(new_office)
-					print("An Office called {} has been successfully created"
+					print("An Office called {} has been successfully created."
 						  .format(name.capitalize()))
 				else:
 					print("A Room with the name {} already exist"
@@ -71,15 +71,15 @@ class Office(Room):
 		if office:
 			person.office = office
 			office.room_members = person
-			return("{p.surname} has been allocated the office {o.name}\n"
-				   .format(p=person, o=office))
+			return(("{p.surname} {p.firstname} has been allocated the office "
+					+ " {o.name}\n").format(p=person, o=office))
 		Staff.add_unallocated_staff(person) if isinstance(person, Staff) \
 			else Fellow.add_unallocated_fellow(person, True)
-		return(("No available office, {p.surname} has been placed on the"
-				+ " office waiting list\n").format(p=person))
+		return("No available office, {p.surname} {p.firstname} has been "
+			   + "placed on the office waiting list.\n").format(p=person)
 
 	@classmethod
-	def get_random_office(cls, exempt_office=None):
+	def get_random_office(cls):
 		""" returns a random office from a list of available offices """
 		available_offices = cls.get_available_offices()
 		if available_offices:
@@ -103,7 +103,9 @@ class Office(Room):
 	def get_office(cls, office_name):
 		""" returns a particular office from the list of offices
 		based on the office_name passed as argument """
-		return [office for office in cls.list_of_rooms if office.name == office_name][0]
+		for office in cls.list_of_offices:
+			if office.name == office_name.capitalize():
+				return office
 
 	@classmethod
 	def reallocate_person(cls, person, office_name):
@@ -121,3 +123,8 @@ class Office(Room):
 		person.office = office
 		office.room_members = person
 		print(message.format(office_name, "office", p=person))
+
+	@classmethod
+	def reset(cls):
+		""" Erases all the data in the office list """
+		cls.list_of_offices = []

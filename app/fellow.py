@@ -77,3 +77,10 @@ class Fellow(Person):
 	def remove_from_unallocated_fellow_list(cls, fellow, room_type):
 		""" removes a fellow from the unallocated list """
 		cls.unallocated_fellows[room_type].remove(fellow)
+
+	@classmethod
+	def reset(cls):
+		""" Erases all the data in the fellow list and
+		unallocated fellow list"""
+		cls.fellow_list = []
+		cls.unallocated_fellows = {"office": [], "livingspace": []}

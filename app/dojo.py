@@ -4,7 +4,7 @@ from os import path, sys
 
 from app.customfile import Customfile
 from app.database import Database
-from app.errors import *
+from app.errors import WrongFormatException
 from app.fellow import Fellow
 from app.livingspace import LivingSpace
 from app.office import Office
@@ -49,7 +49,7 @@ class Dojo(object):
 				new_staff = Staff(person_id, surname, firstname)
 				if new_staff:
 					print(("Staff {ns.surname} {ns.firstname} with id "
-						   + "{ns.uniqueId} has been successfully added")
+						   + "{ns.uniqueId} has been successfully added.")
 						  .format(ns=new_staff))
 					Staff.add_to_staff_list(new_staff)
 					Person.add_to_person_list(new_staff)
@@ -61,7 +61,7 @@ class Dojo(object):
 					else Fellow(person_id, surname, firstname)
 				if new_fellow:
 					print(("Fellow {nf.surname} {nf.firstname} with id "
-						   + "{nf.uniqueId} has been successfully added")
+						   + "{nf.uniqueId} has been successfully added.")
 						  .format(nf=new_fellow))
 					Fellow.add_to_fellow_list(new_fellow)
 					Person.add_to_person_list(new_fellow)
@@ -91,7 +91,7 @@ class Dojo(object):
 		print("\n{}".format(Room.print_room_members(room_name)))
 
 	@classmethod
-	def print_allocations(cls, filename):
+	def print_allocations(cls, filename, append_flag=False, override_flag=False):
 		""" This method prints all the allocations that has been made onto
 		the console or to a file if a file name is passed as argument """
 
@@ -100,7 +100,8 @@ class Dojo(object):
 			print(allocations)
 		else:
 			try:
-				new_file = Customfile.create_file(filename)
+				new_file = Customfile.create_file(filename, append_flag,
+												  override_flag)
 				Customfile.write(new_file, allocations)
 			except FileExistsError as e:
 				print(e)
@@ -108,18 +109,19 @@ class Dojo(object):
 				print(e)
 
 	@classmethod
-	def print_unallocated(cls, filename):
+	def print_unallocated(cls, filename, append_flag=False, override_flag=False):
 		""" This method prints all the unallocated staff and fellow onto
 		the console or to a file if a file name is passed as argument """
 
 		unallocated = Person \
 			.get_unallocated(Staff.get_unallocated_staff(),
 							 Fellow.get_unallocated_fellows())
-		if filename is None:
+		if not filename:
 			print(unallocated)
 		else:
 			try:
-				new_file = Customfile.create_file(filename)
+				new_file = Customfile.create_file(filename, append_flag,
+												  override_flag)
 				Customfile.write(new_file, unallocated)
 			except FileExistsError as e:
 				print(e)
@@ -258,9 +260,9 @@ class Dojo(object):
 			+ "/data/database/"
 		if database_name:
 			if Customfile.exist(database_path, database_name + ".db"):
+				cls.reset_state()
 				new_database = Database(database_path + database_name + ".db")
 				new_database.load()
-				print()
 			else:
 				error = "Database with the name {} does not exist."\
 						.format(database_name + ".db")
@@ -282,3 +284,14 @@ class Dojo(object):
 		else:
 			print(("Room {} doesn't exist, therefore changes couldn't be "
 				   + "made.").format(old_room_name))
+
+	@classmethod
+	def reset_state(cls):
+		""" clears the current state of the app, deleting
+		all generated data """
+		LivingSpace.reset()
+		Office.reset()
+		Room.reset()
+		Staff.reset()
+		Fellow.reset()
+		Person.reset()

@@ -19,7 +19,6 @@ import platform
 import sys
 
 from app.dojo import Dojo
-from app.errors import RemoveFullRoomException, RemoveRoomReallocationException
 from app.fellow import Fellow
 from app.livingspace import LivingSpace
 from app.office import Office
@@ -53,7 +52,7 @@ def docopt_cmd(callback):
 
 
 class MyInteractive(cmd.Cmd):
-	"""docstring for MyInteractive"""
+	"""The class holds the methods for an interractive console"""
 	intro = 'Welcome to the Dojo Space Allocator Program!' \
 		+ ' (type help for a list of commands.)'
 	prompt = ">>> "
@@ -76,13 +75,13 @@ class MyInteractive(cmd.Cmd):
 
 	@docopt_cmd
 	def do_print_allocations(self, arg):
-		"""Usage: print_allocations [--o=<filename>] """
-		Dojo.print_allocations(arg['--o'])
+		"""Usage: print_allocations [(--o=<filename> [override|append])] """
+		Dojo.print_allocations(arg['--o'], arg['append'], arg['override'])
 
 	@docopt_cmd
 	def do_print_unallocated(self, arg):
-		"""Usage: print_unallocated [--o=<filename>] """
-		Dojo.print_unallocated(arg['--o'])
+		"""Usage: print_unallocated [(--o=<filename> [override|append])] """
+		Dojo.print_unallocated(arg['--o'], arg['append'], arg['override'])
 
 	@docopt_cmd
 	def do_reallocate_person(self, arg):
@@ -107,23 +106,13 @@ class MyInteractive(cmd.Cmd):
 
 	@docopt_cmd
 	def do_load_state(self, arg):
-		"""Usage: save_state <sqlite_database> """
+		"""Usage: load_state <sqlite_database> """
 		Dojo.load_state(arg['<sqlite_database>'])
 
 	@docopt_cmd
 	def do_rename_room(self, arg):
 		"""Usage: rename_room <old_room_name> <new_room_name>"""
 		Dojo.rename_room(arg['<old_room_name>'], arg['<new_room_name>'])
-
-	@docopt_cmd
-	def do_remove_room(self, arg):
-		"""Usage: remove_room [reallocate] <room_name>... """
-		try:
-			Dojo.remove_room(arg['<room_name>'], arg['reallocate'])
-		except RemoveFullRoomException as e:
-			print(e)
-		except RemoveRoomReallocationException as e:
-			print(e)
 
 	@docopt_cmd
 	def do_clear(self, arg):

@@ -85,18 +85,18 @@ class Person():
 		serial_no = 0
 		for staff in unallocated_staff_list:
 			serial_no += 1
-			output.append(("{}. Staff {s.surname} {s.firstname}\n")
+			output.append(("{}. Staff {s.surname} {s.firstname} ({s.uniqueId})\n")
 						  .format(serial_no, s=staff))
 
 		for fellow in unallocated_fellow_list["office"]:
 			serial_no += 1
 			if fellow in unallocated_fellow_list["livingspace"]:
-				output.append(("{}. Fellow {f.surname} {f.firstname}"
+				output.append(("{}. Fellow {f.surname} {f.firstname} ({f.uniqueId})"
 							   + " (Office $ Livingspace)\n")
 							  .format(serial_no, f=fellow))
 			else:
-				output.append(("{}. Fellow {f.surname} {f.firstname} "
-							   + "(Office)\n").format(serial_no, f=fellow))
+				output.append(("{}. Fellow {f.surname} {f.firstname} ({f.uniqueId})"
+							   + " (Office)\n").format(serial_no, f=fellow))
 
 		for fellow in unallocated_fellow_list["livingspace"]:
 
@@ -147,3 +147,8 @@ class Person():
 			)
 
 		return output
+
+	@classmethod
+	def reset(cls):
+		""" Erases all the data in the person list """
+		cls.list_of_persons = []

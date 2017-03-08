@@ -79,11 +79,13 @@ class Room():
 		output = []
 		name = room_name.capitalize()
 		if name in [room.name for room in cls.list_of_rooms]:
-			output.append("{:15} {}".format("Surname", "Firstname"))
+			output.append("{:4} {:15} {:15} {}"
+						  .format("ID", "Surname", "Firstname", "Category"))
 			for member in [room.room_members for room in cls.list_of_rooms
 						   if room.name == name][0]:
-				output.append("{:15} {} "
-							  .format(member.surname, member.firstname))
+				output.append("{:4} {:15} {:15} {}"
+							  .format(member.uniqueId, member.surname,
+									  member.firstname, member.category))
 
 			return "\n".join(output)
 
@@ -96,7 +98,7 @@ class Room():
 
 	@classmethod
 	def exists(cls, room_name):
-		""" this methos checks whether a room exists or has been created """
+		""" this methods checks whether a room exists or has been created """
 		return room_name.capitalize() in [room.name for room in cls.list_of_rooms]
 
 	@classmethod
@@ -132,3 +134,8 @@ class Room():
 				  room_name.capitalize()]
 		return output[0] if output \
 			else "Room {} doesn't exist".format(room_name)
+
+	@classmethod
+	def reset(cls):
+		""" erases the room list """
+		cls.list_of_rooms = []

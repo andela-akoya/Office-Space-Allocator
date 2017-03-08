@@ -47,3 +47,9 @@ class Staff(Person):
 	def remove_from_unallocated_staff_list(cls, staff):
 		""" removes a staff from the list of unallocated staff """
 		cls.unallocated_staff.remove(staff)
+
+	@classmethod
+	def reset(cls):
+		""" Erases all the data in the staff list and unallocated staff list """
+		cls.staff_list = []
+		cls.unallocated_staff = []

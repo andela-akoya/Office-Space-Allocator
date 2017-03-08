@@ -9,7 +9,7 @@ class Customfile():
 	model """
 
 	@classmethod
-	def create_file(cls, filename):
+	def create_file(cls, filename, append_flag=False, override_flag=False):
 		""" this method creates a new file using the filename
 		passed as argument """
 		try:
@@ -21,9 +21,11 @@ class Customfile():
 		filepath = path.dirname(path.abspath(__file__)) + "/data/documents/"
 
 		filename = "{}.txt".format(filename)
-		if cls.exist(filepath, filename):
+		if cls.exist(filepath, filename) and not(append_flag or override_flag):
 			raise FileExistsError("{} already exist".format(filename))
 		else:
+			if append_flag:
+				return open(filepath + filename, "a")
 			return open(filepath + filename, "w")
 
 	@classmethod
