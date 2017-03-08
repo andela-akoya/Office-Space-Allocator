@@ -103,6 +103,7 @@ class Dojo(object):
 				new_file = Customfile.create_file(filename, append_flag,
 												  override_flag)
 				Customfile.write(new_file, allocations)
+				print("{}.txt has been suceesfully created".format(filename))
 			except FileExistsError as e:
 				print(e)
 			except WrongFormatException as e:
@@ -123,6 +124,13 @@ class Dojo(object):
 				new_file = Customfile.create_file(filename, append_flag,
 												  override_flag)
 				Customfile.write(new_file, unallocated)
+				if append_flag:
+					action = "appended to"
+				elif override_flag:
+					action = "overridden"
+				else:
+					action = "written to"
+				print("{}.txt has been suceesfully {} .".format(filename, action))
 			except FileExistsError as e:
 				print(e)
 
@@ -244,11 +252,12 @@ class Dojo(object):
 				Room.export_in_database_format(),
 				Person.export_in_database_format()
 			)
+			print("Current State has been sucessfully saved")
 		else:
 			error = "Database with the name {} already exist. "\
-					+ "You can either specify another name or override the " \
-					+ "existing database.\n"\
-					+ "To override specify the [override] command "
+				+ "You can either specify another name or override the " \
+				+ "existing database.\n"\
+				+ "To override specify the [override] command "
 			print(error.format(database_name + ".db"))
 
 	@classmethod
@@ -263,9 +272,10 @@ class Dojo(object):
 				cls.reset_state()
 				new_database = Database(database_path + database_name + ".db")
 				new_database.load()
+				print("The chosen State has been sucessfully loaded")
 			else:
 				error = "Database with the name {} does not exist."\
-						.format(database_name + ".db")
+					.format(database_name + ".db")
 				print(error)
 
 	@classmethod
@@ -295,3 +305,40 @@ class Dojo(object):
 		Staff.reset()
 		Fellow.reset()
 		Person.reset()
+		print("The current state has been cleared successfully")
+
+	# @classmethod
+	# def delete_person(cls, unique_id):
+	# 	""" removes a person from the system """
+	# 	try:
+	# 		# import pdb
+	# 		# pdb.set_trace()
+	# 		person_id = int(unique_id)
+	# 		if Person.exist(person_id):
+	# 			person, = [person for person in Person.get_list_of_persons()
+	# 					   if person.uniqueId == person_id]
+	#
+	# 			if person.office:
+	# 				person.get_office().remove(person)
+	# 			else:
+	# 				if person.category == "staff":
+	# 					Staff.get_unallocated_staff().remove(person)
+	# 				else:
+	# 					Fellow.get_unallocated_fellows()['office']\
+	# 						.remove(person)
+	#
+	# 			if person.category == "fellow" and wants_accomodation:
+	# 				if person.livingspace:
+	# 					person.get_livingspace().remove(person)
+	# 				else:
+	# 					Fellow.get_unallocated_fellows()['livingspace']\
+	# 						.remove(person)
+	#
+	# 			Staff.get_staff_list().remove(person)
+	# 			Fellow.get_fellow_list().remove(person)
+	# 			Person.get_list_of_persons().remove(person)
+	# 		else:
+	# 			print("Person with the id {} doesn't exist".format(person_id))
+	#
+	# 	except ValueError:
+	# 		print("Wrong id format. id must be a number")

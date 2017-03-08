@@ -70,7 +70,7 @@ class Fellow(Person):
 
 	@classmethod
 	def get_unallocated_fellows(cls):
-		""" returns a list containing all unallocated list """
+		""" returns a dictionary containing all unallocated fellow """
 		return cls.unallocated_fellows
 
 	@classmethod

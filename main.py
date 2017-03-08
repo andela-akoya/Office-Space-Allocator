@@ -1,18 +1,3 @@
-"""
-Usage:
-  main.py create_room <room_type> <room_name>...
-  main.py add_person <person_name> <staff/fellow> [<wants_accomodation>]
-  main.py print_room <room_name>
-  main.py print_allocations [--o=<filename>]
-  main.py print_unallocated [--o=<filename>]
-  main.py reallocate_person <person_identifier> <new_room_name>
-  main.py -h | --help
-  main.py -v | --version
-
-Options:
-  -h, --help     Show this screen.
-  --version      Show version.
-"""
 import cmd
 import os
 import platform
@@ -121,6 +106,10 @@ class MyInteractive(cmd.Cmd):
 			else os.system("tput reset")
 
 	@docopt_cmd
+	def do_reset_state(self, arg):
+		"""Usage: reset_state"""
+		Dojo.reset_state()
+
 	def do_quit(self, arg):
 		"""Usage: quit"""
 		print("********** Good Bye **********")

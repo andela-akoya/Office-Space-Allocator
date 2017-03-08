@@ -224,8 +224,8 @@ class TestDojo(unittest.TestCase):
 		as argument """
 		office, = Dojo.create_room("office", ["Orange"])
 		Dojo.add_person("Koya", "gabriel", "staff")
-		expected_output = "Orange Room{}Koya Gabriel, "\
-			.format(len(office.name + " Room") * "-")
+		expected_output = "Orange Room ({}){}Koya Gabriel, "\
+			.format("office", len(office.name + " Room " + "office") * "-")
 		Dojo.print_allocations(None)
 		output = "".join(sys.stdout.getvalue().split("\n")[4:7])
 		self.assertEqual(output, expected_output)

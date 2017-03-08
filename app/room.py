@@ -112,11 +112,13 @@ class Room():
 		also its occupants """
 		output = ""
 		for room in cls.list_of_rooms:
-			output += "{} Room\n".format(room.name)
-			output += (len(room.name + " Room") * "-") + "\n"
-			for member in room.room_members:
-				output += "{m.surname} {m.firstname}, ".format(m=member)
-			output += "\n"
+			if room.room_members:
+				output += "{} Room ({})\n".format(room.name, room.room_type)
+				output += (len(room.name + " Room " +
+							   str(room.room_type)) * "-") + "\n"
+				for member in room.room_members:
+					output += "{m.surname} {m.firstname}, ".format(m=member)
+				output += "\n\n"
 
 		return output
 
