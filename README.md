@@ -3,8 +3,6 @@
 
 # Office-Space-Allocator
 
-[![Build Status](https://travis-ci.org/andela-akoya/Office-Space-Allocator.svg?branch=checkpoint)](https://travis-ci.org/andela-akoya/Office-Space-Allocator [![Coverage Status](https://coveralls.io/repos/github/andela-akoya/Office-Space-Allocator/badge.svg?branch=checkpoint)](https://coveralls.io/github/andela-akoya/Office-Space-Allocator?branch=checkpoint)
-
 
 The office space allocator is console application that manages the allocation of rooms by randomly allocating a newly added employee to a room.
 
