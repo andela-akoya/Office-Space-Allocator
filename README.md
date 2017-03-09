@@ -41,26 +41,58 @@ pip install -r requirements.txt
 #### How should this be locally tested?
 
 ##### Usage:
-
+```
+  create_room (<room_names> <room_types>)...
+  add_person <first_name> <last_name> <STAFF/FELLOW> [<wants_accommodation>]
+  reallocate_person <person_identifier> <new_room_name>
+  load_people <filename>
+  load_rooms <filename>
+  rename_room <old_room_name> <new_room_name>
+  print_room <room_name>
+  print_allocations [(--o=<filename> [override|append])]
+  print_unallocated [(--o=<filename> [override|append])]
+  save_state [--db=sqlite_database]
+  load_state [--db=sqlite_database]
+  clear
+  help
 ```
 
-- To create a room run `create_room type_of_room(office/livingspace) room_name`
-  - e.g  `create_room office Orange`
-- To create multiple rooms at once run `create_room type_of_room(office/livingspace) room_name1 room_name2 room_name3`
-  - e.g  `create_room livingspace Orange Red Green White`
-- To add a person to a room run `add_person surname firstname person_type(staff/fellow) wants_accomodation(y/n)
-  - e.g `add_person John Doe staff y`
-- To print members of a room run `print_room room_name`
-  - e.g `print_room Orange`
-- To print allocations to command line run `print_allocations`
-  - e.g `print_allocations`
-- To print allocations to a text file run `print_allocations --o=filename`
-  - e.g `print_allocations --o=data`
-- To print unallocated to command line run `print_allocations`
-  - e.g `print_unallocated`
-- To print unallocated to a text file run `print_allocations --o=filename`
-  - e.g `print_unallocated --o=data`
+##### Usage Example:
+
+- To create a room
+   ```
+	   create_room office Orange
+   ```
+
+- To create multiple rooms at once
+ ```
+	 create_room livingspace Orange Red Green White
+ ```
+- To add a person to a room
 ```
+	add_person John Doe staff y
+```
+- To print members of a room run
+  ```
+	  print_room Orange
+  ```
+- To print allocations to command line run
+```
+	print_allocations
+```
+- To print allocations to a text file run
+```
+	print_allocations --o=data
+```
+- To print unallocated
+ ```
+	 print_unallocated
+ ```
+- To print unallocated to a text file run
+```
+print_unallocated --o=data
+```
+
 
 ##### To test the app:
 
