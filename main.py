@@ -39,7 +39,7 @@ def docopt_cmd(callback):
 class MyInteractive(cmd.Cmd):
 	"""The class holds the methods for an interractive console"""
 	intro = 'Welcome to the Dojo Space Allocator Program!' \
-		+ ' (type help for a list of commands.)'
+			+ ' (type help for a list of commands.)'
 	prompt = ">>> "
 
 	@docopt_cmd

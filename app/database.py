@@ -17,7 +17,7 @@ class Database():
 		self.db_cursor = self.db_conn.cursor()
 
 	def save(self, rooms, persons):
-		""" This method saves the room and person data to a database """
+		"""This method saves the room and person data to a database."""
 		self.create_tables()
 		self.save_room(rooms)
 		self.save_person(persons)
@@ -32,7 +32,7 @@ class Database():
 
 		# creates the room table
 		create_room_table_query = \
-				"""
+			"""
 		CREATE TABLE IF NOT EXISTS rooms
 		(id INTEGER PRIMARY KEY AUTOINCREMENT,
 		 name VARCHAR(30),
@@ -41,7 +41,7 @@ class Database():
 		"""
 		# creates the person table
 		create_person_table_query = \
-				"""
+			"""
 		CREATE TABLE IF NOT EXISTS person
 		(id INTEGER PRIMARY KEY,
 		 surname VARCHAR(30),

@@ -5,13 +5,11 @@ from app.utilities import Utilities
 
 
 class Customfile():
-	"""This class holds the properties and methods of a customfile
-	model """
+	"""This class holds the properties and methods of a customfile model """
 
 	@classmethod
 	def create_file(cls, filename, append_flag=False, override_flag=False):
-		""" this method creates a new file using the filename
-		passed as argument """
+	""" this method creates a new file using the filename passed as argument """
 		try:
 			Utilities.check_format_validity(filename)
 		except:
