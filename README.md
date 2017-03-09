@@ -1,9 +1,49 @@
 # Office-Space-Allocator
 
-#### How should this be manually tested?
-1. To run the app itself:
-- Install `docopt module` using `pip install docopt==0.6.2` for python 2 and `pip3 install docopt==0.6.2` for python 3.
-- After cloning the repo,  run `python main.py`.
+The office space allocator is console application that manages the allocation of rooms by randomly allocating a newly added employee to a room.
+
+## Installation
+
+These are the basic steps to install and run the application locally on both a linux and windows system.
+
+### Linux
+
+```
+1) Install the necessary packages
+ $ sudo apt-get install python3-dev python-virtualenvwrapper git
+2) sudo pip3 install virtualenvwrapper
+3) mkvirtualenv --python=python3 cpenv
+4) workon cpenv
+```
+### Windows
+```
+1) Download and Install python 3 using the link
+	https://www.python.org/downloads/release/python-360/
+2) pip3 install virtualenvwrapper
+3) mkvirtualenv --python=python3 cpenv
+4) workon cpenv
+```
+
+
+### Download the project by cloning the repository
+From the terminal
+```
+1) git clone https://github.com/andela-akoya/Office-Space-Allocator.git
+2) cd Office-Space-Allocator
+3) pip install -r requirements.txt
+
+virtualenv --python python3 venv-dojo
+source venv-dojo/bin/activate
+
+pip install -r requirements.txt
+```
+
+#### How should this be locally tested?
+
+##### Usage:
+
+```
+
 - To create a room run `create_room type_of_room(office/livingspace) room_name`
   - e.g  `create_room office Orange`
 - To create multiple rooms at once run `create_room type_of_room(office/livingspace) room_name1 room_name2 room_name3`
@@ -20,7 +60,20 @@
   - e.g `print_unallocated`
 - To print unallocated to a text file run `print_allocations --o=filename`
   - e.g `print_unallocated --o=data`
+```
 
-2. To test the app:
-- Install `nosetest module` using using `pip install nose` for python 2 and `pip3 install nose` for python 3.
-- After cloning the repo, cd into the `app/tests` directory and run `nosetests dojo_tests.py`.
+##### To test the app:
+
+```
+- After cloning the repo, cd into the app/test directory and run nosetests dojo_tests.py.
+```
+### Contributing to the project
+```Koya Adegboyega```
+
+### Author
+```Koya Adegboyega```
+
+### License
+```
+MIT License
+```
