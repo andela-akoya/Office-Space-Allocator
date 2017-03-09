@@ -72,15 +72,15 @@ pip install -r requirements.txt
 ```
 	add_person John Doe staff y
 ```
-- To print members of a room run
+- To print members of a room
   ```
 	  print_room Orange
   ```
-- To print allocations to command line run
+- To print allocations to command line
 ```
 	print_allocations
 ```
-- To print allocations to a text file run
+- To print allocations to a text file
 ```
 	print_allocations --o=data
 ```
@@ -88,7 +88,7 @@ pip install -r requirements.txt
  ```
 	 print_unallocated
  ```
-- To print unallocated to a text file run
+- To print unallocated to a text file 
 ```
 print_unallocated --o=data
 ```
@@ -97,7 +97,9 @@ print_unallocated --o=data
 ##### To test the app:
 
 ```
-- After cloning the repo, cd into the app/test directory and run nosetests dojo_tests.py.
+- After cloning the repo,
+ cd into the app/test directory
+  run nosetests dojo_tests.py.
 ```
 ### Contributing to the project
 ```Koya Adegboyega```
