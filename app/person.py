@@ -80,8 +80,7 @@ class Person():
 	def get_unallocated(cls, unallocated_staff_list, unallocated_fellow_list):
 		""" this method returns the unallocated persons both in the staff and
 		fellow category """
-		output = []
-		output.append("Unallocated List \n---------------------\n")
+		output = ["Unallocated List \n---------------------\n"]
 		serial_no = 0
 		for staff in unallocated_staff_list:
 			serial_no += 1
@@ -134,11 +133,8 @@ class Person():
 		importable to a database """
 		output = []
 		for person in cls.list_of_persons:
-			office = "None" \
-				if not person.office \
-				else person.office.name
-			livingspace = "None" \
-				if not person.livingspace \
+			office = "None" if not person.office else person.office.name
+			livingspace = "None" if not person.livingspace \
 				else person.livingspace.name
 			output.append(
 				(person.uniqueId, person.surname, person.firstname,
@@ -152,3 +148,13 @@ class Person():
 	def reset(cls):
 		""" Erases all the data in the person list """
 		cls.list_of_persons = []
+
+	@classmethod
+	def get_person(cls, id):
+		try:
+			person_id = int(id)
+			for person in cls.list_of_persons:
+				if person.uniqueId == person_id:
+					return person
+		except ValueError:
+			raise ValueError("Wrong id format. id must be a number")
