@@ -402,20 +402,19 @@ class TestDojo(unittest.TestCase):
         incomplete arguments
         """
         new_file = open(self.filepath + "test.txt", "w")
-        content = "koya gabriel\norolu wumi\n"
+        content = "koya gabriel\norolu wumi"
         Customfile.write(new_file, content)
         new_file.close()
-        expected_output = [
-            "Errors\n---------",
-            "The following people couldn't be loaded"
-            + " because of incomplete information\n",
-            "koya gabriel",
-            "orolu wumi"
-        ]
+        expected_output = "Errors\n---------"\
+                          +"\nThe following people couldn't be loaded"\
+                          + " because of incomplete information:\n"\
+                          +"koya gabriel\n"\
+                          +"orolu wumi\n"
         Dojo.load_people("test")
-        output = sys.stdout.getvalue().strip()
-        self.assertEqual(output, "\n".join(expected_output))
+        output = sys.stdout.getvalue()
+        self.assertEqual(output, expected_output)
         remove(self.filepath + "test.txt")
+        print(output)
 
     def test_load_people_with_complete_file_content(self):
         """
@@ -448,19 +447,16 @@ class TestDojo(unittest.TestCase):
         incomplete arguments
         """
         new_file = open(self.filepath + "test.txt", "w")
-        content = "red\nlivingspace \n"
+        content = "red\nlivingspace"
         Customfile.write(new_file, content)
         new_file.close()
-        expected_output = [
-            "Errors\n---------",
-            "The following rooms couldn't be loaded"
-            + " because of incomplete information\n",
-            "red",
-            "livingspace"
-        ]
+        expected_output = "Errors\n---------\n"\
+                          +"The following rooms couldn't be loaded"\
+                          + " because of incomplete information:\n"+\
+                          "red\nlivingspace\n"
         Dojo.load_rooms("test")
-        output = sys.stdout.getvalue().strip()
-        self.assertEqual(output, "\n".join(expected_output))
+        output = sys.stdout.getvalue()
+        self.assertEqual(output, expected_output)
         remove(self.filepath + "test.txt")
 
     def test_load_rooms_with_complete_file_content(self):

@@ -155,10 +155,9 @@ class Dojo(object):
         """ This method load a list of persons from a text file and
         adds them to the system """
 
-        error_messages = ["Errors\n---------",
-            "The following people couldn't be loaded"
-            + " because of incomplete information\n"
-        ]
+        error_messages = "Errors\n---------"\
+                         +"\nThe following people couldn't be loaded"\
+                         + " because of incomplete information:\n"
         try:
             file_to_be_loaded = Customfile.open_file(filename)
             with file_to_be_loaded as data_file:
@@ -171,9 +170,11 @@ class Dojo(object):
                         cls.add_person(surname, firstname,category,
                                        wants_accomodation)
                     else:
-                        error_messages.append(" ".join(data))
-                if len(error_messages) > 2:
-                    print("\n".join(error_messages))
+                        error_messages += entry
+
+                if not error_messages.endswith(":\n"):
+                    print(error_messages)
+
                 data_file.close()
 
         except FileNotFoundError as e:
@@ -183,11 +184,9 @@ class Dojo(object):
     def load_rooms(cls, filename):
         """ This method loads rooms from a text file and adds them into the
         system """
-        error_messages = [
-            "Errors\n---------",
-            "The following rooms couldn't be loaded"
-            + " because of incomplete information\n"
-        ]
+        error_messages = "Errors\n---------\n"+\
+                         "The following rooms couldn't be loaded"\
+                         + " because of incomplete information:\n"
         try:
             file_to_be_loaded = Customfile.open_file(filename)
             with file_to_be_loaded as data_file:
@@ -198,9 +197,11 @@ class Dojo(object):
                         room_names = data[1:]
                         cls.create_room(room_type, room_names)
                     else:
-                        error_messages.append(" ".join(data))
-                if len(error_messages) > 2:
-                    print("\n".join(error_messages))
+                        error_messages += entry
+
+                if not error_messages.endswith(":\n"):
+                    print(error_messages)
+
                 data_file.close()
 
         except FileNotFoundError as e:

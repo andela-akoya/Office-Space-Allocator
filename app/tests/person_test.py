@@ -22,8 +22,8 @@ class TestPerson(unittest.TestCase):
         Dojo.add_person("Koya", "Gabriel", "Fellow")
         person, = Person.get_list_of_persons()
         initial_id = (person.uniqueId)
-        person.uniqueId = 4
-        self.assertEqual(person.uniqueId, 4)
+        person.uniqueId = 3000
+        self.assertEqual(person.uniqueId, 3000)
         self.assertNotEqual(initial_id, person.uniqueId)
 
     def test_the_id_property_setter_with_invalid_format(self):
