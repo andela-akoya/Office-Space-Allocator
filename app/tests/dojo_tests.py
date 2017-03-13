@@ -508,9 +508,9 @@ class TestDojo(unittest.TestCase):
         Dojo.add_person("koya", "gabriel", "staff")
         Dojo.save_state("file")
         final_size = Customfile.get_status_info(
-            self.database_path, "file.db").st_size
+            self.database_path, "file.sqlite3").st_size
         self.assertNotEqual(initial_size, final_size)
-        remove(self.database_path + "file.db")
+        remove(self.database_path + "file.sqlite3")
 
     def test_load_state_with_non_existing_database_name(self):
         """ tests load_state method if it returns appropriate
