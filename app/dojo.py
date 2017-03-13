@@ -140,11 +140,10 @@ class Dojo(object):
         try:
             person = Person.get_person(identifier)
             room = Room.get_a_particular_room(room_name)
+            room_type_mapping = {'office': Office, 'livingspace':LivingSpace}
             if person and isinstance(room, Room):
-                if room.room_type == "office":
-                    Office.reallocate_person(person, room)
-                else:
-                    LivingSpace.reallocate_person(person, room)
+                room_type_mapping[room.room_type].reallocate_person(person,
+                                                                    room)
             else:
                 print("Reallocation operation failed. Either the person "
                       + "or room doesn't exist")
@@ -156,8 +155,7 @@ class Dojo(object):
         """ This method load a list of persons from a text file and
         adds them to the system """
 
-        error_messages = [
-            "Errors\n---------",
+        error_messages = ["Errors\n---------",
             "The following people couldn't be loaded"
             + " because of incomplete information\n"
         ]
