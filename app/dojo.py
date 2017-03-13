@@ -222,8 +222,8 @@ class Dojo(object):
         database_name = db_name or \
             ("-").join(re.findall(r"[\w']+",str(datetime.now()).split(".")[0]))
 
-        if not Customfile.exist(database_path, database_name + ".sqlite3"):
-            new_database = Database(database_path + database_name + ".sqlite3")
+        if not Customfile.exist(database_path, database_name + ".db"):
+            new_database = Database(database_path + database_name + ".db")
             new_database.save(
                 Room.export_in_database_format(),
                 Person.export_in_database_format()
@@ -244,9 +244,9 @@ class Dojo(object):
         database_path = path.dirname(path.abspath(__file__)) \
             + "/data/database/"
         if database_name:
-            if Customfile.exist(database_path, database_name + ".sqlite3"):
+            if Customfile.exist(database_path, database_name + ".db"):
                 cls.reset_state()
-                new_database = Database(database_path + database_name + ".sqlite3")
+                new_database = Database(database_path + database_name + ".db")
                 new_database.load()
                 print("The chosen State has been sucessfully loaded")
             else:

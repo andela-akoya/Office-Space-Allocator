@@ -484,7 +484,7 @@ class TestDojo(unittest.TestCase):
         message if an already existing database name is
         inputed as value.
         """
-        test_database = Database(self.database_path + "file.sqlite3")
+        test_database = Database(self.database_path + "file.db")
         expected_output = "Database with the name {} already exist. "\
             + "You can either specify another name or override the " \
             + "existing database.\n"\
@@ -500,17 +500,17 @@ class TestDojo(unittest.TestCase):
         a new database if a non-existing database name is
         passed as value.
         """
-        initial_database = Database(self.database_path + "file.sqlite3")
+        initial_database = Database(self.database_path + "file.db")
         initial_size = Customfile.get_status_info(
-            self.database_path, "file.sqlite3").st_size
+            self.database_path, "file.db").st_size
         remove(self.database_path + "file.db")
         Dojo.create_room("office", ["orange", "red"])
         Dojo.add_person("koya", "gabriel", "staff")
         Dojo.save_state("file")
         final_size = Customfile.get_status_info(
-            self.database_path, "file.sqlite3").st_size
+            self.database_path, "file.db").st_size
         self.assertNotEqual(initial_size, final_size)
-        remove(self.database_path + "file.sqlite3")
+        remove(self.database_path + "file.db")
 
     def test_load_state_with_non_existing_database_name(self):
         """ tests load_state method if it returns appropriate
