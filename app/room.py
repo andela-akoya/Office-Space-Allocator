@@ -39,7 +39,6 @@ class Room():
 		if not isinstance(person, Person):
 			raise ValueError(
 				"Only a person, staff, or fellow instance can be added")
-			return False
 		self.__room_members.append(person)
 
 	def remove_member(self, person):

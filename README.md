@@ -1,5 +1,6 @@
 <snippet>
 <content>
+[![Coverage Status](https://coveralls.io/repos/github/andela-akoya/Office-Space-Allocator/badge.svg?branch=code-refactorization)](https://coveralls.io/github/andela-akoya/Office-Space-Allocator?branch=code-refactorization)
 
 # Office-Space-Allocator
 

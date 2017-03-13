@@ -174,8 +174,8 @@ class Dojo(object):
                         surname, firstname, category = data[0:3]
                         wants_accomodation = data[3] \
                             if len(data) > 3 else None
-                        cls.add_person(surname, firstname,
-                                       category, wants_accomodation)
+                        cls.add_person(surname, firstname,category,
+                                       wants_accomodation)
                     else:
                         error_messages.append(" ".join(data))
                 if len(error_messages) > 2:
@@ -220,8 +220,7 @@ class Dojo(object):
         database_path = path.dirname(path.abspath(__file__)) \
             + "/data/database/"
         database_name = db_name or \
-            ("-").join(re.findall(r"[\w']+",
-                                  str(datetime.now()).split(".")[0]))
+            ("-").join(re.findall(r"[\w']+",str(datetime.now()).split(".")[0]))
 
         if not Customfile.exist(database_path, database_name + ".db"):
             new_database = Database(database_path + database_name + ".db")
