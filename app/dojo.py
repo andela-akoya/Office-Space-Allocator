@@ -148,11 +148,7 @@ class Dojo(object):
             else:
                 print("Reallocation operation failed. Either the person "
                       + "or room doesn't exist")
-        except ValueError as e:
-            print(e)
-        except MaximumCapacityException as e:
-            print(e)
-        except EligibilityException as e:
+        except Exception as e:
             print(e)
 
     @classmethod
