@@ -133,6 +133,12 @@ class LivingSpace(Room):
         if not livingspace.check_availability():
             raise MaximumCapacityException(livingspace.name)
 
+        if person in livingspace.room_members:
+            raise ValueError(("{p.surname} {p.firstname} already belongs "
+                          + "to room {}, therefore can't be "
+                          + "reallocated to the same room")
+                         .format(livingspace.name, p=person))
+
         if person.livingspace is None:
             Fellow.remove_from_unallocated_fellow_list(person, "livingspace")
         else:

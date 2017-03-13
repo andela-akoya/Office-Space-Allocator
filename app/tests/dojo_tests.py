@@ -4,7 +4,6 @@ from os import path, remove, sys
 from app.customfile import Customfile
 from app.database import Database
 from app.dojo import Dojo
-
 from app.fellow import Fellow
 from app.livingspace import LivingSpace
 from app.office import Office

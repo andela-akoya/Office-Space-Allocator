@@ -120,6 +120,12 @@ class Office(Room):
         if not office.check_availability():
             raise MaximumCapacityException(office.name)
 
+        if person in office.room_members:
+            raise ValueError(("{p.surname} {p.firstname} already belongs "
+                          + "to room {}, therefore can't be "
+                          + "reallocated to the same room")
+                         .format(office.name, p=person))
+
         if person.office is None:
             Staff.remove_from_unallocated_staff_list(person)
         else:
