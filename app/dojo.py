@@ -146,7 +146,7 @@ class Dojo(object):
             person = Person.get_person(identifier)
             room = Room.get_a_particular_room(room_name)
             room_type_mapping = {'office': Office, 'livingspace':LivingSpace}
-            if person and isinstance(room, Room):
+            if person and room:
                 room_type_mapping[room.room_type].reallocate_person(person,
                                                                     room)
             else:

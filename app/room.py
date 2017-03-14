@@ -66,8 +66,8 @@ class Room():
 
 	@classmethod
 	def get_available_rooms(cls, room_list):
-		""" this method gets rooms that can still accomodate from
-		the list of all rooms """
+		# this method gets rooms that can still accommodate from
+		# the list of all rooms
 		return [room for room in room_list
 				if len(room.room_members) != room.maximum_capacity] \
 			if room_list else []
@@ -76,20 +76,19 @@ class Room():
 	def print_room_members(cls, room_name):
 		# this method returns a well formatted data of all the
 		# members of a particular room
-		output = []
-		name = room_name.capitalize()
-		if name in [room.name for room in cls.list_of_rooms]:
-			output.append("{:4} {:15} {:15} {}"
-						  .format("ID", "Surname", "Firstname", "Category"))
-			for member in [room.room_members for room in cls.list_of_rooms
-						   if room.name == name][0]:
-				output.append("{:4} {:15} {:15} {}"
-							  .format(member.uniqueId, member.surname,
-									  member.firstname, member.category))
+		room = cls.get_a_particular_room(room_name.capitalize())
+		if not room:
+			return ("The room with the name {} does not exist"
+					.format(room_name))
 
-			return "\n".join(output)
+		room_members = "{:4} {:15} {:15} {}\n"\
+						.format("ID", "Surname", "Firstname", "Category")
 
-		return("The room with the name {} does not exist".format(room_name))
+		for member in room.room_members:
+			room_members += "{:4} {:15} {:15} {}\n"\
+							.format(member.uniqueId, member.surname,
+									member.firstname, member.category)
+
 
 	@classmethod
 	def get_total_number_of_rooms(cls):
@@ -136,7 +135,7 @@ class Room():
 		output = [room for room in cls.list_of_rooms if room.name ==
 				  room_name.capitalize()]
 		return output[0] if output \
-			else "Room {} doesn't exist".format(room_name)
+			else None
 
 	@classmethod
 	def reset(cls):
