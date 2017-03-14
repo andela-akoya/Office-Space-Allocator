@@ -88,6 +88,7 @@ class Room():
 			room_members += "{:4} {:15} {:15} {}\n"\
 							.format(member.uniqueId, member.surname,
 									member.firstname, member.category)
+		return room_members
 
 
 	@classmethod
