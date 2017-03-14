@@ -1,5 +1,4 @@
 import sqlite3
-from os import path, sys
 
 from app.fellow import Fellow
 from app.livingspace import LivingSpace
@@ -9,7 +8,10 @@ from app.staff import Staff
 
 
 class Database():
-	""" This class holds the properties and methods of a database model """
+	"""
+	This class handles all database functionalities such as database creation
+	and saving to database.
+	"""
 
 	def __init__(self, database_name):
 		self.db_name = database_name
@@ -17,18 +19,18 @@ class Database():
 		self.db_cursor = self.db_conn.cursor()
 
 	def save(self, rooms, persons):
-		"""This method saves the room and person data to a database."""
+		# This method saves the room and person data to a database.
 		self.create_tables()
 		self.save_room(rooms)
 		self.save_person(persons)
 
 	def load(self):
-		""" This method fetches the room and person data from the  database """
+		# This method fetches the room and person data from the  database.
 		self.load_rooms()
 		self.load_people()
 
 	def create_tables(self):
-		""" This method creates the both the room and person table """
+		# This method creates the both the room and person table
 
 		# creates the room table
 		create_room_table_query = \
@@ -57,19 +59,19 @@ class Database():
 		self.db_conn.commit()
 
 	def save_room(self, rooms):
-		""" This method saves the room data to the database """
+		# This method saves the room data to the database
 		room_query = "INSERT INTO rooms (name, type) VALUES (?,?)"
 		self.db_cursor.executemany(room_query, rooms)
 		self.db_conn.commit()
 
 	def save_person(self, persons):
-		""" this method saves the person data to the database """
+		# this method saves the person data to the database
 		person_query = "INSERT INTO person VALUES (?,?,?,?,?,?,?)"
 		self.db_cursor.executemany(person_query, persons)
 		self.db_conn.commit()
 
 	def load_rooms(self):
-		""" This method fetches the room data from the database """
+		# This method fetches the room data from the database
 		for row in self.db_cursor.execute("SELECT * FROM rooms"):
 			if row[2] == "office":
 				Office.create_office([row[1]])
@@ -77,7 +79,7 @@ class Database():
 				LivingSpace.create_livingspace([row[1]])
 
 	def load_people(self):
-		""" this method fetches the people data from the database """
+		# this method fetches the people data from the database
 		output = ""
 		for row in self.db_cursor.execute("SELECT * FROM person"):
 			person_id, surname, firstname, category, office, livingspace, \
