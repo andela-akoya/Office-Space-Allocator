@@ -1,7 +1,4 @@
-<snippet>
-<content>
-[![Build Status](https://travis-ci.org/andela-akoya/Office-Space-Allocator.svg?branch=code-refactorization)](https://travis-ci.org/andela-akoya/Office-Space-Allocator)
-[![Coverage Status](https://coveralls.io/repos/github/andela-akoya/Office-Space-Allocator/badge.svg?branch=code-refactorization)](https://coveralls.io/github/andela-akoya/Office-Space-Allocator?branch=code-refactorization)
+[![Build Status](https://travis-ci.org/andela-akoya/Office-Space-Allocator.svg?branch=code-refactorization)](https://travis-ci.org/andela-akoya/Office-Space-Allocator) [![Coverage Status](https://coveralls.io/repos/github/andela-akoya/Office-Space-Allocator/badge.svg?branch=code-refactorization)](https://coveralls.io/github/andela-akoya/Office-Space-Allocator?branch=code-refactorization)
 
 # Office-Space-Allocator
 
@@ -117,5 +114,4 @@ print_unallocated --o=data
 ```
 MIT License
 ```
-</content>
-</snippet>
+
