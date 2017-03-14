@@ -16,8 +16,10 @@ class TestPerson(unittest.TestCase):
         Staff.unallocated_staff = []
 
     def test_the_id_property_setter(self):
-        """  tests the id property setter method if it properly sets
-        the id to any new id provided. """
+        """
+        tests the id property setter method if it properly sets
+        the id to any new id provided.
+        """
 
         Dojo.add_person("Koya", "Gabriel", "Fellow")
         person, = Person.get_list_of_persons()
@@ -27,9 +29,11 @@ class TestPerson(unittest.TestCase):
         self.assertNotEqual(initial_id, person.uniqueId)
 
     def test_the_id_property_setter_with_invalid_format(self):
-        """  tests the id property setter method if it returns appropriate
+        """
+        tests the id property setter method if it returns appropriate
         error messages if an invalid id format is passed as
-        argument """
+        argument
+        """
 
         Dojo.add_person("Koya", "Gabriel", "Fellow")
         person, = Person.get_list_of_persons()

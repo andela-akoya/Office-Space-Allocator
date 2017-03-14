@@ -39,7 +39,9 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(latter_room_count - initial_room_count, 1)
 
     def test_create_multiple_rooms(self):
-        ''' test if multiple rooms were successfully created '''
+        """
+        test if multiple rooms were successfully created
+        """
         initial_room_count = Room.get_total_number_of_rooms()
         new_rooms = Dojo.create_room('Office', ['red', 'green', 'blue'])
         latter_room_count = Room.get_total_number_of_rooms()
@@ -47,8 +49,10 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(latter_room_count - initial_room_count, 3)
 
     def test_create_rooms_with_valid_name_format(self):
-        """ test the create_room function if only rooms
-        with valid name format only are created """
+        """
+        test the create_room function if only rooms
+        with valid name format only are created
+        """
         initial_room_count = Room.get_total_number_of_rooms()
         new_rooms = Dojo.create_room('LivingSpace', ['Python',
                                                      'Yellow', "\"\""])
@@ -58,8 +62,10 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(later_room_count, 2)
 
     def test_create_duplicate_room(self):
-        """ the create_room function shouldn't create an already existing
-        room """
+        """
+        the create_room function shouldn't create an already existing
+        room
+        """
         new_room1, = Dojo.create_room("Office", ["Orange"])
         initial_room_count = Dojo.get_total_rooms()
         self.assertEqual(initial_room_count, 1)
@@ -69,8 +75,10 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(initial_room_count, later_room_count)
 
     def test_create_room_with_valid_type_alone(self):
-        """ the create_room function shouldn't create a room without a valid
-        type like office or livingspace """
+        """
+        the create_room function shouldn't create a room without a valid
+        type like office or livingspace
+        """
         initial_room_count = Dojo.get_total_rooms()
         self.assertEqual(initial_room_count, 0)
         new_room1 = Dojo.create_room("", ["Orange"])
@@ -81,9 +89,11 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(initial_room_count, later_room_count)
 
     def test_create_room_with_invalid_office_name_format(self):
-        """ tests the create_room method if it returns appropriate
+        """
+        tests the create_room method if it returns appropriate
         error message if an invalid office name format is passed in as
-        argument """
+        argument
+        """
         Dojo.create_room("office", ["'"])
         output = sys.stdout.getvalue().strip()
         self.assertEqual(output, "' is not a valid office name format")
@@ -97,17 +107,21 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(output, "' is not a valid livingspace name format")
 
     def test_add_person_staff(self):
-        """ test add_person_method if a staff is successfully
-        added and allocated an office """
+        """
+        test add_person_method if a staff is successfully
+        added and allocated an office
+        """
         new_office, = Dojo.create_room('Office', ['Orange'])
         self.assertTrue(new_office)
         Dojo.add_person("koya", "gabriel", "staff")
         self.assertEqual(len(new_office.room_members), 1)
 
     def test_add_person_fellow_no_accomodation(self):
-        """ test  add_person method if a fellow
+        """
+        test  add_person method if a fellow
         that doesn't want accomodation is successfully
-        added and allocated an office only  """
+        added and allocated an office only
+        """
         new_office, = Dojo.create_room('Office', ['Orange'])
         new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
         Dojo.add_person("koya", "gabriel", "fellow")
@@ -115,9 +129,11 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_livingspace.room_members), 0)
 
     def test_add_person_fellow_with_accomodation(self):
-        """ test add_person method if a fellow
+        """
+        test add_person method if a fellow
         that wants accomodation is successfully
-        added and allocated an office and a livingspace  """
+        added and allocated an office and a livingspace
+        """
         new_office, = Dojo.create_room('Office', ['Orange'])
         new_livingspace, = Dojo.create_room('livingspace', ['kfc'])
         Dojo.add_person("koya", "gabriel", "fellow", 'y')
@@ -125,8 +141,10 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_livingspace.room_members), 1)
 
     def test_add_person_with_valid_category(self):
-        """ test if only people with valid categorys are successfully
-        added and allocated a space  """
+        """
+        test if only people with valid categorys are successfully
+        added and allocated a space
+        """
         new_office, = Dojo.create_room('Office', ['Orange'])
         Dojo.add_person("koya", "gabriel", "staff")
         self.assertEqual(len(new_office.room_members), 1)
@@ -134,7 +152,9 @@ class TestDojo(unittest.TestCase):
         self.assertEqual(len(new_office.room_members), 1)
 
     def test_add_person(self):
-        """ test if a person instance was created"""
+        """
+        test if a person instance was created
+        """
         new_office, = Dojo.create_room('Office', ['Orange'])
         Dojo.add_person("koya", "gabriel", "staff")
         person, = new_office.room_members
@@ -153,8 +173,10 @@ class TestDojo(unittest.TestCase):
             len(Fellow.get_unallocated_fellows()['livingspace']), 1)
 
     def test_add_person_with_invalid_name_format(self):
-        """ test if the add_person method returns appropriate
-        error if an invalid name format is passed as argument """
+        """
+        test if the add_person method returns appropriate
+        error if an invalid name format is passed as argument
+        """
         Dojo.add_person("'", "gabriel", "staff")
         output = sys.stdout.getvalue().strip()
         self.assertEqual(
@@ -544,9 +566,11 @@ class TestDojo(unittest.TestCase):
                           + "be made.").format("blue"))
 
     def test_rename_room_with_existing_room_name(self):
-        """ test rename_room method if it returns appropriate
+        """
+        test rename_room method if it returns appropriate
         error message when trying to use a name that already
-        exist """
+        exist
+        """
         Dojo.create_room("office", ["red"])
         Dojo.create_room("office", ["blue"])
         Dojo.rename_room("red", "blue")
@@ -556,8 +580,10 @@ class TestDojo(unittest.TestCase):
                          .format("blue"))
 
     def test_rename_room(self):
-        """ test rename_room method if it properly renames
-        an existing room to a new name passed as arguments """
+        """
+        test rename_room method if it properly renames
+        an existing room to a new name passed as arguments
+        """
         Dojo.create_room("office", ["red"])
         self.assertTrue(Room.exists("red"))
         self.assertEqual(Room.get_room_list()[0].name, "Red")

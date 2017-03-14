@@ -1,4 +1,7 @@
 class WrongFormatException(Exception):
+    """
+    This class defines the a custom wrong format exception message
+    """
 
     def __init__(self, arg):
         self.error = arg
@@ -8,6 +11,9 @@ class WrongFormatException(Exception):
 
 
 class MaximumCapacityException(Exception):
+    """
+        This class defines the a custom maximum capacity exception message
+    """
 
     def __init__(self, arg):
         self.error = "Room {} is filled up, please input another room"\
@@ -18,6 +24,9 @@ class MaximumCapacityException(Exception):
 
 
 class EligibilityException(Exception):
+    """
+    This class defines the a custom eligibility exception message
+    """
 
     def __init__(self, arg):
         self.error = arg

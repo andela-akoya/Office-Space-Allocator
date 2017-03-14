@@ -7,7 +7,9 @@ from app.staff import Staff
 
 
 class Room():
-	""" This class hold all properties and methods of a Room model """
+	"""
+	This class serve has the base class for both livingspace and office class
+	"""
 
 	list_of_rooms = []  # holds all the rooms created
 
@@ -17,12 +19,12 @@ class Room():
 
 	@property
 	def name(self):
-		""" This method returns the name property value"""
+		# This method returns the name property value
 		return self.__name
 
 	@name.setter
 	def name(self, new_room_name):
-		""" This method sets the name property value """
+		# This method sets the name property value
 		if new_room_name and isinstance(new_room_name, str):
 			self.__name = new_room_name.capitalize()
 		else:
@@ -30,19 +32,19 @@ class Room():
 
 	@property
 	def room_members(self):
-		""" This method returns the room members property value"""
+		# This method returns the room members property value
 		return self.__room_members
 
 	@room_members.setter
 	def room_members(self, person):
-		""" Thhis method sets the room member property """
+		# This method sets the room member property
 		if not isinstance(person, Person):
 			raise ValueError(
 				"Only a person, staff, or fellow instance can be added")
 		self.__room_members.append(person)
 
 	def remove_member(self, person):
-		""" this method removes a member from a room member list """
+		# this method removes a member from a room member list
 		if not isinstance(person, Person):
 			raise ValueError(
 				"Only a person, staff, or fellow instance can be removed")
@@ -50,7 +52,7 @@ class Room():
 
 	@classmethod
 	def add_room(cls, room):
-		""" Adds a room  to the list of rooms """
+		# Adds a room  to the list of rooms
 		if not isinstance(room, Room):
 			raise ValueError(
 				"Only a room, office, or livingspace instance can be added")
@@ -58,8 +60,7 @@ class Room():
 
 	@classmethod
 	def get_random_room(cls, room_list):
-		""" this method gets a random room from a list of
-		available rooms """
+		# this method gets a random room from a list of available rooms
 		available_rooms = cls.get_available_rooms(room_list)
 		return random.choice(available_rooms) if available_rooms else False
 
@@ -73,8 +74,8 @@ class Room():
 
 	@classmethod
 	def print_room_members(cls, room_name):
-		""" this method returns a well formattted data of all the
-		members of a particular room """
+		# this method returns a well formatted data of all the
+		# members of a particular room
 		output = []
 		name = room_name.capitalize()
 		if name in [room.name for room in cls.list_of_rooms]:
@@ -92,23 +93,24 @@ class Room():
 
 	@classmethod
 	def get_total_number_of_rooms(cls):
-		""" returns the total number of rooms created """
+		# returns the total number of rooms created
 		return len(cls.list_of_rooms)
 
 	@classmethod
 	def exists(cls, room_name):
-		""" this methods checks whether a room exists or has been created """
-		return room_name.capitalize() in [room.name for room in cls.list_of_rooms]
+		# this methods checks whether a room exists or has been created
+		return room_name.capitalize() in [room.name
+										  for room in cls.list_of_rooms]
 
 	@classmethod
 	def get_room_list(cls):
-		""" this method returns the list of rooms """
+		# this method returns the list of rooms
 		return cls.list_of_rooms
 
 	@classmethod
 	def get_allocations(cls):
-		""" this method returns all the rooms that have been allocated and
-		also its occupants """
+		# this method returns all the rooms that have been allocated and
+		# also its occupants
 		output = ""
 		for room in cls.list_of_rooms:
 			if room.room_members:
@@ -123,14 +125,14 @@ class Room():
 
 	@classmethod
 	def export_in_database_format(cls):
-		""" this method exports all rooms data in a format that is
-		importable to a database """
+		# this method exports all rooms data in a format that is
+		# importable to a database
 		return [(room.name, room.room_type) for room in cls.list_of_rooms]
 
 	@classmethod
 	def get_a_particular_room(cls, room_name):
-		""" this method returns a particular room from the list of
-		rooms based on the room name provided as argument """
+		# this method returns a particular room from the list of
+		# rooms based on the room name provided as argument
 		output = [room for room in cls.list_of_rooms if room.name ==
 				  room_name.capitalize()]
 		return output[0] if output \
@@ -138,5 +140,5 @@ class Room():
 
 	@classmethod
 	def reset(cls):
-		""" erases the room list """
+		# erases the room list
 		cls.list_of_rooms = []

@@ -9,7 +9,10 @@ from app.utilities import Utilities
 
 
 class Office(Room):
-    """This class holds the properties and methods of an office model"""
+    """
+    This class implements office specific functionalities and inherits from
+    the Room class.
+    """
     list_of_offices = []
 
     def __init__(self, name):
@@ -19,22 +22,22 @@ class Office(Room):
 
     @property
     def room_type(self):
-        """ returns the value of the room_type property """
+        # returns the value of the room_type property.
         return self.__room_type
 
     @room_type.setter
     def room_type(self, new_type):
-        """ this method sets the value of the room_type property """
+        # this method sets the value of the room_type property
         self.__room_type = new_type
 
     @property
     def maximum_capacity(self):
-        """ this method returns the value of the maximum_capacity property """
+        # this method returns the value of the maximum_capacity property
         return self.__maximum_capacity
 
     @maximum_capacity.setter
     def maximum_capacity(self, new_capacity):
-        """ sets the value of the maximum_capacity property """
+        # sets the value of the maximum_capacity property
         self.__maximum_capacity = new_capacity
 
     def check_availability(self):
@@ -42,7 +45,7 @@ class Office(Room):
 
     @classmethod
     def create_office(cls, room_names):
-        """ creates an office object """
+        # creates an office object
         output = []
         for name in room_names:
             try:
@@ -63,12 +66,12 @@ class Office(Room):
 
     @classmethod
     def add_to_office_list(cls, office_instance):
-        """ adds an office to the list of offices """
+        # adds an office to the list of offices
         cls.list_of_offices.append(office_instance)
 
     @classmethod
     def allocate_office(cls, person, office_name=None):
-        """ Allocates a random office to a person """
+        # Allocates a random office to a person
         office = Office.get_office(office_name) \
             if office_name else cls.get_random_office()
         if office:
@@ -83,14 +86,14 @@ class Office(Room):
 
     @classmethod
     def get_random_office(cls):
-        """ returns a random office from a list of available offices """
+        # returns a random office from a list of available offices
         available_offices = cls.get_available_offices()
         if available_offices:
             return random.choice(available_offices)
 
     @classmethod
     def get_available_offices(cls):
-        """ returns a list of offices that haven't exceeded maximum capacity """
+        # returns a list of offices that haven't exceeded maximum capacity
         available_offices = []
         for office in cls.get_office_list():
             if len(office.room_members) != office.maximum_capacity:
@@ -99,21 +102,21 @@ class Office(Room):
 
     @classmethod
     def get_office_list(cls):
-        """ returns a list conttaining all offices """
+        # returns a list containing all offices
         return cls.list_of_offices
 
     @classmethod
     def get_office(cls, office_name):
-        """ returns a particular office from the list of offices
-        based on the office_name passed as argument """
+        # returns a particular office from the list of offices
+        # based on the office_name passed as argument
         for office in cls.list_of_offices:
             if office.name == office_name.capitalize():
                 return office
 
     @classmethod
     def reallocate_person(cls, person, office):
-        """ reallocates a person to another office specified by the
-        office_name argument passed in """
+        # reallocates a person to another office specified by the
+        # office_name argument passed in
         message = "{p.category} {p.surname} {p.firstname} has been " \
             + "successfully reallocated to {} {}"
 
@@ -137,5 +140,5 @@ class Office(Room):
 
     @classmethod
     def reset(cls):
-        """ Erases all the data in the office list """
+        # Erases all the data in the office list
         cls.list_of_offices = []

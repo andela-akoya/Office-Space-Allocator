@@ -14,12 +14,14 @@ from app.staff import Staff
 
 
 class Dojo(object):
-    """The class holds all the properties and methods of a Dojo model"""
+    """
+    This class implements the major functionalities of the application.
+    """
 
     @classmethod
     def create_room(cls, room_type, room_names):
-        """This method creates a particular type of room or rooms
-            based on the room_type and room name(s) passed as arguments"""
+        # This method creates a particular type of room or rooms
+        # based on the room_type and room name(s) passed as arguments
 
         type_of_room = room_type.strip().lower()
         if type_of_room == "office":
@@ -31,16 +33,16 @@ class Dojo(object):
 
     @classmethod
     def get_total_rooms(cls):
-        """ this method returns the total number of rooms that has been
-        created """
+        # this method returns the total number of rooms that has been
+        # created
 
         return Room.get_total_number_of_rooms()
 
     @classmethod
-    def add_person(cls, surname, firstname, category, wants_accomodation=None,
-                   person_id=None):
-        """ this method creates a person object and assigns a room to the
-        person  """
+    def add_person(cls, surname, firstname, category,
+                   wants_accomodation=None, person_id=None):
+        # this method creates a person object and assigns a room to the
+        # person
 
         type_of_person = category.strip().lower()
         try:
@@ -73,8 +75,8 @@ class Dojo(object):
 
     @classmethod
     def allocate_room(cls, person, wants_accomodation=None):
-        """ This method allocates a room to a person based on the
-        person's category """
+        # This method allocates a room to a person based on the
+        # person's category.
 
         if(not(wants_accomodation in ['y', 'Y'])):
             print(Office.allocate_office(person))
@@ -84,15 +86,16 @@ class Dojo(object):
 
     @classmethod
     def print_room(cls, room_name):
-        """ This method prints the information of the members of a particular
-        room based on the room name passed as arguments """
+        # This method prints the information of the members of a particular
+        # room based on the room name passed as arguments
 
         print("\n{}".format(Room.print_room_members(room_name)))
 
     @classmethod
-    def print_allocations(cls, filename, append_flag=False, override_flag=False):
-        """ This method prints all the allocations that has been made onto
-        the console or to a file if a file name is passed as argument """
+    def print_allocations(cls, filename, append_flag=False,
+                          override_flag=False):
+        # this method prints all the allocations that has been made onto
+        # the console or to a file if a file name is passed as argument.
 
         allocations = Room.get_allocations()
         if filename is None:
@@ -109,9 +112,10 @@ class Dojo(object):
                 print(e)
 
     @classmethod
-    def print_unallocated(cls, filename, append_flag=False, override_flag=False):
-        """ This method prints all the unallocated staff and fellow onto
-        the console or to a file if a file name is passed as argument """
+    def print_unallocated(cls, filename, append_flag=False,
+                            override_flag=False):
+        # This method prints all the unallocated staff and fellow onto
+        # the console or to a file if a file name is passed as argument.
 
         unallocated = Person \
             .get_unallocated(Staff.get_unallocated_staff(),
@@ -129,14 +133,15 @@ class Dojo(object):
                     action = "overridden"
                 else:
                     action = "written to"
-                print("{}.txt has been suceesfully {} .".format(filename, action))
+                print("{}.txt has been suceesfully {} .".format(filename,
+                                                                action))
             except FileExistsError as e:
                 print(e)
 
     @classmethod
     def reallocate_person(cls, identifier, room_name):
-        """ This method reallocates a person to another room based on the
-        room name passed in as argument """
+        # this method reallocates a person to another room based on the
+        # room name passed in as argument.
         try:
             person = Person.get_person(identifier)
             room = Room.get_a_particular_room(room_name)
@@ -152,8 +157,8 @@ class Dojo(object):
 
     @classmethod
     def load_people(cls, filename):
-        """ This method load a list of persons from a text file and
-        adds them to the system """
+        # This method load a list of persons from a text file and
+        # adds them to the system.
 
         error_messages = "Errors\n---------"\
                          +"\nThe following people couldn't be loaded"\
@@ -182,8 +187,8 @@ class Dojo(object):
 
     @classmethod
     def load_rooms(cls, filename):
-        """ This method loads rooms from a text file and adds them into the
-        system """
+        # This method loads rooms from a text file and adds them into the
+        # system.
         error_messages = "Errors\n---------\n"+\
                          "The following rooms couldn't be loaded"\
                          + " because of incomplete information:\n"
@@ -209,13 +214,14 @@ class Dojo(object):
 
     @classmethod
     def save_state(cls, db_name):
-        """ this method saves the current state of the system (i.e persist the
-        generated data in the system into a database). """
+        # this method saves the current state of the system (i.e persist the
+        # generated data in the system into a database).
 
         database_path = path.dirname(path.abspath(__file__)) \
             + "/data/database/"
         database_name = db_name or \
-            ("-").join(re.findall(r"[\w']+",str(datetime.now()).split(".")[0]))
+            ("-").join(re.findall(r"[\w']+",
+                                  str(datetime.now()).split(".")[0]))
 
         if not Customfile.exist(database_path, database_name + ".db"):
             new_database = Database(database_path + database_name + ".db")
@@ -233,8 +239,8 @@ class Dojo(object):
 
     @classmethod
     def load_state(cls, database_name):
-        """ This method load a state from the database and set the system to
-        that state """
+        # this method load a state from the database and set the system to
+        # that state.
 
         database_path = path.dirname(path.abspath(__file__)) \
             + "/data/database/"
@@ -251,8 +257,8 @@ class Dojo(object):
 
     @classmethod
     def rename_room(cls, old_room_name, new_room_name):
-        """ This method changes the name of an existing room into a new
-        one based on the new_room_name passed in as argument """
+        # this method changes the name of an existing room into a new
+        # one based on the new_room_name passed in as argument.
 
         if Room.exists(old_room_name):
             if not Room.exists(new_room_name):
@@ -268,8 +274,8 @@ class Dojo(object):
 
     @classmethod
     def reset_state(cls):
-        """ clears the current state of the app, deleting
-        all generated data """
+        # clears the current state of the app, deleting
+        # all generated data
         LivingSpace.reset()
         Office.reset()
         Room.reset()
